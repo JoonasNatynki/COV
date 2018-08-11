@@ -35,6 +35,10 @@ public:
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_Spacebar_Released();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftShift_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftShift_Released();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_LeftMouseButton_Pressed();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();

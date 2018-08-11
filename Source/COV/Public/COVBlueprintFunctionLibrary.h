@@ -49,7 +49,8 @@ class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 	//	Simplified line trace function. Parameters: 1) Starting position, 2) end position and 3) an actor in the world that will be "casting" this line trace
-		static FHitResult SimpleTraceByChannel(FVector startPos, FVector endPos, UObject* InObj);
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		static FHitResult SimpleTraceByChannel(UObject* castingObject, FVector startPos, FVector endPos);
 };
 
 /*

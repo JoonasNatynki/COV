@@ -5,7 +5,7 @@
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
 
-FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(FVector startPos, FVector endPos, UObject* inObj)
+FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos)
 {
 	//	LINETRACE	################################
 	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("Joonas")), false);

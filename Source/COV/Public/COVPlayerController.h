@@ -46,6 +46,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_Spacebar_Released();
 	UFUNCTION(BlueprintNativeEvent)
+		void Input_LeftShift_Pressed();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_LeftShift_Released();
+	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();

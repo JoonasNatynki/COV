@@ -18,12 +18,18 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 	SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
 
 	this->bAlwaysRelevant = true;
+
+	//	Initialize the variable. Will be set properly in the BeginPlay
+	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;
 }
 
 // Called when the game starts or when spawned
 void ACOVCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(IsLocallyControlled())
+		SetCurrentWalkingSpeed(_defaultMaximumWalkingSpeed);
 }
 
 // Called to bind functionality to input
@@ -43,6 +49,19 @@ void ACOVCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaul
 	DOREPLIFETIME_CONDITION(ACOVCharacter, _aimingLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(ACOVCharacter, _actorRotation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(ACOVCharacter, _bIsReceivingMovementInput, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(ACOVCharacter, _currentMaximumMovementSpeed, COND_SkipOwner);
+}
+
+void ACOVCharacter::OnRep_currentMaximumMovementSpeed()
+{
+	//UE_LOG(XYZCharacter, Log, TEXT("%s: ONREP!."), PRINT_FUNCTION);
+
+	TWeakObjectPtr<UCharacterMovementComponent> charMove = GetCharacterMovement();
+
+	if (charMove.IsValid())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = _currentMaximumMovementSpeed;
+	}
 }
 
 void ACOVCharacter::Input_D_Implementation(float amount)
@@ -63,6 +82,16 @@ void ACOVCharacter::Input_Spacebar_Pressed_Implementation()
 void ACOVCharacter::Input_Spacebar_Released_Implementation()
 {
 
+}
+
+void ACOVCharacter::Input_LeftShift_Pressed_Implementation()
+{
+	SetCurrentWalkingSpeed(_defaultMaximumRunningSpeed);
+}
+
+void ACOVCharacter::Input_LeftShift_Released_Implementation()
+{
+	SetCurrentWalkingSpeed(_defaultMaximumWalkingSpeed);
 }
 
 void ACOVCharacter::Input_E_Pressed_Implementation()
@@ -135,13 +164,25 @@ void ACOVCharacter::Server_SetYaw_Implementation(float yaw)
 	_upperTorsoYaw = yaw;
 }
 
+bool ACOVCharacter::Server_SetCurrentWalkingSpeed_Validate(float currentWalkingSpeed)
+{
+	return true;
+}
+
+void ACOVCharacter::Server_SetCurrentWalkingSpeed_Implementation(float currentWalkingSpeed)
+{
+	_currentMaximumMovementSpeed = currentWalkingSpeed;
+	OnRep_currentMaximumMovementSpeed();
+	//UE_LOG(XYZCharacter, Log, TEXT("%s: SERVER FUNCTION CALLED!."), PRINT_FUNCTION);
+}
+
 void ACOVCharacter::Input_MoveForward(float amount)
 {
 	if (this != nullptr)
 	{
-		UCameraComponent* cam = GetCharacterCamera();
+		TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
 
-		if (!IsValid(cam))
+		if (!cam.IsValid())
 			return;
 
 		FVector dir = cam->GetForwardVector();
@@ -156,9 +197,9 @@ void ACOVCharacter::Input_MoveRight(float amount)
 {
 	if (this != nullptr)
 	{
-		UCameraComponent* cam = GetCharacterCamera();
+		TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
 
-		if (!IsValid(cam))
+		if (!cam.IsValid())
 			return;
 
 		FVector dir = cam->GetRightVector();
@@ -252,21 +293,21 @@ float ACOVCharacter::GetPitch()
 
 UCameraComponent* ACOVCharacter::GetCharacterCamera() const
 {
-	UCameraComponent* cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
+	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
 	//	Error handling
-	if (!IsValid(cam))
+	if (!cam.IsValid())
 	{
 		UE_LOG(XYZCharacter, Error, TEXT("%s: Could not find camera on XYZ_Character or it is pending kill."), PRINT_FUNCTION);
 	}
-	return cam;
+	return cam.Get();
 }
 
 FVector ACOVCharacter::GetEyeWorldLocation() const
 {
-	UCameraComponent * cam = GetCharacterCamera();
+	TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
 
 	//	Error case
-	if (!IsValid(cam))
+	if (!cam.IsValid())
 		return FVector(0, 0, 0);
 
 	return cam->GetComponentLocation();
@@ -278,13 +319,24 @@ FVector ACOVCharacter::GetAimingVector()
 	return aimingVec;
 }
 
+void ACOVCharacter::SetCurrentWalkingSpeed(float currentWalkingSpeed)
+{
+	IS_NOT_LOCALLY_CONTROLLED_WARNING;
+	if (IsLocallyControlled())
+	{
+		_currentMaximumMovementSpeed = currentWalkingSpeed;
+		OnRep_currentMaximumMovementSpeed();
+		Server_SetCurrentWalkingSpeed(_currentMaximumMovementSpeed);
+	}
+}
+
 FVector ACOVCharacter::CalculateAimingLocation()
 {
 	IS_NOT_LOCALLY_CONTROLLED_WARNING;
 
-	UCameraComponent* cam = GetCharacterCamera();
+	TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
 
-	if (!IsValid(cam))
+	if (!cam.IsValid())
 	{
 		UE_LOG(XYZCharacter, Error, TEXT("%s: No camera found!"), PRINT_FUNCTION);
 		_aimingLocation = FVector(0, 0, 0);
@@ -297,9 +349,9 @@ FVector ACOVCharacter::CalculateAimingLocation()
 	float lineTraceLength = 10000.0f;
 
 	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
+		this,
 		camWorldLoc + (camFwdVec * (-20.0f)),
-		camWorldLoc + (camFwdVec * lineTraceLength),
-		this);
+		camWorldLoc + (camFwdVec * lineTraceLength));
 
 	if (RV_Hit.bBlockingHit)
 	{
@@ -323,15 +375,15 @@ FVector ACOVCharacter::GetAimingLocation()
 AActor* ACOVCharacter::TryGetInteractedActor()
 {
 	FVector eyePos = GetEyeWorldLocation();
-	UCameraComponent* cam = GetCharacterCamera();
+	TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
 
-	if (!IsValid(cam))
+	if (!cam.IsValid())
 	{
 		UE_LOG(XYZCharacter, Warning, TEXT("%s: No camera found!"), PRINT_FUNCTION);
 		return nullptr;
 	}
 
-	FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(eyePos, eyePos + (cam->GetForwardVector() * _maximumInteractionDistance), this);
+	FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(this, eyePos, eyePos + (cam->GetForwardVector() * _maximumInteractionDistance));
 
 	AActor* interactedActor = hit.Actor.Get();
 
@@ -415,13 +467,6 @@ ACOVPlayerController* ACOVCharacter::GetXYZPlayerController() const
 void ACOVCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//	DEBUGS	###########################################################################################
-	if (_bShowDebugForwardVector)
-	{
-		DrawDebugLine(GetWorld(), GetActorLocation(), (GetActorLocation() + (GetActorForwardVector() * 100)), FColor(0, 0, 1), false, -1, 1, 1);
-	}
-	//	###################################################################################################
 
 	if (IsLocallyControlled())
 	{

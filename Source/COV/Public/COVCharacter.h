@@ -34,16 +34,25 @@ public:
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bIsReceivingMovementInput;
 
-
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		//	Angle at which the character will start rotating towards aiming location
-		float _angleToStartRotatingHips = 110.0f;
-	UPROPERTY(EditAnywhere)
+		float _angleToStartRotatingHips = 90;
+	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
 		//	How far away can the player interact with things?
 		float _maximumInteractionDistance = 200.0f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	How fast the player rotates to movement vector when receiving movement input?
 		float _movementInputRotationSpeed = 5.0f;
+
+	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed)
+		//	The default maximum speed the character will be running at without sprinting
+		float _currentMaximumMovementSpeed;
+	UPROPERTY(Category = "Movement", EditDefaultsOnly)
+		//	The default maximum speed the character will be running at without sprinting
+		float _defaultMaximumRunningSpeed = 600.0f;
+	UPROPERTY(Category = "Movement", EditDefaultsOnly)
+		//	The default maximum speed the character will be running at without sprinting
+		float _defaultMaximumWalkingSpeed = 200.0f;
 
 private:
 	uint32_t _bIsReceivingForwardInput : 1;
@@ -71,12 +80,14 @@ public:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 	//	PLAYERINPUT INTERFACE IMPLEMENTATIONS
+	virtual void Input_E_Pressed_Implementation() override;
+	virtual void Input_E_Released_Implementation() override;
 	virtual void Input_W_Implementation(float amount) override;
 	virtual void Input_D_Implementation(float amount) override;
 	virtual void Input_Spacebar_Pressed_Implementation() override;
 	virtual void Input_Spacebar_Released_Implementation() override;
-	virtual void Input_E_Pressed_Implementation() override;
-	virtual void Input_E_Released_Implementation() override;
+	virtual void Input_LeftShift_Pressed_Implementation() override;
+	virtual void Input_LeftShift_Released_Implementation() override;
 	virtual void Input_LeftMouseButton_Pressed_Implementation() override;
 	virtual void Input_LeftMouseButton_Released_Implementation() override;
 	virtual void Input_MouseMovementY_Implementation(float amount) override;
@@ -120,7 +131,15 @@ public:
 	UFUNCTION(Category = "XYZInteraction", Server, Reliable, WithValidation)
 		//	Server-side interaction
 		void Server_Interact(AActor* interacted);
+	UFUNCTION(Category = "XYZCharacterAnimation", Server, Reliable, WithValidation)
+		//	Server version of the current walking speed setter
+		void Server_SetCurrentWalkingSpeed(float currentWalkingSpeed);
 	//	####################################################################################################
+
+
+	//	ONREP FUNCTIONS
+	UFUNCTION()
+		void OnRep_currentMaximumMovementSpeed();
 
 
 	//	GETTERS	############################################################################################
@@ -152,6 +171,10 @@ public:
 	AActor* TryGetInteractedActor();
 	//	GETTERS	############################################################################################
 	
+	//	SETTERS ############################################################################################
+	UFUNCTION(Category = "Movement", BlueprintCallable)
+		void SetCurrentWalkingSpeed(float currentWalkingSpeed);
+	//	SETTERS ############################################################################################
 
 	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
 		void Update_IsReceivingMovementInput();

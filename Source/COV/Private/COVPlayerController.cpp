@@ -16,6 +16,8 @@ void ACOVPlayerController::SetupInputComponent()
 	InputComponent->BindAction("E", IE_Released, this, &ACOVPlayerController::Input_E_Released);
 	InputComponent->BindAction("Spacebar", IE_Pressed, this, &ACOVPlayerController::Input_Spacebar_Pressed);
 	InputComponent->BindAction("Spacebar", IE_Released, this, &ACOVPlayerController::Input_Spacebar_Released);
+	InputComponent->BindAction("LeftShift", IE_Pressed, this, &ACOVPlayerController::Input_LeftShift_Pressed);
+	InputComponent->BindAction("LeftShift", IE_Released, this, &ACOVPlayerController::Input_LeftShift_Released);
 	InputComponent->BindAction("LeftMouseButton", IE_Pressed, this, &ACOVPlayerController::Input_LeftMouseButton_Pressed);
 	InputComponent->BindAction("LeftMouseButton", IE_Released, this, &ACOVPlayerController::Input_LeftMouseButton_Released);
 
@@ -49,6 +51,24 @@ void ACOVPlayerController::Input_Spacebar_Pressed_Implementation()
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Pressed)
 }
 
+void ACOVPlayerController::Input_Spacebar_Released_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
+		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
+}
+
+void ACOVPlayerController::Input_LeftShift_Pressed_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Left shift pressed!"));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftShift_Pressed)
+}
+
+void ACOVPlayerController::Input_LeftShift_Released_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Left shift released!"));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftShift_Released)
+}
+
 void ACOVPlayerController::Input_Key_W_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_W, amount)
@@ -57,12 +77,6 @@ void ACOVPlayerController::Input_Key_W_Implementation(float amount)
 void ACOVPlayerController::Input_Key_D_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_D, amount)
-}
-
-void ACOVPlayerController::Input_Spacebar_Released_Implementation()
-{
-	UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
-	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
 }
 
 void ACOVPlayerController::Input_LeftMouseButton_Pressed_Implementation()

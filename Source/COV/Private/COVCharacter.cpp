@@ -18,7 +18,8 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 	SetActorTickEnabled(true);
 	//SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
 
-	this->bAlwaysRelevant = true;
+	//this->bAlwaysRelevant = true;
+	bUseControllerRotationYaw = false;
 
 	SmoothMotionComponent = CreateDefaultSubobject<UCOVSmoothAnimationComponent>(TEXT("Smooth Motion Component"));
 }

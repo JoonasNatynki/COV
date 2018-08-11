@@ -130,25 +130,12 @@ void ACOVCharacter::Input_MoveRight(float amount)
 	}
 }
 
-float ACOVCharacter::GetYaw()
+void ACOVCharacter::Input_Interact()
 {
-	return SmoothMotionComponent->_upperTorsoYaw;
-}
+	AActor* interactedActor = TryGetInteractedActor();
 
-float ACOVCharacter::GetPitch()
-{
-	return SmoothMotionComponent->_upperTorsoPitch;
-}
-
-UCameraComponent* ACOVCharacter::GetCharacterCamera() const
-{
-	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
-	//	Error handling
-	if (!cam.IsValid())
-	{
-		UE_LOG(COVCharacter, Error, TEXT("%s: Could not find camera on XYZ_Character or it is pending kill."), PRINT_FUNCTION);
-	}
-	return cam.Get();
+	if (IsValid(interactedActor))
+		SmoothMotionComponent->Server_Interact(interactedActor);
 }
 
 FVector ACOVCharacter::GetEyeWorldLocation() const
@@ -162,15 +149,54 @@ FVector ACOVCharacter::GetEyeWorldLocation() const
 	return cam->GetComponentLocation();
 }
 
+UCameraComponent* ACOVCharacter::GetCharacterCamera() const
+{
+	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
+	//	Error handling
+	if (!cam.IsValid())
+	{
+		UE_LOG(COVCharacter, Error, TEXT("%s: Could not find camera on XYZ_Character or it is pending kill."), PRINT_FUNCTION);
+	}
+	return cam.Get();
+}
+
+ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const
+{
+
+	ACOVPlayerController* playerController = Cast<ACOVPlayerController>(GetController());
+
+	if (!IsValid(playerController))
+	{
+		UE_LOG(COVCharacter, Error, TEXT("%s: No XYZPlayerController found on character (%s). Is this intentional?"), PRINT_FUNCTION, *GetName());
+	}
+
+	return playerController;
+}
+
+FVector ACOVCharacter::GetAimingLocation()
+{
+	return SmoothMotionComponent->_aimingLocation;
+}
+
 FVector ACOVCharacter::GetAimingVector()
 {
 	FVector aimingVec = GetAimingLocation() - GetEyeWorldLocation();
 	return aimingVec;
 }
 
-FVector ACOVCharacter::GetAimingLocation()
+float ACOVCharacter::GetYaw()
 {
-	return SmoothMotionComponent->_aimingLocation;
+	return SmoothMotionComponent->_upperTorsoYaw;
+}
+
+float ACOVCharacter::GetPitch()
+{
+	return SmoothMotionComponent->_upperTorsoPitch;
+}
+
+FRotator ACOVCharacter::GetHipRotation() const
+{
+	return SmoothMotionComponent->_actorRotation;
 }
 
 AActor* ACOVCharacter::TryGetInteractedActor()
@@ -198,39 +224,12 @@ AActor* ACOVCharacter::TryGetInteractedActor()
 	return interactedActor;
 }
 
-void ACOVCharacter::Input_Interact()
-{
-	AActor* interactedActor = TryGetInteractedActor();
-
-	if (IsValid(interactedActor))
-		SmoothMotionComponent->Server_Interact(interactedActor);
-}
-
-
-FRotator ACOVCharacter::GetHipRotation() const
-{
-	return SmoothMotionComponent->_actorRotation;
-}
-
 void ACOVCharacter::DrawDebugEyeVector()
 {
 	FHitResult hitOut(ForceInit);
 	TArray<AActor*> actorsToIgnore;
 	actorsToIgnore.Add(this);
 	UKismetSystemLibrary::LineTraceSingle(this, GetEyeWorldLocation(), GetAimingLocation(), ETraceTypeQuery::TraceTypeQuery_MAX, true, actorsToIgnore, EDrawDebugTrace::ForOneFrame, hitOut, true, FLinearColor(FColor(1, 1, 1, 1)), FLinearColor(FColor(1, 1, 1, 1)), 0.1f);
-}
-
-ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const
-{
-
-	ACOVPlayerController* playerController = Cast<ACOVPlayerController>(GetController());
-
-	if (!IsValid(playerController))
-	{
-		UE_LOG(COVCharacter, Error, TEXT("%s: No XYZPlayerController found on character (%s). Is this intentional?"), PRINT_FUNCTION, *GetName());
-	}
-
-	return playerController;
 }
 
 // Called every frame

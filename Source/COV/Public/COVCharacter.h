@@ -72,11 +72,6 @@ private:
 
 
 public:
-	
-
-
-
-
 
 	//	GETTERS	############################################################################################
 	UFUNCTION(Category = "COVCharacter", BlueprintPure)

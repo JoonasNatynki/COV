@@ -9,55 +9,17 @@
 
 class UCameraComponent;
 class ACOVPlayerController;
+class UCOVSmoothAnimationComponent;
 
-DECLARE_LOG_CATEGORY_EXTERN(XYZCharacter, Log, All)
+DECLARE_LOG_CATEGORY_EXTERN(COVCharacter, Log, All)
 
 UCLASS()
 class COV_API ACOVCharacter : public ACharacter, public ICOVPlayerInput
 {
 	GENERATED_BODY()
 public:
-	//	VARIABLES	##########################################################################################
-	UPROPERTY(Replicated, VisibleAnywhere)
-		//	The yaw of this characters upper torso value. To be used in the animation blueprint
-		float _upperTorsoYaw;
-	UPROPERTY(Replicated, VisibleAnywhere)
-		//	The pitch of this characters upper torso value. To be used in the animation blueprint
-		float _upperTorsoPitch;
-	UPROPERTY(Replicated, VisibleAnywhere)
-		//	The location and direction the player is aiming at
-		FVector _aimingLocation;
-	UPROPERTY(Replicated, VisibleAnywhere)
-		//	The hip rotation of the actor
-		FRotator _actorRotation;
-	UPROPERTY(Replicated, VisibleAnywhere)
-		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
-		bool _bIsReceivingMovementInput;
-
-	UPROPERTY(Category = "Animation", EditDefaultsOnly)
-		//	Angle at which the character will start rotating towards aiming location
-		float _angleToStartRotatingHips = 90;
-	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
-		//	How far away can the player interact with things?
-		float _maximumInteractionDistance = 200.0f;
-	UPROPERTY(Category = "Movement", EditDefaultsOnly)
-		//	How fast the player rotates to movement vector when receiving movement input?
-		float _movementInputRotationSpeed = 5.0f;
-
-	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed)
-		//	The default maximum speed the character will be running at without sprinting
-		float _currentMaximumMovementSpeed;
-	UPROPERTY(Category = "Movement", EditDefaultsOnly)
-		//	The default maximum speed the character will be running at without sprinting
-		float _defaultMaximumRunningSpeed = 600.0f;
-	UPROPERTY(Category = "Movement", EditDefaultsOnly)
-		//	The default maximum speed the character will be running at without sprinting
-		float _defaultMaximumWalkingSpeed = 200.0f;
-
-private:
-	uint32_t _bIsReceivingForwardInput : 1;
-	uint32_t _bIsReceivingRightInput : 1;
-	//	######################################################################################################
+	UPROPERTY(Category = "Animation", VisibleAnywhere)
+		UCOVSmoothAnimationComponent* SmoothMotionComponent;
 
 public:
 	//	DEBUGS	#######################################################################
@@ -66,6 +28,9 @@ public:
 	void DrawDebugEyeVector();
 	//	###############################################################################
 
+	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
+		//	How far away can the player interact with things?
+		float _maximumInteractionDistance = 200.0f;
 
 	//	Constructor
 	ACOVCharacter(const class FObjectInitializer& PCIP);
@@ -74,8 +39,6 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	//	Registers replicated variables to the engine
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
@@ -101,12 +64,6 @@ private:
 	UFUNCTION(Category = "Movement", BlueprintCallable)
 		//	Move character left/right
 		void Input_MoveRight(float amount);
-	UFUNCTION(Category = "Movement", BlueprintCallable)
-		//	Set pitch based on control input
-		void Input_AimUp(float amount);
-	UFUNCTION(Category = "Movement", BlueprintCallable)
-		//	Set yaw based on control input
-		void Input_AimRight(float amount);
 	UFUNCTION(Category = "Input_Interact", BlueprintCallable)
 		//	Interact with the world
 		void Input_Interact();
@@ -115,76 +72,41 @@ private:
 
 
 public:
-	//	SERVER ONLY FUNCTIONS	#############################################################################
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
-		//	Server version of the UpdateYawAndPitch function
-		void Server_SetAimingLocation(FVector aimingLocation);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
-		//	Server version of the UpdateYawAndPitch function
-		void Server_SetPitch(float pitch);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
-		//	Server version of the UpdateYawAndPitch function
-		void Server_SetYaw(float yaw);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
-		//	Server version of the UpdateYawAndPitch function
-		void Server_SetActorRotation(FRotator actorRotation);
-	UFUNCTION(Category = "XYZInteraction", Server, Reliable, WithValidation)
-		//	Server-side interaction
-		void Server_Interact(AActor* interacted);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Reliable, WithValidation)
-		//	Server version of the current walking speed setter
-		void Server_SetCurrentWalkingSpeed(float currentWalkingSpeed);
-	//	####################################################################################################
+	
 
 
-	//	ONREP FUNCTIONS
-	UFUNCTION()
-		void OnRep_currentMaximumMovementSpeed();
+
 
 
 	//	GETTERS	############################################################################################
-	UFUNCTION(Category = "XYZCharacter", BlueprintPure)
+	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the player eye position in world space
 		FVector GetEyeWorldLocation() const;
-	UFUNCTION(Category = "XYZCharacter", BlueprintPure)
+	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the character's camera
 		UCameraComponent* GetCharacterCamera() const;
-	UFUNCTION(Category = "XYZCharacter", BlueprintPure)
+	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the XYZCharacterController of this character
-		ACOVPlayerController* GetXYZPlayerController() const;
-	UFUNCTION(Category = "XYZCharacter", BlueprintPure)
+		ACOVPlayerController* GetCOVPlayerController() const;
+	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the aiming vector
 		FVector GetAimingLocation();
-	UFUNCTION(Category = "XYZCharacter", BlueprintPure)
+	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the aiming vector
 		FVector GetAimingVector();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintPure)
+	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
 		//	Simple getter for yaw
 		float GetYaw();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintPure)
+	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
 		//	Simple getter for _upperTorsopitch
 		float GetPitch();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintPure)
+	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
 		FRotator GetHipRotation() const;
 
 	//	Tries to get the actor which the player might be interacting with
 	AActor* TryGetInteractedActor();
 	//	GETTERS	############################################################################################
-	
-	//	SETTERS ############################################################################################
-	UFUNCTION(Category = "Movement", BlueprintCallable)
-		void SetCurrentWalkingSpeed(float currentWalkingSpeed);
-	//	SETTERS ############################################################################################
 
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
-		void Update_IsReceivingMovementInput();
 
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
-		float CalculateYaw();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
-		float CalculatePitch();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
-		FVector CalculateAimingLocation();
-	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
-		FRotator CalculateRotation(float deltaTime);
+
 };

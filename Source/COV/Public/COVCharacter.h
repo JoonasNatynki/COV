@@ -22,12 +22,6 @@ public:
 		UCOVSmoothAnimationComponent* SmoothMotionComponent;
 
 public:
-	//	DEBUGS	#######################################################################
-	bool _bShowDebugForwardVector = false;
-
-	void DrawDebugEyeVector();
-	//	###############################################################################
-
 	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
 		//	How far away can the player interact with things?
 		float _maximumInteractionDistance = 200.0f;
@@ -103,5 +97,9 @@ public:
 	//	GETTERS	############################################################################################
 
 
+	//	DEBUGS	#######################################################################
+	bool _bShowDebugForwardVector = false;
 
+	void DrawDebugEyeVector();
+	//	###############################################################################
 };

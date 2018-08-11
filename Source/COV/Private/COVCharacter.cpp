@@ -9,8 +9,6 @@
 
 DEFINE_LOG_CATEGORY(XYZCharacter)
 
-#define IS_NOT_LOCALLY_CONTROLLED_WARNING if(!IsLocallyControlled()){UE_LOG(XYZCharacter, Warning, TEXT("%s: Should a non-client be calling this function?"), PRINT_FUNCTION)}
-
 // Sets default values
 ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCIP.SetDefaultSubobjectClass<UXYZ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))*/
 {
@@ -49,30 +47,50 @@ void ACOVCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaul
 
 void ACOVCharacter::Input_D_Implementation(float amount)
 {
-
-}
-
-void ACOVCharacter::Input_A_Implementation(float amount)
-{
-
+	Input_MoveRight(amount);
 }
 
 void ACOVCharacter::Input_W_Implementation(float amount)
 {
-
+	Input_MoveForward(amount);
 }
 
-void ACOVCharacter::Input_S_Implementation(float amount)
+void ACOVCharacter::Input_Spacebar_Pressed_Implementation()
 {
 
 }
 
-void ACOVCharacter::Input_MouseUp_Implementation(float amount)
+void ACOVCharacter::Input_Spacebar_Released_Implementation()
 {
 
 }
 
-void ACOVCharacter::Input_MouseRight_Implementation(float amount)
+void ACOVCharacter::Input_E_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_E_Released_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_LeftMouseButton_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_LeftMouseButton_Released_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_MouseMovementY_Implementation(float amount)
+{
+
+}
+
+void ACOVCharacter::Input_MouseMovementX_Implementation(float amount)
 {
 
 }

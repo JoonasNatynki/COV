@@ -7,14 +7,41 @@
 #include "Engine/EngineTypes.h"
 #include "COVBlueprintFunctionLibrary.generated.h"
 
-/**
- * 
- */
-//	MACROS	#################################################################################################################
+
+
+
+
+
+
+//	MACROS	#######################################################################################################################################
 #define PRINT_FUNCTION *FString(__FUNCTION__).Append(":(").Append(FString::FormatAsNumber(__LINE__)).Append(")")
+
 #define IS_SERVER GetNetMode() == ENetMode::NM_DedicatedServer || GetNetMode() == ENetMode::NM_ListenServer
 //#define XYZLOG(category, log category, msg, ...) UE_LOG(category, log category, TEXT("%s: %s"), PRINT_FUNCTION, TEXT(msg), ##__VA_ARGS__)
-//	#########################################################################################################################
+
+#define IS_NOT_LOCALLY_CONTROLLED_WARNING if(!IsLocallyControlled()){UE_LOG(LogTemp, Warning, TEXT("%s: Should a non-client be calling this function?"), PRINT_FUNCTION)}
+
+
+//	BEGINNING OF USE INTERFACE MAKRO	###############################################################################
+#define USE_INTERFACE(_objectwithinterface, _interface, _functionname, ...) TWeakObjectPtr<UObject> interfaceObject = _objectwithinterface;\
+if (interfaceObject.IsValid())\
+{\
+	if (interfaceObject->GetClass()->ImplementsInterface(U##_interface::StaticClass()))\
+	{\
+		I##_interface::Execute_##_functionname(interfaceObject.Get(), ##__VA_ARGS__);\
+	}\
+	else\
+	{\
+		UE_LOG(LogTemp, Log, TEXT("Using interface failed! The object (%s) does not implement such."), *UKismetSystemLibrary::GetDisplayName(_objectwithinterface));\
+	}\
+}\
+//	END OF USING INTERFACE MAKRO	###################################################################################
+//	###############################################################################################################################################
+
+
+
+
+
 
 UCLASS()
 class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary

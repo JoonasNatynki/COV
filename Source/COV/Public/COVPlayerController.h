@@ -12,7 +12,7 @@
 
 class ACOVCharacter;
 
-DECLARE_LOG_CATEGORY_EXTERN(XYZPlayerController, All, Log)
+DECLARE_LOG_CATEGORY_EXTERN(COVPlayerController, All, Log)
 
 UCLASS()
 class COV_API ACOVPlayerController : public APlayerController
@@ -21,9 +21,6 @@ class COV_API ACOVPlayerController : public APlayerController
 	
 		//	Virtual function from APlayerController that allows custom input bindings
 		void SetupInputComponent() override;
-
-public:
-	void XYZ_Init();
 
 public:
 
@@ -41,19 +38,21 @@ public:
 
 
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_Interact();
+		void Input_E_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_SpaceBar_Pressed();
+		void Input_E_Released();
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_SpaceBar_Released();
+		void Input_Spacebar_Pressed();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_Spacebar_Released();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_Key_W_Pressed(float amount);
+		void Input_Key_W(float amount);
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_Key_D_Pressed(float amount);
+		void Input_Key_D(float amount);
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_MouseMovementY(float amount);
 	UFUNCTION(BlueprintNativeEvent)

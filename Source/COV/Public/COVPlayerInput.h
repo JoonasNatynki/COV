@@ -25,13 +25,21 @@ public:
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_W(float amount);
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
-		void Input_S(float amount);
-	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_D(float amount);
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
-		void Input_A(float amount);
+		void Input_E_Pressed();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
-		void Input_MouseUp(float amount);
+		void Input_E_Released();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
-		void Input_MouseRight(float amount);
+		void Input_Spacebar_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_Spacebar_Released();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftMouseButton_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftMouseButton_Released();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_MouseMovementY(float amount);
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_MouseMovementX(float amount);
 };

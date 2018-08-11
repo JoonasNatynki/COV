@@ -2,45 +2,27 @@
 
 #include "COVPlayerController.h"
 #include "COVCharacter.h"
+#include "COVBlueprintFunctionLibrary.h"
 #include <EngineUtils.h>
+#include <Kismet/KismetSystemLibrary.h>
 
-DEFINE_LOG_CATEGORY(XYZPlayerController)
-
-//	BEGINNING OF USE INTERFACE MAKRO	###############################################################################
-#define USE_INTERFACE(_object, _interface, _functionname, ...) TWeakObjectPtr<UObject> interfaceObject = _object;\
-if (interfaceObject.IsValid())\
-{\
-	if (interfaceObject->GetClass()->ImplementsInterface(U##_interface::StaticClass()))\
-	{\
-		I##_interface::Execute_##_functionname(interfaceObject.Get(), ##__VA_ARGS__);\
-	}\
-	else\
-	{\
-		/*UE_LOG(LogTemp, Log, TEXT("Using interface failed! The object does not implement such."));*/\
-	}\
-}\
-//	END OF USING INTERFACE MAKRO	###################################################################################
+DEFINE_LOG_CATEGORY(COVPlayerController)
 
 void ACOVPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	InputComponent->BindAction("SpaceBar", IE_Pressed, this, &ACOVPlayerController::Input_SpaceBar_Pressed);
-	InputComponent->BindAction("SpaceBar", IE_Released, this, &ACOVPlayerController::Input_SpaceBar_Released);
+	InputComponent->BindAction("E", IE_Pressed, this, &ACOVPlayerController::Input_E_Pressed);
+	InputComponent->BindAction("E", IE_Released, this, &ACOVPlayerController::Input_E_Released);
+	InputComponent->BindAction("Spacebar", IE_Pressed, this, &ACOVPlayerController::Input_Spacebar_Pressed);
+	InputComponent->BindAction("Spacebar", IE_Released, this, &ACOVPlayerController::Input_Spacebar_Released);
 	InputComponent->BindAction("LeftMouseButton", IE_Pressed, this, &ACOVPlayerController::Input_LeftMouseButton_Pressed);
 	InputComponent->BindAction("LeftMouseButton", IE_Released, this, &ACOVPlayerController::Input_LeftMouseButton_Released);
-	InputComponent->BindAction("Interact", IE_Pressed, this, &ACOVPlayerController::Input_Interact);
 
-	InputComponent->BindAxis("W", this, &ACOVPlayerController::Input_Key_W_Pressed);
-	InputComponent->BindAxis("D", this, &ACOVPlayerController::Input_Key_D_Pressed);
+	InputComponent->BindAxis("W", this, &ACOVPlayerController::Input_Key_W);
+	InputComponent->BindAxis("D", this, &ACOVPlayerController::Input_Key_D);
 	InputComponent->BindAxis("MouseMovementY", this, &ACOVPlayerController::Input_MouseMovementY);
 	InputComponent->BindAxis("MouseMovementX", this, &ACOVPlayerController::Input_MouseMovementX);
-}
-
-void ACOVPlayerController::XYZ_Init()
-{
-
-
 }
 
 ACOVCharacter* ACOVPlayerController::GetControlledCOVCharacter()
@@ -49,47 +31,60 @@ ACOVCharacter* ACOVPlayerController::GetControlledCOVCharacter()
 	return xyzchar;
 }
 
-void ACOVPlayerController::Input_Interact_Implementation()
+void ACOVPlayerController::Input_E_Pressed_Implementation()
 {
-	GetControlledCOVCharacter()->Input_Interact();
+	UE_LOG(COVPlayerController, Log, TEXT("E pressed."));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_E_Pressed)
 }
 
-void ACOVPlayerController::Input_SpaceBar_Pressed_Implementation()
+void ACOVPlayerController::Input_E_Released_Implementation()
 {
-	UE_LOG(XYZPlayerController, Log, TEXT("Spacebar pressed."));
+	UE_LOG(COVPlayerController, Log, TEXT("E released."));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_E_Released)
 }
 
-void ACOVPlayerController::Input_SpaceBar_Released_Implementation()
+void ACOVPlayerController::Input_Spacebar_Pressed_Implementation()
 {
-	UE_LOG(XYZPlayerController, Log, TEXT("Spacebar released."))
+	UE_LOG(COVPlayerController, Log, TEXT("Spacebar pressed."));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Pressed)
 }
 
-void ACOVPlayerController::Input_LeftMouseButton_Pressed_Implementation()
-{
-	UE_LOG(XYZPlayerController, Log, TEXT("Left mouse button pressed."))
-}
-
-void ACOVPlayerController::Input_LeftMouseButton_Released_Implementation()
-{
-	UE_LOG(XYZPlayerController, Log, TEXT("Left mouse button released."))
-}
-
-void ACOVPlayerController::Input_Key_W_Pressed_Implementation(float amount)
+void ACOVPlayerController::Input_Key_W_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_W, amount)
 }
 
-void ACOVPlayerController::Input_Key_D_Pressed_Implementation(float amount)
+void ACOVPlayerController::Input_Key_D_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_D, amount)
 }
 
+void ACOVPlayerController::Input_Spacebar_Released_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
+}
+
+void ACOVPlayerController::Input_LeftMouseButton_Pressed_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Left mouse button pressed."))
+		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Pressed)
+}
+
+void ACOVPlayerController::Input_LeftMouseButton_Released_Implementation()
+{
+	UE_LOG(COVPlayerController, Log, TEXT("Left mouse button released."))
+		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Released)
+}
+
 void ACOVPlayerController::Input_MouseMovementX_Implementation(float amount)
 {
-	AddYawInput(amount * _XSensitivity);
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseMovementX, amount)
+		AddYawInput(amount * _XSensitivity);
 }
 
 void ACOVPlayerController::Input_MouseMovementY_Implementation(float amount)
 {
-	AddPitchInput(amount * _YSensitivity);
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseMovementY, amount)
+		AddPitchInput(amount * _YSensitivity);
 }

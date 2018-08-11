@@ -62,7 +62,7 @@ public:
 	ACOVCharacter(const class FObjectInitializer& PCIP);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-public:
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	// Called to bind functionality to input
@@ -72,12 +72,17 @@ public:
 
 	//	PLAYERINPUT INTERFACE IMPLEMENTATIONS
 	virtual void Input_W_Implementation(float amount) override;
-	virtual void Input_S_Implementation(float amount) override;
 	virtual void Input_D_Implementation(float amount) override;
-	virtual void Input_A_Implementation(float amount) override;
-	virtual void Input_MouseUp_Implementation(float amount) override;
-	virtual void Input_MouseRight_Implementation(float amount) override;
+	virtual void Input_Spacebar_Pressed_Implementation() override;
+	virtual void Input_Spacebar_Released_Implementation() override;
+	virtual void Input_E_Pressed_Implementation() override;
+	virtual void Input_E_Released_Implementation() override;
+	virtual void Input_LeftMouseButton_Pressed_Implementation() override;
+	virtual void Input_LeftMouseButton_Released_Implementation() override;
+	virtual void Input_MouseMovementY_Implementation(float amount) override;
+	virtual void Input_MouseMovementX_Implementation(float amount) override;
 
+private:
 	//	INPUTS	#############################################################################################
 	UFUNCTION(Category = "Movement", BLueprintCallable)
 		//	Move character forward/back
@@ -98,7 +103,7 @@ public:
 
 
 
-
+public:
 	//	SERVER ONLY FUNCTIONS	#############################################################################
 	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
 		//	Server version of the UpdateYawAndPitch function
@@ -146,15 +151,10 @@ public:
 	//	Tries to get the actor which the player might be interacting with
 	AActor* TryGetInteractedActor();
 	//	GETTERS	############################################################################################
-
-
-
+	
 
 	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
 		void Update_IsReceivingMovementInput();
-
-
-
 
 	UFUNCTION(Category = "XYZCharacterAnimationVariables", BlueprintCallable)
 		float CalculateYaw();

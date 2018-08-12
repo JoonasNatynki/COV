@@ -133,9 +133,6 @@ void ACOVCharacter::Input_MoveRight(float amount)
 void ACOVCharacter::Input_Interact()
 {
 	AActor* interactedActor = TryGetInteractedActor();
-
-	if (IsValid(interactedActor))
-		SmoothMotionComponent->Server_Interact(interactedActor);
 }
 
 FVector ACOVCharacter::GetEyeWorldLocation() const

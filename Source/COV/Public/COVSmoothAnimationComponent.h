@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "COVSmoothAnimationComponent.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(COVSmoothAnimation, Log, All)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COV_API UCOVSmoothAnimationComponent : public UActorComponent
@@ -24,7 +25,7 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
-
+	//	VARIABLES ###########################################################################################
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The yaw of this characters upper torso value. To be used in the animation blueprint
 		float _upperTorsoYaw;
@@ -39,8 +40,7 @@ public:
 		FRotator _actorRotation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
-		bool _bIsReceivingMovementInput;
-
+		bool _bShouldBeRotatingHips;
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		//	Angle at which the character will start rotating towards aiming location
 		float _angleToStartRotatingHips = 90;
@@ -57,6 +57,7 @@ public:
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	The default maximum speed the character will be running at without sprinting
 		float _defaultMaximumWalkingSpeed = 200.0f;
+	//	VARIABLES ###########################################################################################
 
 	uint32_t _bIsReceivingForwardInput : 1;
 	uint32_t _bIsReceivingRightInput : 1;
@@ -75,23 +76,45 @@ public:
 	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetActorRotation(FRotator actorRotation);
-	UFUNCTION(Category = "XYZInteraction", Server, Reliable, WithValidation)
-		//	Server-side interaction
-		void Server_Interact(AActor* interacted);
 	UFUNCTION(Category = "XYZCharacterAnimation", Server, Reliable, WithValidation)
 		//	Server version of the current walking speed setter
 		void Server_SetCurrentWalkingSpeed(float currentWalkingSpeed);
 	//	####################################################################################################
 
+	//	REPPERS ############################################################################################
 	UFUNCTION()
 		void OnRep_currentMaximumMovementSpeed();
+	//	REPPERS ############################################################################################
 
+	//	GETTERS ############################################################################################
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		float GetYaw() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		float GetPitch() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		FRotator GetHipRotation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		bool GetShouldBeRotatingHips() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		FVector GetAimingLocation() const;
+	//	GETTERS ############################################################################################
 
 	//	SETTERS ############################################################################################
 	UFUNCTION(Category = "Movement", BlueprintCallable)
 		void SetCurrentWalkingSpeed(float currentWalkingSpeed);
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
+		void SetYaw(float yaw);
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
+		void SetPitch(float pitch);
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
+		void SetHipRotation(FRotator rot);
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
+		void SetShouldRotateHips(bool bShouldBeRotating);
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
+		void SetAimingLocation(FVector loc);
 	//	SETTERS ############################################################################################
 	
+	//	CALCULATORS ########################################################################################
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		float CalculateYaw();
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
@@ -99,11 +122,14 @@ public:
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FVector CalculateAimingLocation();
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		FRotator CalculateRotation(float deltaTime);
+		bool CalculateIsReceivingMovementInput();
+	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		FRotator CalculateHipRotation(float deltaTime);
+	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		FRotator CalculateHeadRotation() const;
+	//	CALCULATORS ########################################################################################
 
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	This function updates all of the necessary variables needed to animate the character. Put this in your character's tick and make sure it only runs on a local client.
 		void Update_AllAnimationVariables_TICK(float deltaTime);
-	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		bool CalculateIsReceivingMovementInput();
 };

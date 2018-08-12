@@ -7,7 +7,10 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Camera/CameraComponent.h>
+#include <Components/SkeletalMeshComponent.h>
+#include <Kismet/KismetSystemLibrary.h>
 
+DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
 // Sets default values for this component's properties
 UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
@@ -41,7 +44,7 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _upperTorsoPitch, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _aimingLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _actorRotation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bIsReceivingMovementInput, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMaximumMovementSpeed, COND_SkipOwner);
 }
 
@@ -97,26 +100,6 @@ void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: SERVER FUNCTION CALLED!."), PRINT_FUNCTION);
 }
 
-void UCOVSmoothAnimationComponent::Server_Interact_Implementation(AActor* interacted)
-{
-
-}
-
-bool UCOVSmoothAnimationComponent::Server_Interact_Validate(AActor* interacted)
-{
-	return true;
-}
-
-void UCOVSmoothAnimationComponent::SetCurrentWalkingSpeed(float currentWalkingSpeed)
-{
-	if (Cast<ACharacter>(GetOwner())->IsLocallyControlled())
-	{
-		_currentMaximumMovementSpeed = currentWalkingSpeed;
-		OnRep_currentMaximumMovementSpeed();
-		Server_SetCurrentWalkingSpeed(_currentMaximumMovementSpeed);
-	}
-}
-
 void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 {
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: ONREP!."), PRINT_FUNCTION);
@@ -127,6 +110,70 @@ void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 	{
 		Cast<ACharacter>(GetOwner())->GetCharacterMovement()->MaxWalkSpeed = _currentMaximumMovementSpeed;
 	}
+}
+
+float UCOVSmoothAnimationComponent::GetYaw() const
+{
+	return _upperTorsoYaw;
+}
+
+float UCOVSmoothAnimationComponent::GetPitch() const
+{
+	return _upperTorsoPitch;
+}
+
+FRotator UCOVSmoothAnimationComponent::GetHipRotation() const
+{
+	return _actorRotation;
+}
+
+bool UCOVSmoothAnimationComponent::GetShouldBeRotatingHips() const
+{
+	return _bShouldBeRotatingHips;
+}
+
+FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
+{
+	return _aimingLocation;
+}
+
+void UCOVSmoothAnimationComponent::SetYaw(float yaw)
+{
+	_upperTorsoYaw = yaw;
+	Server_SetYaw(yaw);
+}
+
+void UCOVSmoothAnimationComponent::SetPitch(float pitch)
+{
+	_upperTorsoPitch = pitch;
+	Server_SetPitch(pitch);
+}
+
+void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
+{
+	_actorRotation = rot;
+	Server_SetActorRotation(rot);
+}
+
+void UCOVSmoothAnimationComponent::SetShouldRotateHips(bool bShouldBeRotating)
+{
+	_bShouldBeRotatingHips = bShouldBeRotating;
+}
+
+void UCOVSmoothAnimationComponent::SetCurrentWalkingSpeed(float currentWalkingSpeed)
+{
+	if (GetOwner()->Role == ENetRole::ROLE_AutonomousProxy)
+	{
+		_currentMaximumMovementSpeed = currentWalkingSpeed;
+		OnRep_currentMaximumMovementSpeed();
+		Server_SetCurrentWalkingSpeed(_currentMaximumMovementSpeed);
+	}
+}
+
+void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
+{
+	_aimingLocation = loc;
+	Server_SetAimingLocation(loc);
 }
 
 float UCOVSmoothAnimationComponent::CalculateYaw()
@@ -143,15 +190,11 @@ float UCOVSmoothAnimationComponent::CalculateYaw()
 	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
 	{
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
-
-		Server_SetYaw(clampedYaw);
 		return clampedYaw;
 	}
 	else   //	Need to rotate character towards _aimingVector
 	{
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
-
-		Server_SetYaw(clampedYaw);
 		return clampedYaw;
 	}
 }
@@ -174,20 +217,18 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation()
 	float lineTraceLength = 10000.0f;
 
 	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
-		this,
+		GetOwner(),
 		camWorldLoc + (camFwdVec * (-20.0f)),
 		camWorldLoc + (camFwdVec * lineTraceLength));
 
 	if (RV_Hit.bBlockingHit)
 	{
 		FVector result = RV_Hit.ImpactPoint;
-		Server_SetAimingLocation(result);
 		return result;
 	}
 	else
 	{
 		FVector result = RV_Hit.TraceEnd;
-		Server_SetAimingLocation(result);
 		return result;
 	}
 }
@@ -203,29 +244,27 @@ float UCOVSmoothAnimationComponent::CalculatePitch()
 
 	if (controlRot.Pitch > 90)
 	{
-		Server_SetPitch(controlRot.Pitch - 360.0f);
 		return (controlRot.Pitch - 360.0f);
 	}
 	else
 	{
-		Server_SetPitch(controlRot.Pitch);
 		return controlRot.Pitch;
 	}
 }
 
-FRotator UCOVSmoothAnimationComponent::CalculateRotation(float deltaTime)
+FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime)
 {
 	FRotator controllerRotation = Cast<ACharacter>(GetOwner())->GetControlRotation();
 	FRotator actorRotation = _actorRotation;
 
 	float absAngle = FMath::Abs(_upperTorsoYaw);
 
-	if (absAngle > _angleToStartRotatingHips || _bIsReceivingMovementInput)
+	if (absAngle > _angleToStartRotatingHips || _bShouldBeRotatingHips)
 	{
 		float rotSpeed;
 		uint8 rotExp = 6;	//	Hip rotation angle exponent
 
-		_bIsReceivingMovementInput ? rotSpeed = _movementInputRotationSpeed : rotSpeed = FMath::Pow((absAngle / _angleToStartRotatingHips), rotExp);
+		_bShouldBeRotatingHips ? rotSpeed = _movementInputRotationSpeed : rotSpeed = FMath::Pow((absAngle / _angleToStartRotatingHips), rotExp);
 		FRotator result = UKismetMathLibrary::RInterpTo(actorRotation, controllerRotation, deltaTime, rotSpeed);
 		result.Pitch = 0;
 		result.Roll = 0;
@@ -235,21 +274,38 @@ FRotator UCOVSmoothAnimationComponent::CalculateRotation(float deltaTime)
 	return actorRotation;
 }
 
+FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
+{
+	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+
+	if (ownerSkeletalMeshComp.IsValid())
+	{
+		if (!ownerSkeletalMeshComp->DoesSocketExist("Head"))
+		{
+			UE_LOG(COVSmoothAnimation, Warning, TEXT("Owner (%s) did not have a socket named 'head'."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+			return FRotator(0, 0, 0);
+		}
+
+		FVector headLoc = ownerSkeletalMeshComp->GetSocketLocation("Head");
+		FVector aimingLoc = _aimingLocation;
+
+		FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, aimingLoc);
+		FRotator headRot = FRotator(90.0f, 0, 90.0f);
+		headRot += tempRot;
+
+		return headRot;
+	}
+
+	return FRotator(0, 0, 0);
+}
+
 void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(float deltaTime)
 {
-	_actorRotation = CalculateRotation(deltaTime);
-	Server_SetActorRotation(_actorRotation);
-
-	_upperTorsoYaw = CalculateYaw();
-	Server_SetYaw(_upperTorsoYaw);
-
-	_upperTorsoPitch = CalculatePitch();
-	Server_SetPitch(_upperTorsoPitch);
-
-	_aimingLocation = CalculateAimingLocation();
-	Server_SetAimingLocation(_aimingLocation);
-
-	_bIsReceivingMovementInput = CalculateIsReceivingMovementInput();
+	SetHipRotation(CalculateHipRotation(deltaTime));
+	SetYaw(CalculateYaw());
+	SetPitch(CalculatePitch());
+	SetAimingLocation(CalculateAimingLocation());
+	SetShouldRotateHips(CalculateIsReceivingMovementInput());
 }
 
 // Called every frame
@@ -257,7 +313,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (Cast<ACharacter>(GetOwner())->IsLocallyControlled())
+	if (GetOwner()->Role == ENetRole::ROLE_AutonomousProxy)
 	{
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}

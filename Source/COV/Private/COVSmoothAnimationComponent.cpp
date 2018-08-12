@@ -233,11 +233,6 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation()
 	}
 }
 
-bool UCOVSmoothAnimationComponent::CalculateIsReceivingMovementInput()
-{
-	return _bIsReceivingForwardInput || _bIsReceivingRightInput;
-}
-
 float UCOVSmoothAnimationComponent::CalculatePitch()
 {
 	FRotator controlRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
@@ -305,7 +300,6 @@ void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(float delta
 	SetYaw(CalculateYaw());
 	SetPitch(CalculatePitch());
 	SetAimingLocation(CalculateAimingLocation());
-	SetShouldRotateHips(CalculateIsReceivingMovementInput());
 }
 
 // Called every frame

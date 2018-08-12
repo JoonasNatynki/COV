@@ -109,7 +109,7 @@ void ACOVCharacter::Input_MoveForward(float amount)
 		dir.Z = 0.0f;
 		dir.Normalize();
 		AddMovementInput(dir * amount);
-		SmoothMotionComponent->_bIsReceivingForwardInput = amount != 0.0f;
+		SmoothMotionComponent->SetShouldRotateHips(amount != 0.0f);
 	}
 }
 
@@ -126,7 +126,7 @@ void ACOVCharacter::Input_MoveRight(float amount)
 		dir.Z = 0.0f;
 		dir.Normalize();
 		AddMovementInput(dir * amount);
-		SmoothMotionComponent->_bIsReceivingRightInput = amount != 0.0f;
+		SmoothMotionComponent->SetShouldRotateHips(amount != 0.0f);
 	}
 }
 

@@ -122,8 +122,6 @@ public:
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FVector CalculateAimingLocation();
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		bool CalculateIsReceivingMovementInput();
-	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FRotator CalculateHipRotation(float deltaTime);
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FRotator CalculateHeadRotation() const;

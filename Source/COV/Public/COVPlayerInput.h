@@ -43,6 +43,8 @@ public:
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_MovementInput(float amount);
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_MouseMovementY(float amount);
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_MouseMovementX(float amount);

@@ -48,15 +48,17 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftShift_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
+		void Input_Key_W(float amount);
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_Key_D(float amount);
+	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftShift_Released();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();
 	UFUNCTION(BlueprintNativeEvent)
-		void Input_Key_W(float amount);
-	UFUNCTION(BlueprintNativeEvent)
-		void Input_Key_D(float amount);
+		void Input_MovementInput(float amount);
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_MouseMovementY(float amount);
 	UFUNCTION(BlueprintNativeEvent)

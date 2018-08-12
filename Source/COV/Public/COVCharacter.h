@@ -47,6 +47,7 @@ public:
 	virtual void Input_LeftShift_Released_Implementation() override;
 	virtual void Input_LeftMouseButton_Pressed_Implementation() override;
 	virtual void Input_LeftMouseButton_Released_Implementation() override;
+	virtual void Input_MovementInput_Implementation(float amount) override;
 	virtual void Input_MouseMovementY_Implementation(float amount) override;
 	virtual void Input_MouseMovementX_Implementation(float amount) override;
 

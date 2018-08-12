@@ -36,6 +36,16 @@ void ACOVCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaul
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);	
 }
 
+void ACOVCharacter::Input_E_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_E_Released_Implementation()
+{
+
+}
+
 void ACOVCharacter::Input_D_Implementation(float amount)
 {
 	Input_MoveRight(amount);
@@ -66,16 +76,6 @@ void ACOVCharacter::Input_LeftShift_Released_Implementation()
 	SmoothMotionComponent->SetCurrentWalkingSpeed(SmoothMotionComponent->_defaultMaximumWalkingSpeed);
 }
 
-void ACOVCharacter::Input_E_Pressed_Implementation()
-{
-
-}
-
-void ACOVCharacter::Input_E_Released_Implementation()
-{
-
-}
-
 void ACOVCharacter::Input_LeftMouseButton_Pressed_Implementation()
 {
 
@@ -96,6 +96,11 @@ void ACOVCharacter::Input_MouseMovementX_Implementation(float amount)
 
 }
 
+void ACOVCharacter::Input_MovementInput_Implementation(float amount)
+{
+	SmoothMotionComponent->SetShouldRotateHips(amount != 0);
+}
+
 void ACOVCharacter::Input_MoveForward(float amount)
 {
 	if (this != nullptr)
@@ -109,7 +114,6 @@ void ACOVCharacter::Input_MoveForward(float amount)
 		dir.Z = 0.0f;
 		dir.Normalize();
 		AddMovementInput(dir * amount);
-		SmoothMotionComponent->SetShouldRotateHips(amount != 0.0f);
 	}
 }
 
@@ -126,7 +130,6 @@ void ACOVCharacter::Input_MoveRight(float amount)
 		dir.Z = 0.0f;
 		dir.Normalize();
 		AddMovementInput(dir * amount);
-		SmoothMotionComponent->SetShouldRotateHips(amount != 0.0f);
 	}
 }
 

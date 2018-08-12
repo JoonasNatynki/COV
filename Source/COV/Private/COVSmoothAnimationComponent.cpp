@@ -20,7 +20,6 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
 	bReplicates = true;
-	// ...
 	//	Initialize the variable. Will be set properly in the BeginPlay	
 	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;
 }
@@ -155,9 +154,9 @@ void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
 	Server_SetActorRotation(rot);
 }
 
-void UCOVSmoothAnimationComponent::SetShouldRotateHips(bool bShouldBeRotating)
+void UCOVSmoothAnimationComponent::SetShouldRotateHips(float inputAmount)
 {
-	_bShouldBeRotatingHips = bShouldBeRotating;
+	_bShouldBeRotatingHips = inputAmount != 0.0f;
 }
 
 void UCOVSmoothAnimationComponent::SetCurrentWalkingSpeed(float currentWalkingSpeed)

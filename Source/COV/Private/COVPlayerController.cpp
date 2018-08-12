@@ -23,6 +23,7 @@ void ACOVPlayerController::SetupInputComponent()
 
 	InputComponent->BindAxis("W", this, &ACOVPlayerController::Input_Key_W);
 	InputComponent->BindAxis("D", this, &ACOVPlayerController::Input_Key_D);
+	InputComponent->BindAxis("MovementInput", this, &ACOVPlayerController::Input_MovementInput);
 	InputComponent->BindAxis("MouseMovementY", this, &ACOVPlayerController::Input_MouseMovementY);
 	InputComponent->BindAxis("MouseMovementX", this, &ACOVPlayerController::Input_MouseMovementX);
 }
@@ -101,4 +102,9 @@ void ACOVPlayerController::Input_MouseMovementY_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseMovementY, amount)
 		AddPitchInput(amount * _YSensitivity);
+}
+
+void ACOVPlayerController::Input_MovementInput_Implementation(float amount)
+{
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MovementInput, amount)
 }

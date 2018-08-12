@@ -59,10 +59,6 @@ public:
 		float _defaultMaximumWalkingSpeed = 200.0f;
 	//	VARIABLES ###########################################################################################
 
-	uint32_t _bIsReceivingForwardInput : 1;
-	uint32_t _bIsReceivingRightInput : 1;
-
-
 	//	SERVER ONLY FUNCTIONS	#############################################################################
 	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
 		//	Server version of the UpdateYawAndPitch function
@@ -109,7 +105,7 @@ public:
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
 		void SetHipRotation(FRotator rot);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetShouldRotateHips(bool bShouldBeRotating);
+		void SetShouldRotateHips(float inputAmount);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
 		void SetAimingLocation(FVector loc);
 	//	SETTERS ############################################################################################

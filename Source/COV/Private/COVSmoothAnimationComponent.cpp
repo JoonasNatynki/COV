@@ -9,6 +9,7 @@
 #include <Camera/CameraComponent.h>
 #include <Components/SkeletalMeshComponent.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include <DrawDebugHelpers.h>
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
@@ -136,6 +137,45 @@ FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
 	return _aimingLocation;
 }
 
+FVector UCOVSmoothAnimationComponent::GetHeadLocation() const
+{
+	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+
+	ensureMsgf(ownerSkeletalMeshComp.IsValid(), TEXT("Owner (%s) did not have a SkeletalMeshComponent."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+
+	if (ownerSkeletalMeshComp.IsValid())
+	{
+		bool socketDoesExist = ownerSkeletalMeshComp->DoesSocketExist("Head");
+		if (!socketDoesExist)
+		{
+			ensureMsgf(socketDoesExist, TEXT("Owner (%s) did not have a socket named 'head'."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+			return FVector(0, 0, 0);
+		}
+
+		FVector headLoc = ownerSkeletalMeshComp->GetSocketLocation("Head");
+		return headLoc;
+	}
+
+	return FVector(0, 0, 0);
+}
+
+FRotator UCOVSmoothAnimationComponent::GetAimPitchTargetRotation() const
+{
+	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
+	{
+		FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
+		return targetRot;
+	}
+
+	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
+	{
+		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(GetHeadLocation(), GetAimingLocation());
+		return targetRot;
+	}
+
+	return FRotator(0, 0, 0);
+}
+
 void UCOVSmoothAnimationComponent::SetYaw(float yaw)
 {
 	_upperTorsoYaw = yaw;
@@ -181,23 +221,24 @@ float UCOVSmoothAnimationComponent::CalculateYaw()
 	float angleToStopRotatingHips = 20.0f;
 	float torsoMaxRotation = 140.0f;
 
-	FRotator controlRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
 	FRotator playerRot = _actorRotation;	//	REALLY IMPORTANT PART! TAKE ROTATION OF LAST CALCULATION NOT THE CURRENT ONE!
-	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(controlRot, playerRot);
+	FRotator targetRot = GetAimPitchTargetRotation();
+	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(targetRot, playerRot);
 
 	//	If hips turn over too much...
 	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
 	{
-		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
-		return clampedYaw;
+		//	We clamp the yaw so that the torso can't rotate in a silly manner
+		float actualYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
+		return actualYaw;
 	}
-	else   //	Need to rotate character towards _aimingVector
+	else   //	Need to rotate character towards the target
 	{
-		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
-		return clampedYaw;
+		//	We clamp the yaw so that the torso can't rotate in a silly manner
+		float actualYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
+		return actualYaw;
 	}
 }
-
 
 FVector UCOVSmoothAnimationComponent::CalculateAimingLocation()
 {
@@ -234,61 +275,49 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation()
 
 float UCOVSmoothAnimationComponent::CalculatePitch()
 {
-	FRotator controlRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
+	FRotator targetRot = GetAimPitchTargetRotation();
 
-	if (controlRot.Pitch > 90)
+	if (targetRot.Pitch > 90)
 	{
-		return (controlRot.Pitch - 360.0f);
+		return (targetRot.Pitch - 360.0f);
 	}
 	else
 	{
-		return controlRot.Pitch;
+		return targetRot.Pitch;
 	}
 }
 
 FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime)
 {
-	FRotator controllerRotation = Cast<ACharacter>(GetOwner())->GetControlRotation();
-	FRotator actorRotation = _actorRotation;
+	FRotator goalRotation = Cast<ACharacter>(GetOwner())->GetControlRotation();
+	FRotator startRotation = _actorRotation;
 
 	float absAngle = FMath::Abs(_upperTorsoYaw);
 
 	if (absAngle > _angleToStartRotatingHips || _bShouldBeRotatingHips)
 	{
 		float rotSpeed;
-		uint8 rotExp = 6;	//	Hip rotation angle exponent
+		float rotExp = 5.5f;	//	Hip rotation angle exponent
 
-		_bShouldBeRotatingHips ? rotSpeed = _movementInputRotationSpeed : rotSpeed = FMath::Pow((absAngle / _angleToStartRotatingHips), rotExp);
-		FRotator result = UKismetMathLibrary::RInterpTo(actorRotation, controllerRotation, deltaTime, rotSpeed);
+		_bShouldBeRotatingHips ? rotSpeed = _movementInputRotationSpeed : rotSpeed = (FMath::Pow((absAngle / _angleToStartRotatingHips), rotExp) * 0.25f);
+		FRotator result = UKismetMathLibrary::RInterpTo(startRotation, goalRotation, deltaTime, rotSpeed);
 		result.Pitch = 0;
 		result.Roll = 0;
 		return result;
 	}
 
-	return actorRotation;
+	return startRotation;
 }
 
 FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 {
-	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+	FVector headLoc = GetHeadLocation();
+	FVector aimingLoc = _aimingLocation;
+	FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, aimingLoc);
+	FRotator headRot = FRotator(90.0f, 0, 90.0f);
+	headRot += tempRot;
 
-	if (ownerSkeletalMeshComp.IsValid())
-	{
-		if (!ownerSkeletalMeshComp->DoesSocketExist("Head"))
-		{
-			UE_LOG(COVSmoothAnimation, Warning, TEXT("Owner (%s) did not have a socket named 'head'."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
-			return FRotator(0, 0, 0);
-		}
-
-		FVector headLoc = ownerSkeletalMeshComp->GetSocketLocation("Head");
-		FVector aimingLoc = _aimingLocation;
-
-		FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, aimingLoc);
-		FRotator headRot = FRotator(90.0f, 0, 90.0f);
-		headRot += tempRot;
-
-		return headRot;
-	}
+	return headRot;
 
 	return FRotator(0, 0, 0);
 }
@@ -310,5 +339,8 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 	{
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
+
+	DrawDebugSphere(GetWorld(), GetAimingLocation(), 10.0f, 12, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
+	DrawDebugLine(GetWorld(), GetHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
 }
 

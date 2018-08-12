@@ -8,6 +8,12 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(COVSmoothAnimation, Log, All)
 
+UENUM() enum EAimOffsetCalculationMode
+{
+	ControlRotation	UMETA(DisplayName = "Control rotation"),
+	AimLocation		UMETA(DisplayName = "Aim location")
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 {
@@ -47,6 +53,9 @@ public:
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	How fast the player rotates to movement vector when receiving movement input?
 		float _movementInputRotationSpeed = 5.0f;
+
+	UPROPERTY(Category = "Animation", EditDefaultsOnly)
+		TEnumAsByte<EAimOffsetCalculationMode> AimOffsetMode = EAimOffsetCalculationMode::ControlRotation;
 
 	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed)
 		//	The default maximum speed the character will be running at without sprinting
@@ -93,6 +102,11 @@ public:
 		bool GetShouldBeRotatingHips() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		FVector GetAimingLocation() const;
+		//	Gets the "head" socket's location. If nothing is found, return 0,0,0 vector
+		FVector GetHeadLocation() const;
+
+		//	Gets the target rotation that the yaw and pitch try to aim at.
+		FRotator GetAimPitchTargetRotation() const;
 	//	GETTERS ############################################################################################
 
 	//	SETTERS ############################################################################################

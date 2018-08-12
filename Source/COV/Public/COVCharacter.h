@@ -96,11 +96,4 @@ public:
 	//	Tries to get the actor which the player might be interacting with
 	AActor* TryGetInteractedActor();
 	//	GETTERS	############################################################################################
-
-
-	//	DEBUGS	#######################################################################
-	bool _bShowDebugForwardVector = false;
-
-	void DrawDebugEyeVector();
-	//	###############################################################################
 };

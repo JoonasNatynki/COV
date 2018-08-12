@@ -224,19 +224,8 @@ AActor* ACOVCharacter::TryGetInteractedActor()
 	return interactedActor;
 }
 
-void ACOVCharacter::DrawDebugEyeVector()
-{
-	FHitResult hitOut(ForceInit);
-	TArray<AActor*> actorsToIgnore;
-	actorsToIgnore.Add(this);
-	UKismetSystemLibrary::LineTraceSingle(this, GetEyeWorldLocation(), GetAimingLocation(), ETraceTypeQuery::TraceTypeQuery_MAX, true, actorsToIgnore, EDrawDebugTrace::ForOneFrame, hitOut, true, FLinearColor(FColor(1, 1, 1, 1)), FLinearColor(FColor(1, 1, 1, 1)), 0.1f);
-}
-
 // Called every frame
 void ACOVCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	
-	DrawDebugEyeVector();
 }

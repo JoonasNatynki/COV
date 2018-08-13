@@ -16,7 +16,7 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetActorTickEnabled(true);
-	//SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
+	SetTickGroup(ETickingGroup::TG_PostUpdateWork);	//	Maybe set post update group so that animation has time to finish?
 
 	//this->bAlwaysRelevant = true;
 	bUseControllerRotationYaw = false;

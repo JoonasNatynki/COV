@@ -19,7 +19,8 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
+	//SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
+	AddTickPrerequisiteActor(GetOwner());
 	bReplicates = true;
 	//	Initialize the variable. Will be set properly in the BeginPlay	
 	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;

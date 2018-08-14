@@ -134,18 +134,7 @@ void ACOVCharacter::Input_MoveRight(float amount)
 
 void ACOVCharacter::Input_Interact()
 {
-	AActor* interactedActor = TryGetInteractedActor();
-}
 
-FVector ACOVCharacter::GetEyeWorldLocation() const
-{
-	TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
-
-	//	Error case
-	if (!cam.IsValid())
-		return FVector(0, 0, 0);
-
-	return cam->GetComponentLocation();
 }
 
 UCameraComponent* ACOVCharacter::GetCharacterCamera() const
@@ -172,93 +161,8 @@ ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const
 	return playerController;
 }
 
-FVector ACOVCharacter::GetAimingLocation()
-{
-	return SmoothMotionComponent->_aimingLocation;
-}
-
-FVector ACOVCharacter::GetAimingVector()
-{
-	FVector aimingVec = GetAimingLocation() - GetEyeWorldLocation();
-	return aimingVec;
-}
-
-float ACOVCharacter::GetYaw()
-{
-	return SmoothMotionComponent->_cachedYaw;
-}
-
-float ACOVCharacter::GetPitch()
-{
-	IS_NOT_LOCALLY_CONTROLLED_WARNING;
-
-	FRotator controlRot = GetControlRotation();
-
-	if (controlRot.Pitch > 90)
-	{
-		//Server_SetPitch(controlRot.Pitch - 360.0f);
-		return (controlRot.Pitch - 360.0f);
-	}
-	else
-	{
-		//Server_SetPitch(controlRot.Pitch);
-		return controlRot.Pitch;
-	}
-}
-
-FRotator ACOVCharacter::GetHipRotation() const
-{
-	return SmoothMotionComponent->cachedHipRotation;
-}
-
-AActor* ACOVCharacter::TryGetInteractedActor()
-{
-	FVector eyePos = GetEyeWorldLocation();
-	TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
-
-	if (!cam.IsValid())
-	{
-		UE_LOG(COVCharacter, Warning, TEXT("%s: No camera found!"), PRINT_FUNCTION);
-		return nullptr;
-	}
-
-	FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(this, eyePos, eyePos + (cam->GetForwardVector() * _maximumInteractionDistance));
-
-	AActor* interactedActor = hit.Actor.Get();
-
-	//	Check if interact line trace hits and actor or not
-	if (!IsValid(interactedActor))
-	{
-		UE_LOG(COVCharacter, Log, TEXT("%s: Interact line trace of actor (%s) did not hit anything."), PRINT_FUNCTION, *GetName());
-		return nullptr;
-	}
-
-	return interactedActor;
-}
-
-
-float ACOVCharacter::CalculatePitch()
-{
-	IS_NOT_LOCALLY_CONTROLLED_WARNING;
-
-	FRotator controlRot = GetControlRotation();
-
-	if (controlRot.Pitch > 90)
-	{
-		//Server_SetPitch(controlRot.Pitch - 360.0f);
-		return (controlRot.Pitch - 360.0f);
-	}
-	else
-	{
-		//Server_SetPitch(controlRot.Pitch);
-		return controlRot.Pitch;
-	}
-}
-
 // Called every frame
 void ACOVCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	_pitch = CalculatePitch();
 }

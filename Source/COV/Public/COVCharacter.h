@@ -64,37 +64,14 @@ private:
 		void Input_Interact();
 	//	#####################################################################################################
 
-	float _pitch;
-	float CalculatePitch();
-
 public:
 
 	//	GETTERS	############################################################################################
-	UFUNCTION(Category = "COVCharacter", BlueprintPure)
-		//	Get the player eye position in world space
-		FVector GetEyeWorldLocation() const;
 	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the character's camera
 		UCameraComponent* GetCharacterCamera() const;
 	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the XYZCharacterController of this character
 		ACOVPlayerController* GetCOVPlayerController() const;
-	UFUNCTION(Category = "COVCharacter", BlueprintPure)
-		//	Get the aiming vector
-		FVector GetAimingLocation();
-	UFUNCTION(Category = "COVCharacter", BlueprintPure)
-		//	Get the aiming vector
-		FVector GetAimingVector();
-	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
-		//	Simple getter for yaw
-		float GetYaw();
-	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
-		//	Simple getter for _upperTorsopitch
-		float GetPitch();
-	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintPure)
-		FRotator GetHipRotation() const;
-
-	//	Tries to get the actor which the player might be interacting with
-	AActor* TryGetInteractedActor();
 	//	GETTERS	############################################################################################
 };

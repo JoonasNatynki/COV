@@ -10,6 +10,8 @@
 #include <Components/SkeletalMeshComponent.h>
 #include <Kismet/KismetSystemLibrary.h>
 #include <DrawDebugHelpers.h>
+#include <GameFramework/Pawn.h>
+#include <GameFramework/PlayerController.h>
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
@@ -21,7 +23,8 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.TickGroup = TG_PostUpdateWork;
+	//PrimaryComponentTick.TickGroup = ETickingGroup::TG_PostUpdateWork;	//	IMPORTANT FOR TICK TO NOT LAG BEHIND IF DRAWING DEBUG THINGS
+	AddTickPrerequisiteActor(GetOwner());
 	bReplicates = true;
 	//	Initialize the variable. Will be set properly in the BeginPlay	
 	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;
@@ -196,7 +199,7 @@ void UCOVSmoothAnimationComponent::SetShouldRotateHips(float inputAmount)
 
 void UCOVSmoothAnimationComponent::SetCurrentWalkingSpeed(float currentWalkingSpeed)
 {
-	if (GetOwner()->Role == ENetRole::ROLE_AutonomousProxy)
+	if (IS_LOCALLY_CONTROLLED)
 	{
 		_currentMaximumMovementSpeed = currentWalkingSpeed;
 		OnRep_currentMaximumMovementSpeed();
@@ -212,24 +215,28 @@ void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
 
 FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 {
-	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(Cast<ACharacter>(GetOwner())->GetComponentByClass(UCameraComponent::StaticClass()));
-
-	if (!cam.IsValid())
-	{
-		//UE_LOG(COVCharacter, Error, TEXT("%s: No camera found!"), PRINT_FUNCTION);
-		FVector aimLoc = FVector(0, 0, 0);
-		return aimLoc;
-	}
-
 	FHitResult RV_Hit(ForceInit);
-	FVector camWorldLoc = cam->GetComponentLocation();
-	FVector camFwdVec = cam->GetForwardVector();
-	float lineTraceLength = 10000.0f;
+
+	//	THIS FINALLY FIXED THE WHOLE CODE!!!! EVERYTHING IS WORKING PERFECTLY NOW AND IS FRAME ACCURATE AND NO LAG WHATSOEVER!!
+	//	TRAIN CRASH! CHOOO CHOOO!
+	APawn* pawn = Cast<APawn>(GetOwner());
+	AController* controller = pawn->GetController();
+	APlayerController* playerController = Cast<APlayerController>(controller);
+	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
+
+	//	Ray starting point
+	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
+	//	end point targer direction
+	FVector controllerForwardVector = Cast<AActor>(Cast<APawn>(GetOwner())->GetController())->GetActorForwardVector();
+	
+	float lineTraceLength = _aimingLocationTraceLength;
 
 	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
 		GetOwner(),
-		camWorldLoc + (camFwdVec * (-20.0f)),
-		camWorldLoc + (camFwdVec * lineTraceLength));
+		playerViewWorldLocation + (controllerForwardVector),
+		playerViewWorldLocation + (controllerForwardVector * lineTraceLength));
+
+	DrawDebugSphere(GetWorld(), RV_Hit.ImpactPoint, 10.0f, 12, FColor(255, 0, 255, 1), false, 1.0f, 1, 1.0f);
 
 	if (RV_Hit.bBlockingHit)
 	{
@@ -243,7 +250,7 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 	}
 }
 
-FRotator UCOVSmoothAnimationComponent::GetAimPitchTargetRotation() const
+FRotator UCOVSmoothAnimationComponent::GetRotationToTargetDirection() const
 {
 	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
 	{
@@ -266,44 +273,40 @@ float UCOVSmoothAnimationComponent::CalculateYaw() const
 	float angleToStopRotatingHips = 20.0f;
 	float torsoMaxRotation = 140.0f;
 
-	//FRotator controlRot = Cast<APawn>(GetOwner())->GetControlRotation();
-	FRotator controlRot = GetAimPitchTargetRotation();
-	FRotator playerRot = cachedHipRotation;	//	REALLY IMPORTANT PART! TAKE ROTATION OF LAST CALCULATION NOT THE CURRENT ONE!
-	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(controlRot, playerRot);
+	FRotator targetRot = GetRotationToTargetDirection();
+	FRotator playerRot = Cast<ACharacter>(GetOwner())->GetActorRotation();
+	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(playerRot, targetRot);
 
 	//	If hips turn over too much...
 	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
 	{
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
-		return clampedYaw;
+		return -clampedYaw;
 	}
 	else   //	Need to rotate character towards _aimingVector
 	{
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
-		return clampedYaw;
+		return -clampedYaw;
 	}
 }
 
 float UCOVSmoothAnimationComponent::CalculatePitch() const
 {
-	//FRotator controlRot = Cast<APawn>(GetOwner())->GetControlRotation();
-	FRotator controlRot = GetAimPitchTargetRotation();
+	FRotator controlRot = GetRotationToTargetDirection();
 
 	if (controlRot.Pitch > 90)
 	{
-		//Server_SetPitch(controlRot.Pitch - 360.0f);
 		return (controlRot.Pitch - 360.0f);
 	}
 	else
 	{
-		//Server_SetPitch(controlRot.Pitch);
 		return controlRot.Pitch;
 	}
 }
 
 FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) const
 {
-	FRotator goalRotation = GetAimPitchTargetRotation();
+	FRotator goalRotation = GetRotationToTargetDirection();
 	FRotator startRotation = cachedHipRotation;
 
 	float absAngle = FMath::Abs(_cachedYaw);
@@ -326,7 +329,7 @@ FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) con
 FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 {
 	FVector headLoc = GetHeadLocation();
-	FVector aimingLoc = _aimingLocation;
+	FVector aimingLoc = GetAimingLocation();
 	FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, aimingLoc);
 	FRotator headRot = FRotator(90.0f, 0, 90.0f);
 	headRot += tempRot;
@@ -339,9 +342,9 @@ FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(float deltaTime)
 {
 	SetHipRotation(CalculateHipRotation(deltaTime));
+	SetAimingLocation(CalculateAimingLocation());
 	SetYaw(CalculateYaw());
 	SetPitch(CalculatePitch());
-	SetAimingLocation(CalculateAimingLocation());
 }
 
 // Called every frame
@@ -351,6 +354,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 
 	if (Cast<APawn>(GetOwner())->IsLocallyControlled())
 	{
+		//	Creates cached variable values and sends them to the server
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
 

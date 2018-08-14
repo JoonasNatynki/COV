@@ -53,6 +53,10 @@ public:
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	How fast the player rotates to movement vector when receiving movement input?
 		float _movementInputRotationSpeed = 5.0f;
+	UPROPERTY(Category = "Animation", EditDefaultsOnly)
+		//	The maximum distance that we use to determine where the player is looking at.
+		float _aimingLocationTraceLength = 10000.0f;
+
 
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		TEnumAsByte<EAimOffsetCalculationMode> AimOffsetMode = EAimOffsetCalculationMode::ControlRotation;
@@ -106,7 +110,7 @@ public:
 		FVector GetHeadLocation() const;
 
 		//	Gets the target rotation that the yaw and pitch try to aim at.
-		FRotator GetAimPitchTargetRotation() const;
+		FRotator GetRotationToTargetDirection() const;
 	//	GETTERS ############################################################################################
 
 	//	SETTERS ############################################################################################

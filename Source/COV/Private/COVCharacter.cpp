@@ -185,17 +185,30 @@ FVector ACOVCharacter::GetAimingVector()
 
 float ACOVCharacter::GetYaw()
 {
-	return SmoothMotionComponent->_upperTorsoYaw;
+	return SmoothMotionComponent->_cachedYaw;
 }
 
 float ACOVCharacter::GetPitch()
 {
-	return SmoothMotionComponent->_upperTorsoPitch;
+	IS_NOT_LOCALLY_CONTROLLED_WARNING;
+
+	FRotator controlRot = GetControlRotation();
+
+	if (controlRot.Pitch > 90)
+	{
+		//Server_SetPitch(controlRot.Pitch - 360.0f);
+		return (controlRot.Pitch - 360.0f);
+	}
+	else
+	{
+		//Server_SetPitch(controlRot.Pitch);
+		return controlRot.Pitch;
+	}
 }
 
 FRotator ACOVCharacter::GetHipRotation() const
 {
-	return SmoothMotionComponent->_actorRotation;
+	return SmoothMotionComponent->cachedHipRotation;
 }
 
 AActor* ACOVCharacter::TryGetInteractedActor()
@@ -223,8 +236,29 @@ AActor* ACOVCharacter::TryGetInteractedActor()
 	return interactedActor;
 }
 
+
+float ACOVCharacter::CalculatePitch()
+{
+	IS_NOT_LOCALLY_CONTROLLED_WARNING;
+
+	FRotator controlRot = GetControlRotation();
+
+	if (controlRot.Pitch > 90)
+	{
+		//Server_SetPitch(controlRot.Pitch - 360.0f);
+		return (controlRot.Pitch - 360.0f);
+	}
+	else
+	{
+		//Server_SetPitch(controlRot.Pitch);
+		return controlRot.Pitch;
+	}
+}
+
 // Called every frame
 void ACOVCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	_pitch = CalculatePitch();
 }

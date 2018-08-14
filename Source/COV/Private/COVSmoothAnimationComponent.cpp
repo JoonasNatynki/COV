@@ -13,26 +13,26 @@
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
+#define IS_LOCALLY_CONTROLLED Cast<ACharacter>(GetOwner())->IsLocallyControlled()
+
 // Sets default values for this component's properties
 UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	//SetTickGroup(ETickingGroup::TG_PrePhysics);	//	Maybe set post update group so that animation has time to finish?
-	AddTickPrerequisiteActor(GetOwner());
+	PrimaryComponentTick.TickGroup = TG_PostUpdateWork;
 	bReplicates = true;
 	//	Initialize the variable. Will be set properly in the BeginPlay	
 	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;
 }
-
 
 // Called when the game starts
 void UCOVSmoothAnimationComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (Cast<ACharacter>(GetOwner())->IsLocallyControlled())
+	if (IS_LOCALLY_CONTROLLED)
 		SetCurrentWalkingSpeed(_defaultMaximumWalkingSpeed);
 }
 
@@ -41,10 +41,10 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	//	Add replicated variables to list using this macro
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _upperTorsoYaw, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _upperTorsoPitch, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedYaw, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, cachedPitch, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _aimingLocation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _actorRotation, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, cachedHipRotation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMaximumMovementSpeed, COND_SkipOwner);
 }
@@ -66,7 +66,7 @@ bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(FRotator act
 
 void UCOVSmoothAnimationComponent::Server_SetActorRotation_Implementation(FRotator actorRotation)
 {
-	_actorRotation = actorRotation;
+	cachedHipRotation = actorRotation;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(float pitch)
@@ -76,7 +76,7 @@ bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(float pitch)
 
 void UCOVSmoothAnimationComponent::Server_SetPitch_Implementation(float pitch)
 {
-	_upperTorsoPitch = pitch;
+	cachedPitch = pitch;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(float yaw)
@@ -86,7 +86,7 @@ bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(float yaw)
 
 void UCOVSmoothAnimationComponent::Server_SetYaw_Implementation(float yaw)
 {
-	_upperTorsoYaw = yaw;
+	_cachedYaw = yaw;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Validate(float currentWalkingSpeed)
@@ -104,7 +104,6 @@ void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(
 void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 {
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: ONREP!."), PRINT_FUNCTION);
-
 	TWeakObjectPtr<UCharacterMovementComponent> charMove = Cast<ACharacter>(GetOwner())->GetCharacterMovement();
 
 	if (charMove.IsValid())
@@ -115,17 +114,29 @@ void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 
 float UCOVSmoothAnimationComponent::GetYaw() const
 {
-	return _upperTorsoYaw;
+	if (IS_LOCALLY_CONTROLLED)
+	{
+		return CalculateYaw();
+	}
+	return _cachedYaw;
 }
 
 float UCOVSmoothAnimationComponent::GetPitch() const
 {
-	return _upperTorsoPitch;
+	if (IS_LOCALLY_CONTROLLED)
+	{
+		return CalculatePitch();
+	}
+	return cachedPitch;
 }
 
-FRotator UCOVSmoothAnimationComponent::GetHipRotation() const
+FRotator UCOVSmoothAnimationComponent::GetHipRotation(float deltaTime) const
 {
-	return _actorRotation;
+	if(IS_LOCALLY_CONTROLLED)
+	{
+		return CalculateHipRotation(deltaTime);
+	}
+	return cachedHipRotation;
 }
 
 bool UCOVSmoothAnimationComponent::GetShouldBeRotatingHips() const
@@ -162,19 +173,19 @@ FVector UCOVSmoothAnimationComponent::GetHeadLocation() const
 
 void UCOVSmoothAnimationComponent::SetYaw(float yaw)
 {
-	_upperTorsoYaw = yaw;
+	_cachedYaw = yaw;
 	Server_SetYaw(yaw);
 }
 
 void UCOVSmoothAnimationComponent::SetPitch(float pitch)
 {
-	_upperTorsoPitch = pitch;
+	cachedPitch = pitch;
 	Server_SetPitch(pitch);
 }
 
 void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
 {
-	_actorRotation = rot;
+	cachedHipRotation = rot;
 	Server_SetActorRotation(rot);
 }
 
@@ -249,51 +260,53 @@ FRotator UCOVSmoothAnimationComponent::GetAimPitchTargetRotation() const
 	return FRotator(0, 0, 0);
 }
 
-float UCOVSmoothAnimationComponent::CalculateYaw()
+float UCOVSmoothAnimationComponent::CalculateYaw() const
 {
 	float angleToStartRotatingHips = 125.0f;
 	float angleToStopRotatingHips = 20.0f;
 	float torsoMaxRotation = 140.0f;
 
-	FRotator playerRot = _actorRotation;	//	REALLY IMPORTANT PART! TAKE ROTATION OF LAST CALCULATION NOT THE CURRENT ONE!
-	FRotator targetRot = GetAimPitchTargetRotation();
-	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(targetRot, playerRot);
+	//FRotator controlRot = Cast<APawn>(GetOwner())->GetControlRotation();
+	FRotator controlRot = GetAimPitchTargetRotation();
+	FRotator playerRot = cachedHipRotation;	//	REALLY IMPORTANT PART! TAKE ROTATION OF LAST CALCULATION NOT THE CURRENT ONE!
+	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(controlRot, playerRot);
 
 	//	If hips turn over too much...
 	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
 	{
-		//	We clamp the yaw so that the torso can't rotate in a silly manner
-		float actualYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
-		return actualYaw;
+		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
+		return clampedYaw;
 	}
-	else   //	Need to rotate character towards the target
+	else   //	Need to rotate character towards _aimingVector
 	{
-		//	We clamp the yaw so that the torso can't rotate in a silly manner
-		float actualYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
-		return actualYaw;
+		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
+		return clampedYaw;
 	}
 }
 
-float UCOVSmoothAnimationComponent::CalculatePitch()
+float UCOVSmoothAnimationComponent::CalculatePitch() const
 {
-	FRotator targetRot = GetAimPitchTargetRotation();
+	//FRotator controlRot = Cast<APawn>(GetOwner())->GetControlRotation();
+	FRotator controlRot = GetAimPitchTargetRotation();
 
-	if (targetRot.Pitch > 90)
+	if (controlRot.Pitch > 90)
 	{
-		return (targetRot.Pitch - 360.0f);
+		//Server_SetPitch(controlRot.Pitch - 360.0f);
+		return (controlRot.Pitch - 360.0f);
 	}
 	else
 	{
-		return targetRot.Pitch;
+		//Server_SetPitch(controlRot.Pitch);
+		return controlRot.Pitch;
 	}
 }
 
-FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime)
+FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) const
 {
 	FRotator goalRotation = GetAimPitchTargetRotation();
-	FRotator startRotation = _actorRotation;
+	FRotator startRotation = cachedHipRotation;
 
-	float absAngle = FMath::Abs(_upperTorsoYaw);
+	float absAngle = FMath::Abs(_cachedYaw);
 
 	if (absAngle > _angleToStartRotatingHips || _bShouldBeRotatingHips)
 	{

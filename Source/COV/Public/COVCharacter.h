@@ -64,7 +64,8 @@ private:
 		void Input_Interact();
 	//	#####################################################################################################
 
-
+	float _pitch;
+	float CalculatePitch();
 
 public:
 

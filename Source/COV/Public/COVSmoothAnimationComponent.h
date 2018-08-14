@@ -34,16 +34,16 @@ public:
 	//	VARIABLES ###########################################################################################
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The yaw of this characters upper torso value. To be used in the animation blueprint
-		float _upperTorsoYaw;
+		float _cachedYaw;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The pitch of this characters upper torso value. To be used in the animation blueprint
-		float _upperTorsoPitch;
+		float cachedPitch;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The location and direction the player is aiming at
 		FVector _aimingLocation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The hip rotation of the actor
-		FRotator _actorRotation;
+		FRotator cachedHipRotation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bShouldBeRotatingHips;
@@ -97,7 +97,7 @@ public:
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		float GetPitch() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
-		FRotator GetHipRotation() const;
+		FRotator GetHipRotation(float deltaTime) const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		bool GetShouldBeRotatingHips() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
@@ -126,13 +126,13 @@ public:
 	
 	//	CALCULATORS ########################################################################################
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		float CalculateYaw();
+		float CalculateYaw() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		float CalculatePitch();
+		float CalculatePitch() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FVector CalculateAimingLocation() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		FRotator CalculateHipRotation(float deltaTime);
+		FRotator CalculateHipRotation(float deltaTime) const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FRotator CalculateHeadRotation() const;
 	//	CALCULATORS ########################################################################################

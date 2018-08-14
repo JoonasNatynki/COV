@@ -130,7 +130,7 @@ public:
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		float CalculatePitch();
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
-		FVector CalculateAimingLocation();
+		FVector CalculateAimingLocation() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		FRotator CalculateHipRotation(float deltaTime);
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)

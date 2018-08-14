@@ -160,23 +160,6 @@ FVector UCOVSmoothAnimationComponent::GetHeadLocation() const
 	return FVector(0, 0, 0);
 }
 
-FRotator UCOVSmoothAnimationComponent::GetAimPitchTargetRotation() const
-{
-	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
-	{
-		FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
-		return targetRot;
-	}
-
-	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
-	{
-		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(GetHeadLocation(), GetAimingLocation());
-		return targetRot;
-	}
-
-	return FRotator(0, 0, 0);
-}
-
 void UCOVSmoothAnimationComponent::SetYaw(float yaw)
 {
 	_upperTorsoYaw = yaw;
@@ -216,6 +199,56 @@ void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
 	Server_SetAimingLocation(loc);
 }
 
+FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
+{
+	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(Cast<ACharacter>(GetOwner())->GetComponentByClass(UCameraComponent::StaticClass()));
+
+	if (!cam.IsValid())
+	{
+		//UE_LOG(COVCharacter, Error, TEXT("%s: No camera found!"), PRINT_FUNCTION);
+		FVector aimLoc = FVector(0, 0, 0);
+		return aimLoc;
+	}
+
+	FHitResult RV_Hit(ForceInit);
+	FVector camWorldLoc = cam->GetComponentLocation();
+	FVector camFwdVec = cam->GetForwardVector();
+	float lineTraceLength = 10000.0f;
+
+	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
+		GetOwner(),
+		camWorldLoc + (camFwdVec * (-20.0f)),
+		camWorldLoc + (camFwdVec * lineTraceLength));
+
+	if (RV_Hit.bBlockingHit)
+	{
+		FVector result = RV_Hit.ImpactPoint;
+		return result;
+	}
+	else
+	{
+		FVector result = RV_Hit.TraceEnd;
+		return result;
+	}
+}
+
+FRotator UCOVSmoothAnimationComponent::GetAimPitchTargetRotation() const
+{
+	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
+	{
+		FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
+		return targetRot;
+	}
+
+	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
+	{
+		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(GetHeadLocation(), CalculateAimingLocation());
+		return targetRot;
+	}
+
+	return FRotator(0, 0, 0);
+}
+
 float UCOVSmoothAnimationComponent::CalculateYaw()
 {
 	float angleToStartRotatingHips = 125.0f;
@@ -241,39 +274,6 @@ float UCOVSmoothAnimationComponent::CalculateYaw()
 	}
 }
 
-FVector UCOVSmoothAnimationComponent::CalculateAimingLocation()
-{
-	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(Cast<ACharacter>(GetOwner())->GetComponentByClass(UCameraComponent::StaticClass()));
-
-	if (!cam.IsValid())
-	{
-		//UE_LOG(COVCharacter, Error, TEXT("%s: No camera found!"), PRINT_FUNCTION);
-		_aimingLocation = FVector(0, 0, 0);
-		return _aimingLocation;
-	}
-
-	FHitResult RV_Hit(ForceInit);
-	FVector camWorldLoc = cam->GetComponentLocation();
-	FVector camFwdVec = cam->GetForwardVector();
-	float lineTraceLength = 10000.0f;
-
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
-		GetOwner(),
-		camWorldLoc + (camFwdVec * (-20.0f)),
-		camWorldLoc + (camFwdVec * lineTraceLength));
-
-	if (RV_Hit.bBlockingHit)
-	{
-		FVector result = RV_Hit.ImpactPoint;
-		return result;
-	}
-	else
-	{
-		FVector result = RV_Hit.TraceEnd;
-		return result;
-	}
-}
-
 float UCOVSmoothAnimationComponent::CalculatePitch()
 {
 	FRotator targetRot = GetAimPitchTargetRotation();
@@ -290,7 +290,7 @@ float UCOVSmoothAnimationComponent::CalculatePitch()
 
 FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime)
 {
-	FRotator goalRotation = Cast<ACharacter>(GetOwner())->GetControlRotation();
+	FRotator goalRotation = GetAimPitchTargetRotation();
 	FRotator startRotation = _actorRotation;
 
 	float absAngle = FMath::Abs(_upperTorsoYaw);
@@ -336,7 +336,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetOwner()->Role == ENetRole::ROLE_AutonomousProxy)
+	if (Cast<APawn>(GetOwner())->IsLocallyControlled())
 	{
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}

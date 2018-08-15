@@ -97,5 +97,5 @@ FString UCOVBlueprintFunctionLibrary::GetGameVersionAsString()
 	float numberOfCommits = (float)GetNumberOfRowsInFile(FString(TEXT("HEAD")), FString(TEXT("/.git/logs/")));
 	FString versionType = ReadConfigFileLine(FString(TEXT("COV_GameInfo.txt")), FString(TEXT("Version")));
 
-	return FString::FormatAsNumber(numberOfCommits / 1000.0f).Append(TEXT(" ")).Append(versionType);
+	return FString::SanitizeFloat(numberOfCommits / 1000.0f).Append(TEXT(" ")).Append(versionType);
 }

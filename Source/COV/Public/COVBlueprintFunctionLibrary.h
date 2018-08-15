@@ -62,6 +62,8 @@ public:
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will return the number of lines in a file. No file found = -1
 		static int32 GetNumberOfRowsInFile(FString InFileName, FString Folder);
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, BlueprintPure)
+		static FString GetGameVersionAsString();
 };
 
 /*

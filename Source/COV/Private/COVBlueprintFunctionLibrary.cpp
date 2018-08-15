@@ -81,12 +81,21 @@ FString UCOVBlueprintFunctionLibrary::ReadFileLine(FString fileName, FString fol
 				return parsedLine[parsedArrayLength - 1];
 			}
 		}
+		COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("No line (%s) was found´in the config file (%s)."), *configName, *fileName);
 
-		return FString::Printf(TEXT("No config with the line (%s) was found."), *configName);
+		return FString(TEXT(""));
 	}
 	else
 	{
 		COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("Did not find a file named (%s)."), *fileName);
 		return FString(TEXT(""));
 	}
+}
+
+FString UCOVBlueprintFunctionLibrary::GetGameVersionAsString()
+{
+	float numberOfCommits = (float)GetNumberOfRowsInFile(FString(TEXT("HEAD")), FString(TEXT("/.git/logs/")));
+	FString versionType = ReadConfigFileLine(FString(TEXT("COV_GameInfo.txt")), FString(TEXT("Version")));
+
+	return FString::FormatAsNumber(numberOfCommits / 1000.0f).Append(TEXT(" ")).Append(versionType);
 }

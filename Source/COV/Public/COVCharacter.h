@@ -59,9 +59,6 @@ private:
 	UFUNCTION(Category = "Movement", BlueprintCallable)
 		//	Move character left/right
 		void Input_MoveRight(float amount);
-	UFUNCTION(Category = "Input_Interact", BlueprintCallable)
-		//	Interact with the world
-		void Input_Interact();
 	//	#####################################################################################################
 
 public:

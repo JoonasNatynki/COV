@@ -36,37 +36,37 @@ ACOVCharacter* ACOVPlayerController::GetControlledCOVCharacter()
 
 void ACOVPlayerController::Input_E_Pressed_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("E pressed."));
+	//UE_LOG(COVPlayerController, Log, TEXT("E pressed."));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_E_Pressed)
 }
 
 void ACOVPlayerController::Input_E_Released_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("E released."));
+	//UE_LOG(COVPlayerController, Log, TEXT("E released."));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_E_Released)
 }
 
 void ACOVPlayerController::Input_Spacebar_Pressed_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Spacebar pressed."));
+	//UE_LOG(COVPlayerController, Log, TEXT("Spacebar pressed."));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Pressed)
 }
 
 void ACOVPlayerController::Input_Spacebar_Released_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
+	//UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
 		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
 }
 
 void ACOVPlayerController::Input_LeftShift_Pressed_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Left shift pressed!"));
+	//UE_LOG(COVPlayerController, Log, TEXT("Left shift pressed!"));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftShift_Pressed)
 }
 
 void ACOVPlayerController::Input_LeftShift_Released_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Left shift released!"));
+	//UE_LOG(COVPlayerController, Log, TEXT("Left shift released!"));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftShift_Released)
 }
 
@@ -82,14 +82,14 @@ void ACOVPlayerController::Input_Key_D_Implementation(float amount)
 
 void ACOVPlayerController::Input_LeftMouseButton_Pressed_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Left mouse button pressed."))
-		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Pressed)
+	//UE_LOG(COVPlayerController, Log, TEXT("Left mouse button pressed."))
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Pressed)
 }
 
 void ACOVPlayerController::Input_LeftMouseButton_Released_Implementation()
 {
-	UE_LOG(COVPlayerController, Log, TEXT("Left mouse button released."))
-		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Released)
+	//UE_LOG(COVPlayerController, Log, TEXT("Left mouse button released."))
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Released)
 }
 
 void ACOVPlayerController::Input_MouseMovementX_Implementation(float amount)

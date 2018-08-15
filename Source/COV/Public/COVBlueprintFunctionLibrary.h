@@ -8,18 +8,22 @@
 #include "COVBlueprintFunctionLibrary.generated.h"
 
 
+DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
 
 
-
-
-
-//	MACROS	#######################################################################################################################################
-#define PRINT_FUNCTION *FString(__FUNCTION__).Append(":(").Append(FString::FormatAsNumber(__LINE__)).Append(")")
+//	MACROS	#####################################################################################################################
+#define PRINT_FUNCTION *FString(__FUNCTION__).Append(":(").Append(FString::FormatAsNumber(__LINE__)).Append("): ")
 
 #define IS_SERVER GetNetMode() == ENetMode::NM_DedicatedServer || GetNetMode() == ENetMode::NM_ListenServer
 //#define XYZLOG(category, log category, msg, ...) UE_LOG(category, log category, TEXT("%s: %s"), PRINT_FUNCTION, TEXT(msg), ##__VA_ARGS__)
 
 #define IS_NOT_LOCALLY_CONTROLLED_WARNING if(!IsLocallyControlled()){UE_LOG(LogTemp, Warning, TEXT("%s: Should a non-client be calling this function?"), PRINT_FUNCTION)}
+
+#define COV_LOG(_namespace, _logcategory, _text, ...) \
+{\
+const FString appendText = FString::Printf(_text, ##__VA_ARGS__);\
+UE_LOG(_namespace, _logcategory, TEXT("%s%s"), PRINT_FUNCTION, *appendText);\
+}
 
 
 //	BEGINNING OF USE INTERFACE MAKRO	###############################################################################
@@ -36,9 +40,7 @@ if (interfaceObject.IsValid())\
 	}\
 }\
 //	END OF USING INTERFACE MAKRO	###################################################################################
-//	###############################################################################################################################################
-
-
+//	#####################################################################################################################
 
 
 
@@ -51,6 +53,15 @@ public:
 	//	Simplified line trace function. Parameters: 1) Starting position, 2) end position and 3) an actor in the world that will be "casting" this line trace
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		static FHitResult SimpleTraceByChannel(UObject* castingObject, FVector startPos, FVector endPos);
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	Will read a file in a specific folder with the variable name
+		static FString ReadFileLine(FString InFileName, FString Folder, FString ConfigName);
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	Will read a file's variable's value in the config folder
+		static FString ReadConfigFileLine(FString InFileName, FString ConfigName);
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	Will return the number of lines in a file. No file found = -1
+		static int32 GetNumberOfRowsInFile(FString InFileName, FString Folder);
 };
 
 /*

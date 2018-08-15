@@ -16,8 +16,6 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetActorTickEnabled(true);
-	//SetTickGroup(ETickingGroup::TG_PostUpdateWork);	//	Maybe set post update group so that animation has time to finish?
-	//this->bAlwaysRelevant = true;
 	bUseControllerRotationYaw = false;
 
 	SmoothMotionComponent = CreateDefaultSubobject<UCOVSmoothAnimationComponent>(TEXT("Smooth Motion Component"));
@@ -132,18 +130,13 @@ void ACOVCharacter::Input_MoveRight(float amount)
 	}
 }
 
-void ACOVCharacter::Input_Interact()
-{
-
-}
-
 UCameraComponent* ACOVCharacter::GetCharacterCamera() const
 {
 	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
 	//	Error handling
 	if (!cam.IsValid())
 	{
-		UE_LOG(COVCharacter, Error, TEXT("%s: Could not find camera on XYZ_Character or it is pending kill."), PRINT_FUNCTION);
+		//UE_LOG(COVCharacter, Error, TEXT("%s: Could not find camera on XYZ_Character or it is pending kill."), PRINT_FUNCTION);
 	}
 	return cam.Get();
 }

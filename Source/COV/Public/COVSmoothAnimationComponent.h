@@ -8,11 +8,13 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(COVSmoothAnimation, Log, All)
 
+
 UENUM() enum EAimOffsetCalculationMode
 {
 	ControlRotation	UMETA(DisplayName = "Control rotation"),
 	AimLocation		UMETA(DisplayName = "Aim location")
 };
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class COV_API UCOVSmoothAnimationComponent : public UActorComponent
@@ -41,6 +43,9 @@ public:
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The location and direction the player is aiming at
 		FVector _aimingLocation;
+		UPROPERTY(Replicated, VisibleAnywhere)
+		//	The location and direction the player is aiming at
+		FVector _specialInterestLocation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The hip rotation of the actor
 		FRotator cachedHipRotation;
@@ -56,7 +61,9 @@ public:
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		//	The maximum distance that we use to determine where the player is looking at.
 		float _aimingLocationTraceLength = 10000.0f;
-
+	UPROPERTY(Category = "Animation", EditDefaultsOnly)
+		//	Do we allow the head to also orient to look at locations of interest?
+		bool bAllowLocationOfInterestHeadRotation;
 
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		TEnumAsByte<EAimOffsetCalculationMode> AimOffsetMode = EAimOffsetCalculationMode::ControlRotation;
@@ -73,21 +80,24 @@ public:
 	//	VARIABLES ###########################################################################################
 
 	//	SERVER ONLY FUNCTIONS	#############################################################################
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
+	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetAimingLocation(FVector aimingLocation);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
+	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetPitch(float pitch);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
+	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetYaw(float yaw);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Unreliable, WithValidation)
+	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetActorRotation(FRotator actorRotation);
-	UFUNCTION(Category = "XYZCharacterAnimation", Server, Reliable, WithValidation)
+	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the current walking speed setter
 		void Server_SetCurrentWalkingSpeed(float currentWalkingSpeed);
+	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintAuthorityOnly)
+		//	Server version of the location of special interest setter
+		void Server_SetLocationOfSpecialInterest(FVector location);
 	//	####################################################################################################
 
 	//	REPPERS ############################################################################################
@@ -97,18 +107,32 @@ public:
 
 	//	GETTERS ############################################################################################
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get the yaw value of the aim offset
 		float GetYaw() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get the pitch value of the aim offset
 		float GetPitch() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get the amount that the hips should be rotated at
 		FRotator GetHipRotation(float deltaTime) const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get if the hips should be rotating this frame
 		bool GetShouldBeRotatingHips() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get the location where the player is aiming at. This is done by ray casting from the camera straight forward
 		FVector GetAimingLocation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Gets the "head" socket's location. If nothing is found, return 0,0,0 vector
-		FVector GetHeadLocation() const;
-
+		FVector CalculateHeadLocation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Gets the actual frame accurate location of the player camera view
+		FVector GetCameraViewLocation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	This is the location that is used to determine where the head is looking at
+		FVector CalculateHeadLookAtLocation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get a location of special interest. This is the location where the head will be looking at if it is allowed to look at special interest locations. Return 0,0,0 if no location was set
+		FVector GetLocationOfSpecialInterest() const;
 		//	Gets the target rotation that the yaw and pitch try to aim at.
 		FRotator GetRotationToTargetDirection() const;
 	//	GETTERS ############################################################################################
@@ -126,18 +150,25 @@ public:
 		void SetShouldRotateHips(float inputAmount);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
 		void SetAimingLocation(FVector loc);
-	//	SETTERS ############################################################################################
+	UFUNCTION(Category = "Movement", BlueprintCallable)
+		void SetLocationOfSpecialInterest(FVector location);
+		//	SETTERS ############################################################################################
 	
 	//	CALCULATORS ########################################################################################
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		//	Calculates a new yaw value at this frame
 		float CalculateYaw() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		//	Calculates a new pitch value at this frame
 		float CalculatePitch() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		//	Calculates a new aiming location at this frame
 		FVector CalculateAimingLocation() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		//	Calculates a new hip rotation at this frame
 		FRotator CalculateHipRotation(float deltaTime) const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
+		//	Calculates a new head rotation at this frame. The head is looking at either the aiming location or another one specifiec independently by SetInterestLocation()
 		FRotator CalculateHeadRotation() const;
 	//	CALCULATORS ########################################################################################
 

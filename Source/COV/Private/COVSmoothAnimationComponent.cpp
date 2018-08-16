@@ -49,6 +49,7 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _aimingLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, cachedHipRotation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _specialInterestLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMaximumMovementSpeed, COND_SkipOwner);
 }
 
@@ -104,6 +105,16 @@ void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: SERVER FUNCTION CALLED!."), PRINT_FUNCTION);
 }
 
+bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(FVector loc)
+{
+	return true;
+}
+
+void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implementation(FVector location)
+{
+	_specialInterestLocation = location;
+}
+
 void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 {
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: ONREP!."), PRINT_FUNCTION);
@@ -152,7 +163,7 @@ FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
 	return _aimingLocation;
 }
 
-FVector UCOVSmoothAnimationComponent::GetHeadLocation() const
+FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
 {
 	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
 
@@ -213,20 +224,33 @@ void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
 	Server_SetAimingLocation(loc);
 }
 
-FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
+void UCOVSmoothAnimationComponent::SetLocationOfSpecialInterest(FVector location)
 {
-	FHitResult RV_Hit(ForceInit);
+	_specialInterestLocation = location;
+	Server_SetLocationOfSpecialInterest(location);
+}
 
-	//	THIS FINALLY FIXED THE WHOLE CODE!!!! EVERYTHING IS WORKING PERFECTLY NOW AND IS FRAME ACCURATE AND NO LAG WHATSOEVER!!
-	//	TRAIN CRASH! CHOOO CHOOO!
+FVector UCOVSmoothAnimationComponent::GetCameraViewLocation() const
+{
 	APawn* pawn = Cast<APawn>(GetOwner());
 	AController* controller = pawn->GetController();
 	APlayerController* playerController = Cast<APlayerController>(controller);
 	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
 
 	//	Ray starting point
-	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
-	//	end point targer direction
+	return playerCameraManagerActor->GetActorLocation();
+}
+
+FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
+{
+	FHitResult RV_Hit(ForceInit);
+
+	//	THIS FINALLY FIXED THE WHOLE CODE!!!! EVERYTHING IS WORKING PERFECTLY NOW AND IS FRAME ACCURATE AND NO LAG WHATSOEVER!!
+	//	TRAIN CRASH! CHOOO CHOOO!
+
+	//	Ray starting point
+	FVector playerViewWorldLocation = GetCameraViewLocation();
+	//	end point target direction
 	FVector controllerForwardVector = Cast<AActor>(Cast<APawn>(GetOwner())->GetController())->GetActorForwardVector();
 	
 	float lineTraceLength = _aimingLocationTraceLength;
@@ -235,8 +259,6 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 		GetOwner(),
 		playerViewWorldLocation + (controllerForwardVector),
 		playerViewWorldLocation + (controllerForwardVector * lineTraceLength));
-
-	DrawDebugSphere(GetWorld(), RV_Hit.ImpactPoint, 10.0f, 12, FColor(255, 0, 255, 1), false, 1.0f, 1, 1.0f);
 
 	if (RV_Hit.bBlockingHit)
 	{
@@ -260,7 +282,7 @@ FRotator UCOVSmoothAnimationComponent::GetRotationToTargetDirection() const
 
 	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
 	{
-		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(GetHeadLocation(), CalculateAimingLocation());
+		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(CalculateHeadLocation(), CalculateAimingLocation());
 		return targetRot;
 	}
 
@@ -326,17 +348,32 @@ FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) con
 	return startRotation;
 }
 
+FVector UCOVSmoothAnimationComponent::GetLocationOfSpecialInterest() const
+{
+	return _specialInterestLocation;
+}
+
+FVector UCOVSmoothAnimationComponent::CalculateHeadLookAtLocation() const
+{
+	if (bAllowLocationOfInterestHeadRotation)
+	{
+		return GetLocationOfSpecialInterest();
+	}
+	else
+	{
+		return CalculateAimingLocation();
+	}
+}
+
 FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 {
-	FVector headLoc = GetHeadLocation();
-	FVector aimingLoc = GetAimingLocation();
-	FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, aimingLoc);
+	FVector headLoc = CalculateHeadLocation();
+	FVector targetLoc = CalculateHeadLookAtLocation();
+	FRotator tempRot = UKismetMathLibrary::FindLookAtRotation(headLoc, targetLoc);
 	FRotator headRot = FRotator(90.0f, 0, 90.0f);
 	headRot += tempRot;
 
 	return headRot;
-
-	return FRotator(0, 0, 0);
 }
 
 void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(float deltaTime)
@@ -358,7 +395,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
 
-	DrawDebugSphere(GetWorld(), GetAimingLocation(), 10.0f, 12, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
-	DrawDebugLine(GetWorld(), GetHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
+	DrawDebugSphere(GetWorld(), GetAimingLocation(), 5.0f, 4, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
+	DrawDebugLine(GetWorld(), CalculateHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
 }
 

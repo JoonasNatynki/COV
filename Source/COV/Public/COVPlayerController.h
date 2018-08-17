@@ -11,6 +11,7 @@
  */
 
 class ACOVCharacter;
+class UCOVScreenManager;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVPlayerController, All, Log)
 
@@ -18,9 +19,14 @@ UCLASS()
 class COV_API ACOVPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+		ACOVPlayerController(const class FObjectInitializer& PCIP);
+
 		//	Virtual function from APlayerController that allows custom input bindings
 		void SetupInputComponent() override;
+
+	UPROPERTY(VisibleAnywhere)
+		UCOVScreenManager* _screenManager;
 
 public:
 

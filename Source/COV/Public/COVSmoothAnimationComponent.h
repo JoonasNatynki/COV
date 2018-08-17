@@ -16,12 +16,11 @@ UENUM() enum EAimOffsetCalculationMode
 };
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(COV), meta=(BlueprintSpawnableComponent), Config=Game)
 class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
 	// Sets default values for this component's properties
 	UCOVSmoothAnimationComponent();
 
@@ -33,13 +32,14 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
+private:
 	//	VARIABLES ###########################################################################################
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The yaw of this characters upper torso value. To be used in the animation blueprint
 		float _cachedYaw;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The pitch of this characters upper torso value. To be used in the animation blueprint
-		float cachedPitch;
+		float _cachedPitch;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The location and direction the player is aiming at
 		FVector _aimingLocation;
@@ -48,7 +48,7 @@ public:
 		FVector _specialInterestLocation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The hip rotation of the actor
-		FRotator cachedHipRotation;
+		FRotator _cachedHipRotation;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bShouldBeRotatingHips;
@@ -70,8 +70,8 @@ public:
 
 	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed)
 		//	The default maximum speed the character will be running at without sprinting
-		float _currentMaximumMovementSpeed;
-	UPROPERTY(Category = "Movement", EditDefaultsOnly)
+		float _currentMovementSpeed;
+	UPROPERTY(Category = "Movement", EditDefaultsOnly, Config)
 		//	The default maximum speed the character will be running at without sprinting
 		float _defaultMaximumRunningSpeed = 600.0f;
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
@@ -105,6 +105,7 @@ public:
 		void OnRep_currentMaximumMovementSpeed();
 	//	REPPERS ############################################################################################
 
+public:
 	//	GETTERS ############################################################################################
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Get the yaw value of the aim offset
@@ -122,14 +123,14 @@ public:
 		//	Get the location where the player is aiming at. This is done by ray casting from the camera straight forward
 		FVector GetAimingLocation() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
-		//	Gets the "head" socket's location. If nothing is found, return 0,0,0 vector
-		FVector CalculateHeadLocation() const;
-	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Gets the actual frame accurate location of the player camera view
 		FVector GetCameraViewLocation() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
-		//	This is the location that is used to determine where the head is looking at
-		FVector CalculateHeadLookAtLocation() const;
+		//	Get the default maximum running speed
+		float GetDefaultRunningSpeed() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Get the default maximum walking speed
+		float GetDefaultWalkingSpeed() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Get a location of special interest. This is the location where the head will be looking at if it is allowed to look at special interest locations. Return 0,0,0 if no location was set
 		FVector GetLocationOfSpecialInterest() const;
@@ -139,7 +140,7 @@ public:
 
 	//	SETTERS ############################################################################################
 	UFUNCTION(Category = "Movement", BlueprintCallable)
-		void SetCurrentWalkingSpeed(float currentWalkingSpeed);
+		void SetCurrentMovementSpeed(float currentWalkingSpeed);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
 		void SetYaw(float yaw);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
@@ -164,12 +165,18 @@ public:
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	Calculates a new aiming location at this frame
 		FVector CalculateAimingLocation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	Gets the "head" socket's location. If nothing is found, return 0,0,0 vector
+		FVector CalculateHeadLocation() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	Calculates a new hip rotation at this frame
 		FRotator CalculateHipRotation(float deltaTime) const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	Calculates a new head rotation at this frame. The head is looking at either the aiming location or another one specifiec independently by SetInterestLocation()
 		FRotator CalculateHeadRotation() const;
+	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
+		//	This is the location that is used to determine where the head is looking at
+		FVector CalculateHeadLookAtLocation() const;
 	//	CALCULATORS ########################################################################################
 
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)

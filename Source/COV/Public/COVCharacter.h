@@ -71,4 +71,13 @@ public:
 		//	Get the XYZCharacterController of this character
 		ACOVPlayerController* GetCOVPlayerController() const;
 	//	GETTERS	############################################################################################
+
+private:
+	UPROPERTY()
+		bool _bDebugModeIsOn = false;
+public:
+	UFUNCTION(Category = "Console", Exec)
+		void ShowAimingVectors(bool bOn);
+
+	void DebugHelpers_TICK() const;
 };

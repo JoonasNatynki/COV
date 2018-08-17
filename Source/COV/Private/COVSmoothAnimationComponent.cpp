@@ -12,6 +12,7 @@
 #include <DrawDebugHelpers.h>
 #include <GameFramework/Pawn.h>
 #include <GameFramework/PlayerController.h>
+#include <CoreGlobals.h>
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
@@ -26,8 +27,6 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 	//PrimaryComponentTick.TickGroup = ETickingGroup::TG_PostUpdateWork;	//	IMPORTANT FOR TICK TO NOT LAG BEHIND IF DRAWING DEBUG THINGS
 	AddTickPrerequisiteActor(GetOwner());
 	bReplicates = true;
-	//	Initialize the variable. Will be set properly in the BeginPlay	
-	_defaultMaximumWalkingSpeed = _defaultMaximumWalkingSpeed;
 }
 
 // Called when the game starts
@@ -36,7 +35,9 @@ void UCOVSmoothAnimationComponent::BeginPlay()
 	Super::BeginPlay();
 
 	if (IS_LOCALLY_CONTROLLED)
-		SetCurrentWalkingSpeed(_defaultMaximumWalkingSpeed);
+	{
+		SetCurrentMovementSpeed(_defaultMaximumWalkingSpeed);
+	}
 }
 
 void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const
@@ -45,12 +46,12 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 
 	//	Add replicated variables to list using this macro
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedYaw, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, cachedPitch, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedPitch, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _aimingLocation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, cachedHipRotation, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedHipRotation, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMovementSpeed, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _specialInterestLocation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMaximumMovementSpeed, COND_SkipOwner);
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(FVector aimingVector)
@@ -70,7 +71,7 @@ bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(FRotator act
 
 void UCOVSmoothAnimationComponent::Server_SetActorRotation_Implementation(FRotator actorRotation)
 {
-	cachedHipRotation = actorRotation;
+	_cachedHipRotation = actorRotation;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(float pitch)
@@ -80,7 +81,7 @@ bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(float pitch)
 
 void UCOVSmoothAnimationComponent::Server_SetPitch_Implementation(float pitch)
 {
-	cachedPitch = pitch;
+	_cachedPitch = pitch;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(float yaw)
@@ -100,7 +101,7 @@ bool UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Validate(float 
 
 void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(float currentWalkingSpeed)
 {
-	_currentMaximumMovementSpeed = currentWalkingSpeed;
+	_currentMovementSpeed = currentWalkingSpeed;
 	OnRep_currentMaximumMovementSpeed();
 	//UE_LOG(XYZCharacter, Log, TEXT("%s: SERVER FUNCTION CALLED!."), PRINT_FUNCTION);
 }
@@ -122,7 +123,7 @@ void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 
 	if (charMove.IsValid())
 	{
-		Cast<ACharacter>(GetOwner())->GetCharacterMovement()->MaxWalkSpeed = _currentMaximumMovementSpeed;
+		Cast<ACharacter>(GetOwner())->GetCharacterMovement()->MaxWalkSpeed = _currentMovementSpeed;
 	}
 }
 
@@ -141,7 +142,7 @@ float UCOVSmoothAnimationComponent::GetPitch() const
 	{
 		return CalculatePitch();
 	}
-	return cachedPitch;
+	return _cachedPitch;
 }
 
 FRotator UCOVSmoothAnimationComponent::GetHipRotation(float deltaTime) const
@@ -150,7 +151,7 @@ FRotator UCOVSmoothAnimationComponent::GetHipRotation(float deltaTime) const
 	{
 		return CalculateHipRotation(deltaTime);
 	}
-	return cachedHipRotation;
+	return _cachedHipRotation;
 }
 
 bool UCOVSmoothAnimationComponent::GetShouldBeRotatingHips() const
@@ -193,13 +194,13 @@ void UCOVSmoothAnimationComponent::SetYaw(float yaw)
 
 void UCOVSmoothAnimationComponent::SetPitch(float pitch)
 {
-	cachedPitch = pitch;
+	_cachedPitch = pitch;
 	Server_SetPitch(pitch);
 }
 
 void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
 {
-	cachedHipRotation = rot;
+	_cachedHipRotation = rot;
 	Server_SetActorRotation(rot);
 }
 
@@ -208,13 +209,13 @@ void UCOVSmoothAnimationComponent::SetShouldRotateHips(float inputAmount)
 	_bShouldBeRotatingHips = inputAmount != 0.0f;
 }
 
-void UCOVSmoothAnimationComponent::SetCurrentWalkingSpeed(float currentWalkingSpeed)
+void UCOVSmoothAnimationComponent::SetCurrentMovementSpeed(float newSpeed)
 {
 	if (IS_LOCALLY_CONTROLLED)
 	{
-		_currentMaximumMovementSpeed = currentWalkingSpeed;
+		_currentMovementSpeed = newSpeed;
 		OnRep_currentMaximumMovementSpeed();
-		Server_SetCurrentWalkingSpeed(_currentMaximumMovementSpeed);
+		Server_SetCurrentWalkingSpeed(_currentMovementSpeed);
 	}
 }
 
@@ -235,10 +236,24 @@ FVector UCOVSmoothAnimationComponent::GetCameraViewLocation() const
 	APawn* pawn = Cast<APawn>(GetOwner());
 	AController* controller = pawn->GetController();
 	APlayerController* playerController = Cast<APlayerController>(controller);
+	
+	if (!IsValid(playerController))
+		return FVector(0, 0, 0);
+	
 	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
 
 	//	Ray starting point
 	return playerCameraManagerActor->GetActorLocation();
+}
+
+float UCOVSmoothAnimationComponent::GetDefaultRunningSpeed() const
+{
+	return _defaultMaximumRunningSpeed;
+}
+
+float UCOVSmoothAnimationComponent::GetDefaultWalkingSpeed() const
+{
+	return _defaultMaximumWalkingSpeed;
 }
 
 FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
@@ -251,7 +266,12 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 	//	Ray starting point
 	FVector playerViewWorldLocation = GetCameraViewLocation();
 	//	end point target direction
-	FVector controllerForwardVector = Cast<AActor>(Cast<APawn>(GetOwner())->GetController())->GetActorForwardVector();
+	AController* playerController = Cast<APawn>(GetOwner())->GetController();
+
+	if (!IsValid(playerController))
+		return FVector(0, 0, 0);
+
+	FVector controllerForwardVector = Cast<AActor>(playerController)->GetActorForwardVector();
 	
 	float lineTraceLength = _aimingLocationTraceLength;
 
@@ -276,12 +296,14 @@ FRotator UCOVSmoothAnimationComponent::GetRotationToTargetDirection() const
 {
 	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
 	{
+		//	We return the rotation of the controller of the character
 		FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
 		return targetRot;
 	}
 
 	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
 	{
+		//	We return the rotation to the aiming location from the character's head
 		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(CalculateHeadLocation(), CalculateAimingLocation());
 		return targetRot;
 	}
@@ -302,11 +324,13 @@ float UCOVSmoothAnimationComponent::CalculateYaw() const
 	//	If hips turn over too much...
 	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
 	{
+		//	Clamp the yaw to torso max rotations
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
 		return -clampedYaw;
 	}
 	else   //	Need to rotate character towards _aimingVector
 	{
+		//	Clamp the yaw to torso max rotations
 		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
 		return -clampedYaw;
 	}
@@ -329,7 +353,7 @@ float UCOVSmoothAnimationComponent::CalculatePitch() const
 FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) const
 {
 	FRotator goalRotation = GetRotationToTargetDirection();
-	FRotator startRotation = cachedHipRotation;
+	FRotator startRotation = _cachedHipRotation;
 
 	float absAngle = FMath::Abs(_cachedYaw);
 
@@ -395,7 +419,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
 
-	DrawDebugSphere(GetWorld(), GetAimingLocation(), 5.0f, 4, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
-	DrawDebugLine(GetWorld(), CalculateHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
+	//DrawDebugSphere(GetWorld(), GetAimingLocation(), 5.0f, 4, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
+	//DrawDebugLine(GetWorld(), CalculateHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
 }
 

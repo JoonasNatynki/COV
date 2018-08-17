@@ -5,8 +5,14 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include <EngineUtils.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include "COVScreenManager.h"
 
 DEFINE_LOG_CATEGORY(COVPlayerController)
+
+ACOVPlayerController::ACOVPlayerController(const class FObjectInitializer& PCIP)
+{
+	_screenManager = CreateDefaultSubobject<UCOVScreenManager>(TEXT("Screen Manager"));
+}
 
 void ACOVPlayerController::SetupInputComponent()
 {

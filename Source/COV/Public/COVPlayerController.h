@@ -25,9 +25,6 @@ class COV_API ACOVPlayerController : public APlayerController
 		//	Virtual function from APlayerController that allows custom input bindings
 		void SetupInputComponent() override;
 
-	UPROPERTY(VisibleAnywhere)
-		UCOVScreenManager* _screenManager;
-
 public:
 
 	UPROPERTY(EditAnywhere)
@@ -37,6 +34,8 @@ public:
 		//	Y axis sensitivity
 		float _YSensitivity = 1;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UCOVScreenManager* _screenManager;
 
 	UFUNCTION(BlueprintPure)
 		//	Get the AXYZ_Character this controller should be controlling
@@ -47,6 +46,10 @@ public:
 		void Input_E_Pressed();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_E_Released();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_F_Pressed();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_F_Released();
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_Spacebar_Pressed();
 	UFUNCTION(BlueprintNativeEvent)

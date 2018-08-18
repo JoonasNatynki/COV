@@ -39,6 +39,8 @@ public:
 	//	PLAYERINPUT INTERFACE IMPLEMENTATIONS
 	virtual void Input_E_Pressed_Implementation() override;
 	virtual void Input_E_Released_Implementation() override;
+	virtual void Input_F_Pressed_Implementation() override;
+	virtual void Input_F_Released_Implementation() override;
 	virtual void Input_W_Implementation(float amount) override;
 	virtual void Input_D_Implementation(float amount) override;
 	virtual void Input_Spacebar_Pressed_Implementation() override;

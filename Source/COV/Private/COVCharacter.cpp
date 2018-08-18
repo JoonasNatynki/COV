@@ -44,6 +44,16 @@ void ACOVCharacter::Input_E_Released_Implementation()
 
 }
 
+void ACOVCharacter::Input_F_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_F_Released_Implementation()
+{
+
+}
+
 void ACOVCharacter::Input_D_Implementation(float amount)
 {
 	Input_MoveRight(amount);

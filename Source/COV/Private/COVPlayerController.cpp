@@ -20,6 +20,8 @@ void ACOVPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("E", IE_Pressed, this, &ACOVPlayerController::Input_E_Pressed);
 	InputComponent->BindAction("E", IE_Released, this, &ACOVPlayerController::Input_E_Released);
+	InputComponent->BindAction("F", IE_Pressed, this, &ACOVPlayerController::Input_F_Pressed);
+	InputComponent->BindAction("F", IE_Released, this, &ACOVPlayerController::Input_F_Released);
 	InputComponent->BindAction("Spacebar", IE_Pressed, this, &ACOVPlayerController::Input_Spacebar_Pressed);
 	InputComponent->BindAction("Spacebar", IE_Released, this, &ACOVPlayerController::Input_Spacebar_Released);
 	InputComponent->BindAction("LeftShift", IE_Pressed, this, &ACOVPlayerController::Input_LeftShift_Pressed);
@@ -50,6 +52,18 @@ void ACOVPlayerController::Input_E_Released_Implementation()
 {
 	//UE_LOG(COVPlayerController, Log, TEXT("E released."));
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_E_Released)
+}
+
+void ACOVPlayerController::Input_F_Pressed_Implementation()
+{
+	//UE_LOG(COVPlayerController, Log, TEXT("E pressed."));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_F_Pressed)
+}
+
+void ACOVPlayerController::Input_F_Released_Implementation()
+{
+	//UE_LOG(COVPlayerController, Log, TEXT("E released."));
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_F_Released)
 }
 
 void ACOVPlayerController::Input_Spacebar_Pressed_Implementation()

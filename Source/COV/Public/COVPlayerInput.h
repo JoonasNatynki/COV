@@ -31,6 +31,10 @@ public:
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_E_Released();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_F_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_F_Released();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_Spacebar_Pressed();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_Spacebar_Released();

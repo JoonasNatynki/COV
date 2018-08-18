@@ -84,7 +84,7 @@ void ACOVCharacter::Server_Interact_Implementation(AActor* interactedActor)
 
 void ACOVCharacter::Input_F_Pressed_Implementation()
 {
-	AActor* focusedActor = FocusComponent->GetCachedFocusedActor();
+	AActor* focusedActor = FocusComponent->GetFocusedActor();
 	if (IsValid(focusedActor))
 	{
 		if (focusedActor->Implements<UCOVInteractable>())

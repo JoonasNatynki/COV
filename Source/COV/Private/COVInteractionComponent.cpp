@@ -13,8 +13,6 @@ UCOVInteractionComponent::UCOVInteractionComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 // Called when the game starts
@@ -22,18 +20,29 @@ void UCOVInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-	
+	//	Get and cache the owner focus component, if present
+	OwnerFocusComponent = TryGetOwnerFocusComponent();
+}
+
+UCOVFocusComponent* UCOVInteractionComponent::TryGetOwnerFocusComponent() const
+{
+	//	In order to find an actor to interact with, we want to use the focus manager component if it is present
+	AActor* owner = GetOwner();
+
+	if (IsValid(owner))
+	{
+		UCOVFocusComponent* focusComponent = Cast<UCOVFocusComponent>(owner->GetComponentByClass(UCOVFocusComponent::StaticClass()));
+		return focusComponent;
+	}
+
+	return nullptr;
 }
 
 AActor* UCOVInteractionComponent::TryGetInteractedActor() const
 {
-	//	In order to find an actor to interact with, we want to use the focus manager component if it is present
-	AActor* owner = GetOwner();
-	UCOVFocusComponent* focusComponent = Cast<UCOVFocusComponent>(owner->GetComponentByClass(UCOVFocusComponent::StaticClass()));
-	if (IsValid(focusComponent))
+	if (OwnerFocusComponent.IsValid())
 	{
-		return focusComponent->GetCachedFocusedActor();
+		return OwnerFocusComponent->GetFocusedActor();
 	}
 
 	COV_LOG(COVInteractionComponent, Warning, TEXT("No Focus Component found on owner of this component."));
@@ -44,7 +53,5 @@ AActor* UCOVInteractionComponent::TryGetInteractedActor() const
 void UCOVInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 

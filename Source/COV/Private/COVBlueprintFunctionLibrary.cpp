@@ -4,6 +4,7 @@
 #include "CollisionQueryParams.h"
 #include "Engine.h"
 #include "Kismet/KismetMathLibrary.h"
+#include <GameFramework/InputSettings.h>
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 

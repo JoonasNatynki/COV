@@ -85,10 +85,9 @@ public:
 		ACOVPlayerController* GetCOVPlayerController() const;
 	//	GETTERS	############################################################################################
 
-private:
-	UPROPERTY()
+	UPROPERTY(Category = "Debug", BlueprintReadWrite, EditAnywhere)
 		bool _bDebugModeIsOn = true;
-public:
+
 	UFUNCTION(Category = "Console", Exec)
 		void ShowAimingVectors(bool bOn);
 

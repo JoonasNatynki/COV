@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "COVInteractionComponent.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(COVInteractionComponent, Log, All)
 
 UCLASS( ClassGroup=(COV), meta=(BlueprintSpawnableComponent), Blueprintable )
 class COV_API UCOVInteractionComponent : public UActorComponent
@@ -24,5 +25,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-
+	UFUNCTION(Category = "Interaction", BlueprintCallable)
+		AActor* TryGetInteractedActor() const;
 };

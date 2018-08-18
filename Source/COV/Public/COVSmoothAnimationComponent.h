@@ -16,7 +16,7 @@ UENUM() enum EAimOffsetCalculationMode
 };
 
 
-UCLASS( ClassGroup=(COV), meta=(BlueprintSpawnableComponent), Config=Game)
+UCLASS( ClassGroup=(COV), meta=(BlueprintSpawnableComponent), Blueprintable, Config=Game)
 class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -42,7 +42,7 @@ private:
 		float _cachedPitch;
 	UPROPERTY(Replicated, VisibleAnywhere)
 		//	The location and direction the player is aiming at
-		FVector _aimingLocation;
+		FVector _cachedAimingLocation;
 		UPROPERTY(Replicated, VisibleAnywhere)
 		//	The location and direction the player is aiming at
 		FVector _specialInterestLocation;

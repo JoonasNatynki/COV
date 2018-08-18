@@ -1,7 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVInteractionComponent.h"
+#include "COVFocusComponent.h"
+#include <GameFramework/Actor.h>
+#include "COVBlueprintFunctionLibrary.h"
 
+DEFINE_LOG_CATEGORY(COVInteractionComponent)
 
 // Sets default values for this component's properties
 UCOVInteractionComponent::UCOVInteractionComponent()
@@ -13,7 +17,6 @@ UCOVInteractionComponent::UCOVInteractionComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void UCOVInteractionComponent::BeginPlay()
 {
@@ -23,6 +26,19 @@ void UCOVInteractionComponent::BeginPlay()
 	
 }
 
+AActor* UCOVInteractionComponent::TryGetInteractedActor() const
+{
+	//	In order to find an actor to interact with, we want to use the focus manager component if it is present
+	AActor* owner = GetOwner();
+	UCOVFocusComponent* focusComponent = Cast<UCOVFocusComponent>(owner->GetComponentByClass(UCOVFocusComponent::StaticClass()));
+	if (IsValid(focusComponent))
+	{
+		return focusComponent->GetCachedFocusedActor();
+	}
+
+	COV_LOG(COVInteractionComponent, Warning, TEXT("No Focus Component found on owner of this component."));
+	return nullptr;
+}
 
 // Called every frame
 void UCOVInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

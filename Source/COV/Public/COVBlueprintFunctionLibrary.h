@@ -54,6 +54,9 @@ public:
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		static FHitResult SimpleTraceByChannel(UObject* castingObject, FVector startPos, FVector endPos);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		static FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file in a specific folder with the variable name
 		static FString ReadFileLine(FString InFileName, FString Folder, FString ConfigName);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)

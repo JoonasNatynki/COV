@@ -5,21 +5,28 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "COVPlayerInput.h"
+#include "COVInteractable.h"
 #include "COVCharacter.generated.h"
 
 class UCameraComponent;
 class ACOVPlayerController;
 class UCOVSmoothAnimationComponent;
+class UCOVInteractionComponent;
+class UCOVFocusComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVCharacter, Log, All)
 
 UCLASS()
-class COV_API ACOVCharacter : public ACharacter, public ICOVPlayerInput
+class COV_API ACOVCharacter : public ACharacter, public ICOVPlayerInput, public ICOVInteractable
 {
 	GENERATED_BODY()
 public:
 	UPROPERTY(Category = "Animation", VisibleAnywhere)
 		UCOVSmoothAnimationComponent* SmoothMotionComponent;
+	UPROPERTY(Category = "Interaction", VisibleAnywhere)
+		UCOVInteractionComponent* InteractionComponent;
+	UPROPERTY(Category = "Interaction", VisibleAnywhere)
+		UCOVFocusComponent* FocusComponent;
 
 public:
 	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
@@ -30,6 +37,7 @@ public:
 	ACOVCharacter(const class FObjectInitializer& PCIP);
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void PostInitializeComponents() override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -61,11 +69,14 @@ private:
 	UFUNCTION(Category = "Movement", BlueprintCallable)
 		//	Move character left/right
 		void Input_MoveRight(float amount);
+
+	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable)
+		void Server_Interact(AActor* interactedActor);
 	//	#####################################################################################################
 
 public:
 
-	//	GETTERS	############################################################################################
+	//	GETTERS	#############################################################################################
 	UFUNCTION(Category = "COVCharacter", BlueprintPure)
 		//	Get the character's camera
 		UCameraComponent* GetCharacterCamera() const;
@@ -76,7 +87,7 @@ public:
 
 private:
 	UPROPERTY()
-		bool _bDebugModeIsOn = false;
+		bool _bDebugModeIsOn = true;
 public:
 	UFUNCTION(Category = "Console", Exec)
 		void ShowAimingVectors(bool bOn);

@@ -47,7 +47,7 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	//	Add replicated variables to list using this macro
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedYaw, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedPitch, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _aimingLocation, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedAimingLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedHipRotation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMovementSpeed, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
@@ -61,7 +61,7 @@ bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(FVector aim
 
 void UCOVSmoothAnimationComponent::Server_SetAimingLocation_Implementation(FVector aimLoc)
 {
-	_aimingLocation = aimLoc;
+	_cachedAimingLocation = aimLoc;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(FRotator actorRotation)
@@ -161,7 +161,11 @@ bool UCOVSmoothAnimationComponent::GetShouldBeRotatingHips() const
 
 FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
 {
-	return _aimingLocation;
+	if (IS_LOCALLY_CONTROLLED)
+	{
+		return CalculateAimingLocation();
+	}
+	return _cachedAimingLocation;
 }
 
 FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
@@ -221,7 +225,7 @@ void UCOVSmoothAnimationComponent::SetCurrentMovementSpeed(float newSpeed)
 
 void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
 {
-	_aimingLocation = loc;
+	_cachedAimingLocation = loc;
 	Server_SetAimingLocation(loc);
 }
 

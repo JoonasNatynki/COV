@@ -31,6 +31,39 @@ FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FV
 	return RV_Hit;
 }
 
+FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* character, float rayDistance)
+{
+	//COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("You should clean this function up a little"));
+
+	FHitResult RV_Hit(ForceInit);
+
+	APawn* pawn = Cast<APawn>(character);
+	AController* controller = pawn->GetController();
+	APlayerController* playerController = Cast<APlayerController>(controller);
+
+	if (!IsValid(playerController))
+		return RV_Hit;
+
+	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
+
+	//	Ray starting point
+	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
+	//	end point target direction
+	controller = Cast<APawn>(character)->GetController();
+
+	if (!IsValid(controller))
+		return RV_Hit;
+
+	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
+
+	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
+		character,
+		playerViewWorldLocation + (controllerForwardVector),
+		playerViewWorldLocation + (controllerForwardVector * rayDistance));
+
+	return RV_Hit;
+}
+
 int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(FString FileName, FString folder)
 {
 	COV_LOG(COVBlueprintFunctionLibrary, Log, TEXT("Reading the number of lines in a file (%s)."), *FileName);

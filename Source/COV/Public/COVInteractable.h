@@ -24,6 +24,9 @@ class COV_API ICOVInteractable
 public:
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
 		//	Call this when interacting with the object. Most often only the client should be calling this function.
+		bool GetIsInteractable();
+	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
+		//	Call this when interacting with the object. Most often only the client should be calling this function.
 		bool Interact(AActor* Interactor);
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
 		//	Call this when interacting with the object. Most often only the client should be calling this function.

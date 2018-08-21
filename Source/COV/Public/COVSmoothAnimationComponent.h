@@ -34,22 +34,22 @@ class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 
 private:
 	//	VARIABLES ###########################################################################################
-	UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	The yaw of this characters upper torso value. To be used in the animation blueprint
 		float _cachedYaw;
-	UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	The pitch of this characters upper torso value. To be used in the animation blueprint
 		float _cachedPitch;
-	UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	The location and direction the player is aiming at
 		FVector _cachedAimingLocation;
-		UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	The location and direction the player is aiming at
 		FVector _specialInterestLocation;
-	UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	The hip rotation of the actor
 		FRotator _cachedHipRotation;
-	UPROPERTY(Replicated, VisibleAnywhere)
+	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bShouldBeRotatingHips;
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
@@ -68,7 +68,7 @@ private:
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		TEnumAsByte<EAimOffsetCalculationMode> AimOffsetMode = EAimOffsetCalculationMode::ControlRotation;
 
-	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed)
+	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed, Transient)
 		//	The default maximum speed the character will be running at without sprinting
 		float _currentMovementSpeed;
 	UPROPERTY(Category = "Movement", EditDefaultsOnly, Config)

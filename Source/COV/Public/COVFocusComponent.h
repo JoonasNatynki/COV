@@ -21,7 +21,7 @@ public:
 	UPROPERTY(BlueprintAssignable)
 		FOnFocusedActorChanged OnFocusedActorChanged;
 
-	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere, Transient)
 		AActor* _cachedFocusedActor;
 	UPROPERTY(Category = "Focus", EditDefaultsOnly)
 		float _focusingMaxDistance = 350.0f;

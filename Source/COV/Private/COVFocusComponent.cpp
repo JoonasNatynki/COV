@@ -27,12 +27,19 @@ TWeakObjectPtr<AActor> UCOVFocusComponent::UpdateFocusedActor_Internal() const
 {
 	//	Just simply get the actor pointed at
 	FHitResult RV_Hit= UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance);
-	return RV_Hit.Actor;
+	auto focusedActor = RV_Hit.Actor;
+
+	return focusedActor;
 }
 
 AActor* UCOVFocusComponent::GetFocusedActor()
 {
 	UpdateFocusedActor();
+	return _cachedFocusedActor;
+}
+
+AActor* UCOVFocusComponent::GetCachedFocusedActor() const
+{
 	return _cachedFocusedActor;
 }
 

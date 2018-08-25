@@ -8,7 +8,7 @@
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 
-FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos)
+FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel)
 {
 	//	LINETRACE	################################
 	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("Joonas")), false);
@@ -25,7 +25,7 @@ FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FV
 		RV_Hit,        //result
 		startPos,    //start
 		endPos, //end
-		ECC_Camera, //collision channel
+		channel, //collision channel
 		RV_TraceParams
 	);
 	//	############################################
@@ -37,7 +37,6 @@ FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* characte
 	//COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("You should clean this function up a little"));
 
 	FHitResult RV_Hit(ForceInit);
-
 	APawn* pawn = Cast<APawn>(character);
 	AController* controller = pawn->GetController();
 	APlayerController* playerController = Cast<APlayerController>(controller);
@@ -46,7 +45,6 @@ FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* characte
 		return RV_Hit;
 
 	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
-
 	//	Ray starting point
 	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
 	//	end point target direction
@@ -57,10 +55,13 @@ FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* characte
 
 	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
 
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
+	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+	(
 		character,
 		playerViewWorldLocation + (controllerForwardVector),
-		playerViewWorldLocation + (controllerForwardVector * rayDistance));
+		playerViewWorldLocation + (controllerForwardVector * rayDistance),
+		ECollisionChannel::ECC_Camera
+	);
 
 	return RV_Hit;
 }

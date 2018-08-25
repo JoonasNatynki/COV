@@ -26,6 +26,7 @@ public:
 	UPROPERTY(Category = "Focus", EditDefaultsOnly)
 		float _focusingMaxDistance = 350.0f;
 
+	//	Internal implementation of the updating logic
 	TWeakObjectPtr<AActor> UpdateFocusedActor_Internal() const;
 protected:
 	// Called when the game starts
@@ -36,8 +37,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(Category = "Focus", BlueprintCallable, BlueprintPure)
-		//	Gets the cached focused actor from the last time the focus actor was updated. USE UpdateFocusedActor() TO UPDATE THE CACHED FOCUSED ACTOR!
+		//	Gets and updates the focused actor.
 		AActor* GetFocusedActor();
+	UFUNCTION(Category = "Focus", BlueprintCallable, BlueprintPure)
+		//	Gets the cached focused actor from the last time the focus actor was updated.
+		AActor* GetCachedFocusedActor() const;
 	UFUNCTION(Category = "Focus", BlueprintCallable)
 		//	Goes through the logic of how the focus actor is determined and updates the cached focused actor variable.
 		void UpdateFocusedActor();

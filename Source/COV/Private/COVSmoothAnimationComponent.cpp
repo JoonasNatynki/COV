@@ -279,10 +279,13 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 	
 	float lineTraceLength = _aimingLocationTraceLength;
 
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(
+	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+	(
 		GetOwner(),
 		playerViewWorldLocation + (controllerForwardVector),
-		playerViewWorldLocation + (controllerForwardVector * lineTraceLength));
+		playerViewWorldLocation + (controllerForwardVector * lineTraceLength),
+		ECollisionChannel::ECC_Camera
+	);
 
 	if (RV_Hit.bBlockingHit)
 	{

@@ -41,19 +41,39 @@ void UCOVDoorComponent::UpdateDoorState()
 	if (_doorStateAlpha <= _doorClosedAlphaThreshold)
 	{
 		newDoorState = EDoorState::Closed;
+		SetDoorState(newDoorState);
+		return;
 	}
 
 	if (_doorStateAlpha >= _doorOpenAlphaThreshold)
 	{
 		newDoorState = EDoorState::Open;
+		SetDoorState(newDoorState);
+		return;
+	}
+
+	if (_doorPreviousFrameAlpha < _doorStateAlpha)
+	{
+		newDoorState = EDoorState::Opening;
+		SetDoorState(newDoorState);
+		return;
+	}
+
+	if (_doorPreviousFrameAlpha > _doorStateAlpha)
+	{
+		newDoorState = EDoorState::Closing;
+		SetDoorState(newDoorState);
+		return;
 	}
 
 	if (_doorStateAlpha <= _doorOpenAlphaThreshold && _doorStateAlpha >= _doorClosedAlphaThreshold)
 	{
 		newDoorState = EDoorState::Cracked;
+		SetDoorState(newDoorState);
+		return;
 	}
 
-	SetDoorState(newDoorState);
+	return;
 }
 
 void UCOVDoorComponent::SetDoorState(EDoorState doorState)
@@ -68,6 +88,7 @@ void UCOVDoorComponent::SetDoorStateAlpha(float alpha)
 	FTransform tempTrans = UKismetMathLibrary::TEase(_initialClosedTransform, _finalOpenTransform, _doorStateAlpha, EEasingFunc::EaseInOut, 2, 2);
 	_doorHinge->SetRelativeTransform(tempTrans);
 	UpdateDoorState();
+	_doorPreviousFrameAlpha = _doorStateAlpha;
 }
 
 void UCOVDoorComponent::SetInitialClosedTransform(FTransform openTransform)

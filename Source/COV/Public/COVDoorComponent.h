@@ -60,6 +60,8 @@ private:
 	UPROPERTY()
 		USceneComponent* _doorHinge;
 
+	float _doorPreviousFrameAlpha;
+
 public:
 	UFUNCTION(BlueprintCallable)
 		void UpdateDoorState();

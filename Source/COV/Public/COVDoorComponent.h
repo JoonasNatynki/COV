@@ -34,25 +34,25 @@ public:
 	UFUNCTION()
 	void OnRep_DoorState();
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(Category = "Door", BlueprintAssignable)
 		//	Called when the door state changes
 		FOnDoorStateChanged OnDoorStateChanged;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, ReplicatedUsing = OnRep_DoorState)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly, ReplicatedUsing = OnRep_DoorState)
 		//	The current state of the door and that it is in
 		TEnumAsByte<EDoorState> _doorState = EDoorState::Closed;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The state alpha. From 0 to 1 with 0 being fully closed and 1 is fully open
 		float _doorStateAlpha = 0.0f;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The value at which the door will be considered closed
 		float _doorClosedAlphaThreshold = 0.1f;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The value at which the door will be considered opened
 		float _doorOpenAlphaThreshold = 0.9f;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully closed
 		FTransform _initialClosedTransform;
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully open
 		FTransform _finalOpenTransform;
 
@@ -66,26 +66,26 @@ public:
 
 
 	//	SETTERS	#############################################################################################
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable)
 		void SetDoorState(EDoorState doorState);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable)
 		void SetDoorStateAlpha(float alpha);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable)
 		void SetInitialClosedTransform(FTransform openTransform);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable)
 		void SetFinalOpenTransform(FTransform finalTransform);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable)
 		void SetDoorHinge(USceneComponent* doorHinge);
 	//	SETTERS	#############################################################################################
 
 	//	GETTERS	#############################################################################################
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable, BlueprintPure)
 		EDoorState GetDoorState() const;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable, BlueprintPure)
 		float GetDoorStateAlpha() const;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable, BlueprintPure)
 		FTransform GetInitialOpenTransform() const;
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Category = "Door", BlueprintCallable, BlueprintPure)
 		FTransform GetFinalClosedTransform() const;
 	//	GETTERS	#############################################################################################
 

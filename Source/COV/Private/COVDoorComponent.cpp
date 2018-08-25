@@ -48,6 +48,11 @@ void UCOVDoorComponent::UpdateDoorState()
 		newDoorState = EDoorState::Open;
 	}
 
+	if (_doorStateAlpha <= _doorOpenAlphaThreshold && _doorStateAlpha >= _doorClosedAlphaThreshold)
+	{
+		newDoorState = EDoorState::Cracked;
+	}
+
 	SetDoorState(newDoorState);
 }
 

@@ -8,8 +8,7 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(COVSmoothAnimation, Log, All)
 
-
-UENUM() enum EAimOffsetCalculationMode
+UENUM(BlueprintType) enum EAimOffsetCalculationMode
 {
 	ControlRotation	UMETA(DisplayName = "Control rotation"),
 	AimLocation		UMETA(DisplayName = "Aim location")

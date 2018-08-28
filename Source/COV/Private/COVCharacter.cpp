@@ -10,6 +10,7 @@
 #include "COVInteractionComponent.h"
 #include "COVFocusComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
+#include "COVInventory.h"
 
 DEFINE_LOG_CATEGORY(COVCharacter)
 
@@ -47,12 +48,15 @@ void ACOVCharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
+	//	Here we see if the character blueprint is configured properly with the proper components that it needs to function properly. If one component is missing, we ensure that it is added to the blueprint. The reason why we add the components in the blueprint instead of code is: it's much easier and designer friendly. No reason to hardcode it here since there is no performance gain in doing so and we can access the component just as well if it is initialized through the blueprint scripting language. Although there is nothing wrong in initializing the components in the constructor here in code either. It is just a personal preference. A good rule of thumb is that you write implementation and the functionality in C++ and you do the higher level logic and execution of those implementations in Blueprints. In other words: "Write the functions in C++, use the functions in Blueprints.".
 	//	Smooth animation component
 	GET_AND_STORE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
 	//	Interaction component
 	GET_AND_STORE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
 	//	Focus component
 	GET_AND_STORE_COMPONENT(UCOVFocusComponent, FocusComponent)
+	//	Inventory component
+	GET_AND_STORE_COMPONENT(UCOVInventory, Inventory)
 }
 
 //	Required for network replication of variables
@@ -72,12 +76,12 @@ void ACOVCharacter::Input_E_Released_Implementation()
 
 }
 
-bool ACOVCharacter::Server_Interact_Validate(AActor* interactedActor)
+bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor)
 {
 	return true;
 }
 
-void ACOVCharacter::Server_Interact_Implementation(AActor* interactedActor)
+void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor)
 {
 	ICOVInteractable::Execute_Interact(interactedActor, this);
 }
@@ -89,9 +93,14 @@ void ACOVCharacter::Input_F_Pressed_Implementation()
 	{
 		if (focusedActor->Implements<UCOVInteractable>())
 		{
+			if (!ICOVInteractable::Execute_GetIsInteractable(focusedActor))
+			{
+				COV_LOG(LogTemp, Warning, TEXT("Character (%s) interacted with actor (%s), but it was set not interactable."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
+				return;
+			}
 			//	Interaction will be successful
 			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacted with actor (%s)."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
-			Server_Interact(focusedActor);
+			Input_Interact_Server(focusedActor);
 		}
 		else
 		{

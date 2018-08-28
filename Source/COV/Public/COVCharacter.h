@@ -13,6 +13,7 @@ class ACOVPlayerController;
 class UCOVSmoothAnimationComponent;
 class UCOVInteractionComponent;
 class UCOVFocusComponent;
+class UCOVInventory;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVCharacter, Log, All)
 
@@ -27,6 +28,8 @@ public:
 		UCOVInteractionComponent* InteractionComponent;
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
 		UCOVFocusComponent* FocusComponent;
+	UPROPERTY(Category = "Interaction", VisibleAnywhere)
+		UCOVInventory* Inventory;
 
 public:
 	UPROPERTY(Category = "Interaction", EditDefaultsOnly)
@@ -70,8 +73,8 @@ private:
 		//	Move character left/right
 		void Input_MoveRight(float amount);
 
-	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable)
-		void Server_Interact(AActor* interactedActor);
+	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
+		void Input_Interact_Server(AActor* interactedActor);
 	//	#####################################################################################################
 
 public:

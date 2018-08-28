@@ -33,9 +33,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY()
+	UPROPERTY(Category = "Screen", BlueprintAssignable)
 		FOnScreenRemoval OnScreenRemoval;
-	UFUNCTION(Category = "Getter", BlueprintCallable, BlueprintPure)
+
+	UFUNCTION(Category = "Screen", BlueprintCallable, BlueprintPure)
 		APlayerController* GetOwnerPlayerController() const;
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool PushScreenByClass(TSubclassOf<UCOVScreen> widgetClass);

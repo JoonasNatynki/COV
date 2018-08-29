@@ -34,9 +34,9 @@ void UCOVInventory::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaul
 
 void UCOVInventory::OnRep_Inventory(TArray<UCOVInventoryItem*> inv) const
 {
-	FString test = EnumToString<EInventoryAction>(FString(TEXT("EInventoryAction")), _cachedLastAction.action.GetValue());
+	FString enumAsString = EnumToString<EInventoryAction>(FString(TEXT("EInventoryAction")), _cachedLastAction.action.GetValue());
 
-	COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *test, *UKismetSystemLibrary::GetDisplayName(_cachedLastAction.item));
+	COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *enumAsString, *UKismetSystemLibrary::GetDisplayName(_cachedLastAction.item));
 
 	OnInventoryChanged.Broadcast(_cachedLastAction);
 }
@@ -62,6 +62,10 @@ void UCOVInventory::AddItem_Implementation(UCOVInventoryItem* item)
 
 	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Add);
 	_cachedLastAction = *action;
+
+	//	Now make the inventory item aware of the inventory it is in
+	item->SetOwningInventory(this);
+
 	OnRep_Inventory(_inventory);
 }
 
@@ -85,6 +89,10 @@ void UCOVInventory::RemoveItem_Implementation(UCOVInventoryItem* item)
 	_inventory.RemoveAt(indexOfFoundItem);
 	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Add);
 	_cachedLastAction = *action;
+
+	//	Now lets update the item's owning inventory
+	item->SetOwningInventory(nullptr);
+
 	OnRep_Inventory(_inventory);
 }
 

@@ -25,6 +25,20 @@ const FString appendText = FString::Printf(_text, ##__VA_ARGS__);\
 UE_LOG(_namespace, _logcategory, TEXT("%s%s"), PRINT_FUNCTION, *appendText);\
 }
 
+#define GET_AND_STORE_COMPONENT(_componentclass, _containervariablename) {\
+_componentclass* tempComp = nullptr;\
+TSet<UActorComponent*> comps = GetComponents();\
+for (auto & comp : comps)\
+{\
+	tempComp = Cast<_componentclass>(comp);\
+	if (tempComp)\
+	{\
+		_containervariablename = tempComp;\
+		break;\
+	}\
+}\
+ensureMsgf(tempComp != nullptr, TEXT("##_componentclass Component was not found! Please add it as a component to this actor or the actor won't work properly!"));\
+}\
 
 //	BEGINNING OF USE INTERFACE MAKRO	###############################################################################
 #define USE_INTERFACE(_objectwithinterface, _interface, _functionname, ...) TWeakObjectPtr<UObject> interfaceObject = _objectwithinterface;\

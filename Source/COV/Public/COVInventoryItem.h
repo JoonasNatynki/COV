@@ -8,6 +8,8 @@
 
 class UCOVInventory;
 
+DECLARE_LOG_CATEGORY_EXTERN(COVInventoryItem, Log, All)
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
 class COV_API UCOVInventoryItem : public UActorComponent
 {
@@ -24,10 +26,19 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
 	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
+		//	Gets the inventory that this item is in currently, if any
 		UCOVInventory* GetOwningInventory() const;
 
 	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
+		//	Set the inventory that this item is in currently, if in any
 		void SetOwningInventory(UCOVInventory* inventory);
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, NetMulticast, Reliable, BlueprintAuthorityOnly, WithValidation)
+		//	Packs the item to be ready for be inserted into an inventory
+		void PackItem();
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, NetMulticast, Reliable, BlueprintAuthorityOnly, WithValidation)
+		//	Packs the item to be ready for be inserted into an inventory
+		void UnpackItem();
 
 protected:
 	// Called when the game starts

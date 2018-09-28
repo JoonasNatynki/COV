@@ -4,8 +4,11 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include <Components/ActorComponent.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include <GameFramework/Actor.h>
 #include "COVInventoryItem.h"
 #include <UnrealNetwork.h>
+#include <Engine/EngineTypes.h>
+#include <Components/PrimitiveComponent.h>
 
 DEFINE_LOG_CATEGORY(COVInventory)
 
@@ -36,7 +39,10 @@ void UCOVInventory::OnRep_Inventory(TArray<UCOVInventoryItem*> inv) const
 {
 	FString enumAsString = EnumToString<EInventoryAction>(FString(TEXT("EInventoryAction")), _cachedLastAction.action.GetValue());
 
-	COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *enumAsString, *UKismetSystemLibrary::GetDisplayName(_cachedLastAction.item));
+	if (GetOwner()->Role != ROLE_Authority)
+	{
+		COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *enumAsString, *UKismetSystemLibrary::GetDisplayName(_cachedLastAction.item));
+	}
 
 	OnInventoryChanged.Broadcast(_cachedLastAction);
 }
@@ -62,10 +68,8 @@ void UCOVInventory::AddItem_Implementation(UCOVInventoryItem* item)
 
 	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Add);
 	_cachedLastAction = *action;
-
 	//	Now make the inventory item aware of the inventory it is in
 	item->SetOwningInventory(this);
-
 	OnRep_Inventory(_inventory);
 }
 
@@ -87,13 +91,36 @@ void UCOVInventory::RemoveItem_Implementation(UCOVInventoryItem* item)
 	}
 
 	_inventory.RemoveAt(indexOfFoundItem);
-	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Add);
+	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Remove);
 	_cachedLastAction = *action;
 
 	//	Now lets update the item's owning inventory
 	item->SetOwningInventory(nullptr);
 
 	OnRep_Inventory(_inventory);
+}
+
+bool UCOVInventory::PackItem_Validate(UCOVInventoryItem* item)
+{
+	return true;
+}
+
+void UCOVInventory::PackItem_Implementation(UCOVInventoryItem* item)
+{
+	AActor* ownerActor = GetOwner();
+	AActor* itemActor = item->GetOwner();
+
+	Cast<UPrimitiveComponent>(itemActor->GetRootComponent())->SetSimulatePhysics(false);
+
+	COV_LOG(COVInventory, Log, TEXT("Item (%s) packed into inventory and the component simulation data has been generated."), *UKismetSystemLibrary::GetDisplayName(itemActor));
+
+	//	Disables collisions
+	itemActor->SetActorEnableCollision(false);
+	//	Hides actor
+	itemActor->SetActorHiddenInGame(true);
+	FAttachmentTransformRules rules(FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	itemActor->AttachToActor(ownerActor, rules);
+	itemActor->SetActorLocation(ownerActor->GetActorLocation());
 }
 
 // Called every frame

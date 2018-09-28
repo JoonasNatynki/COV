@@ -50,6 +50,12 @@ public:
 		//	The value at which the door will be considered opened
 		float _doorOpenAlphaThreshold = 0.9f;
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
+		//	The door motion interpolation exponent
+		float _motionInterpolationExponent = 2.0f;
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
+		//	The door motion interpolation step count
+		int32 _motionInterpolationSteps = 2;
+	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully closed
 		FTransform _initialClosedTransform;
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)

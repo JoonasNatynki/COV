@@ -14,21 +14,6 @@
 
 DEFINE_LOG_CATEGORY(COVCharacter)
 
-#define GET_AND_STORE_COMPONENT(_componentclass, _containervariablename) {\
-_componentclass* tempComp = nullptr;\
-TSet<UActorComponent*> comps = GetComponents();\
-for (auto & comp : comps)\
-{\
-	tempComp = Cast<_componentclass>(comp);\
-	if (tempComp)\
-	{\
-		_containervariablename = tempComp;\
-		break;\
-	}\
-}\
-ensureMsgf(tempComp != nullptr, TEXT("##_componentclass Component was not found on the character! Please add it as a component to this character or the character won't work properly!"));\
-}\
-
 // Sets default values
 ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCIP.SetDefaultSubobjectClass<UXYZ_CharacterMovementComponent>(ACharacter::CharacterMovementComponentName))*/
 {

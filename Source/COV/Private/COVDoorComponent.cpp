@@ -85,7 +85,7 @@ void UCOVDoorComponent::SetDoorState(EDoorState doorState)
 void UCOVDoorComponent::SetDoorStateAlpha(float alpha)
 {
 	_doorStateAlpha = alpha;
-	FTransform tempTrans = UKismetMathLibrary::TEase(_initialClosedTransform, _finalOpenTransform, _doorStateAlpha, EEasingFunc::EaseInOut, 2, 2);
+	FTransform tempTrans = UKismetMathLibrary::TEase(_initialClosedTransform, _finalOpenTransform, _doorStateAlpha, EEasingFunc::EaseInOut, _motionInterpolationExponent, _motionInterpolationSteps);
 	_doorHinge->SetRelativeTransform(tempTrans);
 	UpdateDoorState();
 	_doorPreviousFrameAlpha = _doorStateAlpha;

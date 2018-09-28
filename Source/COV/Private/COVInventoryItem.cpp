@@ -3,7 +3,12 @@
 #include "COVInventoryItem.h"
 #include <UnrealNetwork.h>
 #include "COVInventory.h"
+#include "COVBlueprintFunctionLibrary.h"
+#include <Kismet/KismetSystemLibrary.h>
+#include <GameFramework/Actor.h>
+#include <Components/PrimitiveComponent.h>
 
+DEFINE_LOG_CATEGORY(COVInventoryItem)
 
 // Sets default values for this component's properties
 UCOVInventoryItem::UCOVInventoryItem()
@@ -33,9 +38,47 @@ UCOVInventory* UCOVInventoryItem::GetOwningInventory() const
 }
 
 void UCOVInventoryItem::SetOwningInventory(UCOVInventory* inventory)
+{	
+	if (IsValid(inventory))
+	{
+		_owningInventory = inventory;
+		PackItem();
+	}
+	else
+	{
+		UnpackItem();
+		_owningInventory = inventory;
+	}
+}
+
+bool UCOVInventoryItem::PackItem_Validate()
 {
-	_owningInventory = inventory;
-	//	TODO: When a new inventory is set, do the item hiding and stuff needed to carry it around in the inventory
+	return true;
+}
+
+void UCOVInventoryItem::PackItem_Implementation()
+{
+	COV_LOG(COVInventoryItem, Log, TEXT("Packing item (%s)"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	AActor* itemActor = GetOwner();
+	//itemActor->SetActorHiddenInGame(true);
+	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
+	tempcomp->SetSimulatePhysics(false);
+	tempcomp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+bool UCOVInventoryItem::UnpackItem_Validate()
+{
+	return true;
+}
+
+void UCOVInventoryItem::UnpackItem_Implementation()
+{
+	COV_LOG(COVInventoryItem, Log, TEXT("Unpacking item (%s)"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	AActor* itemActor = GetOwner();
+	//itemActor->SetActorHiddenInGame(false);
+	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
+	tempcomp->SetSimulatePhysics(true);
+	tempcomp->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 }
 
 // Called every frame

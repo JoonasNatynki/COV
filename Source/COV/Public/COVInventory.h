@@ -9,6 +9,7 @@
 
 class UCOVInventoryItem;
 class UCOVInventory;
+class UPrimitiveComponent;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVInventory, Log, All)
 
@@ -71,6 +72,9 @@ public:
 
 	UFUNCTION(Category = "Inventory", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
 		void RemoveItem(UCOVInventoryItem* item);
+
+	UFUNCTION(Category = "Inventory", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
+		void PackItem(UCOVInventoryItem* item);
 
 protected:
 	// Called when the game starts

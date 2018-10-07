@@ -8,6 +8,12 @@
 #include <NoExportTypes.h>
 #include "EchoProfiler.generated.h"
 
+#if WITH_EDITOR
+static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.ShowEchoProfilerDebugSphere"),
+	0,
+	TEXT("Show the aproximate size of the echo profile as volume."));
+#endif
+
 USTRUCT()
 struct FTriangle
 {
@@ -53,8 +59,12 @@ class COV_API UEchoProfiler : public UActorComponent
 
 	UPROPERTY(EditAnywhere)
 		int32 IcoSphereSubdivisions = 2;
+	UPROPERTY(EditAnywhere)
+		float EchoMeasureMaximumDistance = 10000.0f;
 	UPROPERTY(VisibleAnywhere)
-		float EchoFloatProfile;
+		float EchoSpaceSizeProfile;
+	UPROPERTY(VisibleAnywhere)
+		float EchoCoverageProfile;
 
 	//	The generated icosphere
 	TArray<FVector> mesh;
@@ -64,13 +74,19 @@ class COV_API UEchoProfiler : public UActorComponent
 		TArray<FVector>& GetMesh() { return mesh; };
 	UFUNCTION(BlueprintCallable)
 		void GenerateEchoProfile(FVector sourceLocation);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetEchoFloatProfile() const { return EchoSpaceSizeProfile; };
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+		float GetEchoCoverageProfile() const { return EchoCoverageProfile; };
+
 public:	
 	// Sets default values for this component's properties
 	UEchoProfiler();
 
 	FIndex GetVertexForEdge(Lookup& lookup, VertexList& vertices, FIndex first, FIndex second);
-	TriangleList Subdivide(VertexList& vertices, TriangleList triangles);
+	TriangleList SubdivideIcoSphereMesh(VertexList& vertices, TriangleList triangles);
 	IndexedMesh GenerateIcoSphere(int subdivisions);
+	void DrawDebugs() const;
 
 protected:
 	// Called when the game starts

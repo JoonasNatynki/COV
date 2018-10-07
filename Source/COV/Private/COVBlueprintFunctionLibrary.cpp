@@ -8,14 +8,18 @@
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 
-FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel)
+FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag)
 {
+	//const FName TraceTag("COVTraces");
+	//inObj->GetWorld()->DebugDrawTraceTag = TraceTag;
+
 	//	LINETRACE	################################
 	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("Joonas")), false);
 	RV_TraceParams.bTraceComplex = true;
 	RV_TraceParams.bTraceAsyncScene = true;
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 	RV_TraceParams.AddIgnoredActor(Cast<AActor>(inObj));
+	RV_TraceParams.TraceTag = TraceTag;
 
 	//Re-initialize hit info
 	FHitResult RV_Hit(ForceInit);
@@ -60,7 +64,8 @@ FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* characte
 		character,
 		playerViewWorldLocation + (controllerForwardVector),
 		playerViewWorldLocation + (controllerForwardVector * rayDistance),
-		ECollisionChannel::ECC_Camera
+		ECollisionChannel::ECC_Camera,
+		FName("AimTrace")
 	);
 
 	return RV_Hit;
@@ -93,7 +98,7 @@ FString UCOVBlueprintFunctionLibrary::ReadFileLine(FString fileName, FString fol
 {
 	TArray<FString> rows;
 	FString filePath = FString(FPaths::GameDir()).Append(folder).Append(fileName);
-	bool foundSomething = FFileHelper::LoadANSITextFileToStrings(*filePath, NULL, rows);
+	bool foundSomething = FFileHelper::LoadFileToStringArray(rows, *filePath);
 
 	if (foundSomething)
 	{
@@ -130,7 +135,7 @@ FString UCOVBlueprintFunctionLibrary::ReadFileLine(FString fileName, FString fol
 FString UCOVBlueprintFunctionLibrary::GetGameVersionAsString()
 {
 	float numberOfCommits = (float)GetNumberOfRowsInFile(FString(TEXT("HEAD")), FString(TEXT("/.git/logs/")));
-	FString versionType = ReadConfigFileLine(FString(TEXT("COV_GameInfo.txt")), FString(TEXT("Version")));
+	FString versionType = ReadConfigFileLine(FString(TEXT("COVGameInfo.ini")), FString(TEXT("VersionNumber")));
 
 	return FString::SanitizeFloat(numberOfCommits / 1000.0f).Append(TEXT(" ")).Append(versionType);
 }

@@ -284,7 +284,8 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 		GetOwner(),
 		playerViewWorldLocation + (controllerForwardVector),
 		playerViewWorldLocation + (controllerForwardVector * lineTraceLength),
-		ECollisionChannel::ECC_Camera
+		ECollisionChannel::ECC_Camera,
+		FName("AimTrace")
 	);
 
 	if (RV_Hit.bBlockingHit)

@@ -4,6 +4,7 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include <Map.h>
+#include <Kismet/KismetSystemLibrary.h>
 
 // Sets default values for this component's properties
 UEchoProfiler::UEchoProfiler()
@@ -19,7 +20,6 @@ void UEchoProfiler::BeginPlay()
 	Super::BeginPlay();
 
 	IndexedMesh test = GenerateIcoSphere(IcoSphereSubdivisions);
-
 	mesh = test.Key;
 }
 
@@ -45,13 +45,13 @@ FIndex UEchoProfiler::GetVertexForEdge(Lookup& lookup,
 	return inserted;
 }
 
-TriangleList UEchoProfiler::Subdivide(VertexList& vertices,
+TriangleList UEchoProfiler::SubdivideIcoSphereMesh(VertexList& vertices,
 	TriangleList triangles)
 {
 	Lookup lookup;
 	TriangleList result;
 
-	for (auto&& each : triangles)
+	for (auto & each : triangles)
 	{
 		TArray<FIndex> mid;
 		for (int edge = 0; edge < 3; ++edge)
@@ -73,38 +73,71 @@ IndexedMesh UEchoProfiler::GenerateIcoSphere(int subdivisions)
 {
 	for (int i = 0; i < subdivisions; ++i)
 	{
-		triangles = Subdivide(vertices, triangles);
+		triangles = SubdivideIcoSphereMesh(vertices, triangles);
 	}
 	IndexedMesh temp;
 	temp.Key = vertices;
 	temp.Value = triangles;
 
-	UE_LOG(LogTemp, Log, TEXT("Icosphere generated with subdivisions (%d)."), IcoSphereSubdivisions);
+	COV_LOG(LogTemp, Log, TEXT("Icosphere generated with subdivisions (%d)."), IcoSphereSubdivisions);
 	return temp;
 }
 
 void UEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 {
-	EchoFloatProfile = 0;
+	EchoSpaceSizeProfile = 0;
+	EchoCoverageProfile = 0;
 
-	FVector startPos;
+	//FVector startPos;
 	FVector endPos;
 
 	for (auto & vertex : GetMesh())
 	{
-		startPos = GetOwner()->GetActorLocation();
-		endPos = GetOwner()->GetActorLocation() + (vertex * 10000.0f);
-		FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(GetOwner(), startPos, endPos, ECollisionChannel::ECC_Visibility);
+		//startPos = GetOwner()->GetActorLocation();
+		endPos = GetOwner()->GetActorLocation() + (vertex * EchoMeasureMaximumDistance);
+		FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+		(
+			GetOwner(),
+			sourceLocation,
+			endPos,
+			ECollisionChannel::ECC_Visibility,
+			FName("EchoTrace")
+		);
 
-		float tempResult = hit.Distance * hit.Distance;
-		FVector rayNormalized = (endPos - startPos);
+		//	Here we calculate how we add this ray trace into the echo float profile
+		float tempResult = (hit.Distance) / (10.0f * GetMesh().Num());
+		FVector rayNormalized = (endPos - sourceLocation);
 		rayNormalized.Normalize();
 		float dotFloat = FVector::DotProduct(hit.ImpactNormal, rayNormalized);
-		tempResult = tempResult * dotFloat;
-		EchoFloatProfile -= tempResult;
+		tempResult = tempResult * (dotFloat * dotFloat);
+		EchoSpaceSizeProfile += tempResult;
+
+		//	Add into coverage profile
+		hit.bBlockingHit ? EchoCoverageProfile += 1.0f : EchoCoverageProfile;
 	}
 
-	EchoFloatProfile = EchoFloatProfile / 1000000.0f;
+	//	Calculate the wall coverage ratio 0 = open space and 1 = completely closed space
+	EchoCoverageProfile -= (float)(GetMesh().Num() / 2);
+	if (EchoCoverageProfile < 0)
+	{
+		EchoCoverageProfile = 0;
+	}
+	else
+	{
+		EchoCoverageProfile = EchoCoverageProfile / (GetMesh().Num() / 2);
+	}
+}
+
+void UEchoProfiler::DrawDebugs() const 
+{
+	int32 showEchoDebugVolume = CVarShowEchoProfilerDebugSphere.GetValueOnGameThread();
+
+	if (showEchoDebugVolume == 1)
+	{
+		FVector ownerLocation = GetOwner()->GetActorLocation();
+		UKismetSystemLibrary::DrawDebugSphere(GetOwner(), ownerLocation, EchoSpaceSizeProfile * 40, 12, FLinearColor::Red, 0.0f, 4.0f);
+		UKismetSystemLibrary::DrawDebugString(GetOwner(), FVector(0,0,80.0f), FString::SanitizeFloat(EchoSpaceSizeProfile), GetOwner(), FLinearColor::Red, 0.0f);
+	}
 }
 
 // Called every frame
@@ -112,6 +145,7 @@ void UEchoProfiler::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	DrawDebugs();
 	// ...
 }
 

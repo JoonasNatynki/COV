@@ -1,2 +1,0 @@
-Version=alpha
-GameName=Call Of The Void

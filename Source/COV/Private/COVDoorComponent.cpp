@@ -1,9 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVDoorComponent.h"
+#include "COVBlueprintFunctionLibrary.h"
 #include <UnrealNetwork.h>
 #include <Kismet/KismetMathLibrary.h>
 #include <Components/SceneComponent.h>
+#include <Kismet/KismetSystemLibrary.h>
+
+DEFINE_LOG_CATEGORY(COVDoor)
 
 // Sets default values for this component's properties
 UCOVDoorComponent::UCOVDoorComponent()
@@ -14,11 +18,15 @@ UCOVDoorComponent::UCOVDoorComponent()
 	bReplicates = true;
 }
 
-
 // Called when the game starts
 void UCOVDoorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!IsValid(_doorHinge))
+	{
+		COV_LOG(COVDoor, Error, TEXT("Door hinge not set for door (%s). Make sure the OPEN and CLOSED transforms are set as well."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	}
 }
 
 //	Required for network replication of variables

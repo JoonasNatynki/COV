@@ -18,6 +18,8 @@ UENUM(BlueprintType) enum EDoorState
 	Cracked
 };
 
+DECLARE_LOG_CATEGORY_EXTERN(COVDoor, All, Log)
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDoorStateChanged, EDoorState, DoorState);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
@@ -55,15 +57,13 @@ public:
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The door motion interpolation step count
 		int32 _motionInterpolationSteps = 2;
-	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully closed
 		FTransform _initialClosedTransform;
-	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully open
 		FTransform _finalOpenTransform;
-
-private:
-	UPROPERTY()
+	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		USceneComponent* _doorHinge;
 
 	float _doorPreviousFrameAlpha;

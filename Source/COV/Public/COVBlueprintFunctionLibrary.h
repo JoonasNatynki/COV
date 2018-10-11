@@ -40,6 +40,21 @@ for (auto & comp : comps)\
 ensureMsgf(tempComp != nullptr, TEXT("##_componentclass Component was not found! Please add it as a component to this actor or the actor won't work properly!"));\
 }\
 
+#define GET_AND_STORE_COMPONENT_FROM_COMPONENT(_componentclass, _containervariablename) {\
+_componentclass* tempComp = nullptr;\
+TSet<UActorComponent*> comps = GetOwner()->GetComponents();\
+for (auto & comp : comps)\
+{\
+	tempComp = Cast<_componentclass>(comp);\
+	if (tempComp)\
+	{\
+		_containervariablename = tempComp;\
+		break;\
+	}\
+}\
+ensureMsgf(tempComp != nullptr, TEXT("##_componentclass Component was not found! Please add it as a component to this actor or the actor won't work properly!"));\
+}\
+
 //	BEGINNING OF USE INTERFACE MAKRO	###############################################################################
 #define USE_INTERFACE(_objectwithinterface, _interface, _functionname, ...) TWeakObjectPtr<UObject> interfaceObject = _objectwithinterface;\
 if (interfaceObject.IsValid())\

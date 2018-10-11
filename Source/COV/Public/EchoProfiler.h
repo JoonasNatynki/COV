@@ -15,7 +15,7 @@ static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.Sho
 	0,
 	TEXT("Show the aproximate size of the echo profile as volume."));
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
 class COV_API UEchoProfiler : public UActorComponent
 {
 	GENERATED_BODY()

@@ -27,22 +27,40 @@ FIndex UEchoProfiler::GetVertexForEdge(Lookup& lookup,
 	VertexList& vertices, FIndex first, FIndex second)
 {
 	TPair<FIndex, FIndex> key(first, second);
-	if (key.Key > key.Value)
-		std::swap(key.Key, key.Value);
-
-	Lookup temp;
-	temp.Emplace(key, vertices.Num());
-	auto inserted = lookup.Add(key, vertices.Num());
-	if (true)
+	if (first > second)
 	{
+		key.Key = second;
+		key.Value = first;
+	}
+
+	TArray<TPair<int32, int32>> keys;
+	lookup.GetKeys(keys);
+
+	bool bShouldMakeVertice = true;
+	int32 midVertexIndex;
+
+	for (auto & keyt : keys)
+	{
+		if (keyt.Key == key.Key && keyt.Value == key.Value)
+		{
+			bShouldMakeVertice = false;
+			midVertexIndex = *lookup.Find(keyt);
+		}
+	}
+		
+	if (bShouldMakeVertice)
+	{
+		lookup.Add(key, vertices.Num());
 		auto& edge0 = vertices[first];
 		auto& edge1 = vertices[second];
 		auto point = (edge0 + edge1);
 		point.Normalize();
-		vertices.Push(point);
+		vertices.Add(point);
+
+		return vertices.Num() - 1;
 	}
 
-	return inserted;
+	return midVertexIndex;
 }
 
 TriangleList UEchoProfiler::SubdivideIcoSphereMesh(VertexList& vertices,
@@ -60,10 +78,10 @@ TriangleList UEchoProfiler::SubdivideIcoSphereMesh(VertexList& vertices,
 				each.vertex[edge], each.vertex[(edge + 1) % 3]));
 		}
 
-		result.Push({ each.vertex[0], mid[0], mid[2] });
-		result.Push({ each.vertex[1], mid[1], mid[0] });
-		result.Push({ each.vertex[2], mid[2], mid[1] });
-		result.Push({ mid[0], mid[1], mid[2] });
+		result.Add({ each.vertex[0], mid[0], mid[2] });
+		result.Add({ each.vertex[1], mid[1], mid[0] });
+		result.Add({ each.vertex[2], mid[2], mid[1] });
+		result.Add({ mid[0], mid[1], mid[2] });
 	}
 
 	return result;

@@ -92,15 +92,16 @@ public:
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file in a specific folder with the variable name
-		static FString ReadFileLine(FString InFileName, FString Folder, FString ConfigName);
+		static FString GetFileLine(FString InFileName, FString Folder, FString ConfigName);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file's variable's value in the config folder
-		static FString ReadConfigFileLine(FString InFileName, FString ConfigName);
+		static FString GetConfigFileLine(FString InFileName, FString ConfigName);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will return the number of lines in a file. No file found = -1
 		static int32 GetNumberOfRowsInFile(FString InFileName, FString Folder);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, BlueprintPure)
-		static FString GetGameVersionAsString();
+		//	Will return the number of commits in a the repository. No repository found = -1
+		static int32 GetRepositoryCommitCount();
 };
 
 /*

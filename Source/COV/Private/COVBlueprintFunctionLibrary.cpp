@@ -73,8 +73,6 @@ FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* characte
 
 int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(FString FileName, FString folder)
 {
-	COV_LOG(COVBlueprintFunctionLibrary, Log, TEXT("Reading the number of lines in a file (%s)."), *FileName);
-
 	int32 rowCount;
 	TArray<FString> rows;
 	FString filePath = FString(FPaths::GameDir()).Append(folder).Append(FileName);
@@ -86,15 +84,18 @@ int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(FString FileName, FStr
 		COV_LOG(COVBlueprintFunctionLibrary, Log, TEXT("Found a number of (%d) rows in the file (%s)."), rowCount, *FileName);
 		return rowCount;
 	}
+
+	COV_LOG(COVBlueprintFunctionLibrary, Error, TEXT("Could not read the number of lines in a file (%s). No file found!"), *FileName);
+
 	return -1;
 }
 
-FString UCOVBlueprintFunctionLibrary::ReadConfigFileLine(FString fileName, FString configName)
+FString UCOVBlueprintFunctionLibrary::GetConfigFileLine(FString fileName, FString configName)
 {
-	return ReadFileLine(fileName, FString(TEXT("/Config/")), configName);
+	return GetFileLine(fileName, FString(TEXT("/Config/")), configName);
 }
 
-FString UCOVBlueprintFunctionLibrary::ReadFileLine(FString fileName, FString folder, FString configName)
+FString UCOVBlueprintFunctionLibrary::GetFileLine(FString fileName, FString folder, FString configName)
 {
 	TArray<FString> rows;
 	FString filePath = FString(FPaths::GameDir()).Append(folder).Append(fileName);
@@ -121,21 +122,26 @@ FString UCOVBlueprintFunctionLibrary::ReadFileLine(FString fileName, FString fol
 				return parsedLine[parsedArrayLength - 1];
 			}
 		}
-		COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("No line (%s) was found´in the config file (%s)."), *configName, *fileName);
+		COV_LOG(COVBlueprintFunctionLibrary, Error, TEXT("No line (%s) was found´in the config file (%s)."), *configName, *fileName);
 
 		return FString(TEXT(""));
 	}
 	else
 	{
-		COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("Did not find a file named (%s)."), *fileName);
+		COV_LOG(COVBlueprintFunctionLibrary, Error, TEXT("Did not find a file named (%s)."), *fileName);
 		return FString(TEXT(""));
 	}
 }
 
-FString UCOVBlueprintFunctionLibrary::GetGameVersionAsString()
+int32 UCOVBlueprintFunctionLibrary::GetRepositoryCommitCount()
 {
-	float numberOfCommits = (float)GetNumberOfRowsInFile(FString(TEXT("HEAD")), FString(TEXT("/.git/logs/")));
-	FString versionType = ReadConfigFileLine(FString(TEXT("COVGameInfo.ini")), FString(TEXT("VersionNumber")));
+	int32 numberOfCommits = (int32)GetNumberOfRowsInFile(FString(TEXT("HEAD")), FString(TEXT("/.git/logs/")));
 
-	return FString::SanitizeFloat(numberOfCommits / 1000.0f).Append(TEXT(" ")).Append(versionType);
+	if (numberOfCommits == -1)
+	{
+		COV_LOG(COVBlueprintFunctionLibrary, Error, TEXT("Could not find the number of commits. No git repository folder found!"));
+		return -1;
+	}
+
+	return numberOfCommits;
 }

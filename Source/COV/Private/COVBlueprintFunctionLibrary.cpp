@@ -10,11 +10,7 @@ DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 
 FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag)
 {
-	//const FName TraceTag("COVTraces");
-	//inObj->GetWorld()->DebugDrawTraceTag = TraceTag;
-
-	//	LINETRACE	################################
-	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(FName(TEXT("Joonas")), false);
+	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
 	RV_TraceParams.bTraceComplex = true;
 	RV_TraceParams.bTraceAsyncScene = true;
 	RV_TraceParams.bReturnPhysicalMaterial = false;
@@ -25,21 +21,19 @@ FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FV
 	FHitResult RV_Hit(ForceInit);
 
 	//call GetWorld() from within an actor extending class
-	bool blockingHit = inObj->GetWorld()->LineTraceSingleByChannel(
-		RV_Hit,        //result
-		startPos,    //start
-		endPos, //end
-		channel, //collision channel
+	bool blockingHit = inObj->GetWorld()->LineTraceSingleByChannel
+	(
+		RV_Hit,
+		startPos,
+		endPos,
+		channel,
 		RV_TraceParams
 	);
-	//	############################################
 	return RV_Hit;
 }
 
 FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* character, float rayDistance)
 {
-	//COV_LOG(COVBlueprintFunctionLibrary, Warning, TEXT("You should clean this function up a little"));
-
 	FHitResult RV_Hit(ForceInit);
 	APawn* pawn = Cast<APawn>(character);
 	AController* controller = pawn->GetController();

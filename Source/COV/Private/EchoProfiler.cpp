@@ -5,6 +5,7 @@
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include <Map.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include <CollisionQueryParams.h>
 
 // Sets default values for this component's properties
 UEchoProfiler::UEchoProfiler()
@@ -27,25 +28,29 @@ void UEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 {
 	EchoSpaceSizeProfile = 0;
 	EchoCoverageProfile = 0;
-
+	TArray<FVector> meshVertices = GetMesh();
+	AActor* ownerActor = GetOwner();
+	FVector ownerLocation = ownerActor->GetActorLocation();
 	//FVector startPos;
 	FVector endPos;
+	ECollisionChannel collisionChannel = ECollisionChannel::ECC_Visibility;
+	FName traceTag = FName("EchoTrace");
+	int32 verticeCount = meshVertices.Num();
 
-	for (auto & vertex : GetMesh())
+	for (auto & vertex : meshVertices)
 	{
-		//startPos = GetOwner()->GetActorLocation();
-		endPos = GetOwner()->GetActorLocation() + (vertex * EchoMeasureMaximumDistance);
+		endPos = ownerLocation + (vertex * EchoMeasureMaximumDistance);
 		FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
 		(
-			GetOwner(),
+			ownerActor,
 			sourceLocation,
 			endPos,
-			ECollisionChannel::ECC_Visibility,
-			FName("EchoTrace")
+			collisionChannel,
+			traceTag
 		);
 
 		//	Here we calculate how we add this ray trace into the echo float profile
-		float tempResult = (hit.Distance) / (10.0f * GetMesh().Num());
+		float tempResult = (hit.Distance) / (10.0f *verticeCount);
 		FVector rayNormalized = (endPos - sourceLocation);
 		rayNormalized.Normalize();
 		float dotFloat = FVector::DotProduct(hit.ImpactNormal, rayNormalized);
@@ -57,14 +62,14 @@ void UEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 	}
 
 	//	Calculate the wall coverage ratio 0 = open space and 1 = completely closed space
-	EchoCoverageProfile -= (float)(GetMesh().Num() / 2);
+	EchoCoverageProfile -= (float)(verticeCount / 2);
 	if (EchoCoverageProfile < 0)
 	{
 		EchoCoverageProfile = 0;
 	}
 	else
 	{
-		EchoCoverageProfile = EchoCoverageProfile / (GetMesh().Num() / 2);
+		EchoCoverageProfile = EchoCoverageProfile / (verticeCount / 2);
 	}
 }
 

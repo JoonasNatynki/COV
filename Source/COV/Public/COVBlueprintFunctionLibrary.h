@@ -7,7 +7,6 @@
 #include "Engine/EngineTypes.h"
 #include "COVBlueprintFunctionLibrary.generated.h"
 
-
 DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
 
 
@@ -86,7 +85,7 @@ class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	//	Simplified line trace function. Parameters: 1) Starting position, 2) end position and 3) an actor in the world that will be "casting" this line trace
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		static FHitResult SimpleTraceByChannel(UObject* castingObject, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
+		static FHitResult SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		static FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
 

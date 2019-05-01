@@ -77,16 +77,16 @@ static FString EnumToString(const FString& enumName, const T value)
 	return *(pEnum ? pEnum->GetNameStringByIndex(static_cast<uint8>(value)) : "null");
 }
 
-
 UCLASS()
 class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
-	//	Simplified line trace function. Parameters: 1) Starting position, 2) end position and 3) an actor in the world that will be "casting" this line trace
+	//	Simplified line trace function with a baked in Trace Parameter initialization
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		static FHitResult SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	A simplified line tracer for getting a hit on your cross hairs
 		static FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)

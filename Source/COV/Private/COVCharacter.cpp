@@ -35,13 +35,13 @@ void ACOVCharacter::PostInitializeComponents()
 
 	//	Here we see if the character blueprint is configured properly with the proper components that it needs to function properly. If one component is missing, we ensure that it is added to the blueprint. The reason why we add the components in the blueprint instead of code is: it's much easier and designer friendly. No reason to hardcode it here since there is no performance gain in doing so and we can access the component just as well if it is initialized through the blueprint scripting language. Although there is nothing wrong in initializing the components in the constructor here in code either. It is just a personal preference. A good rule of thumb is that you write implementation and the functionality in C++ and you do the higher level logic and execution of those implementations in Blueprints. In other words: "Write the functions in C++, use the functions in Blueprints.".
 	//	Smooth animation component
-	GET_AND_STORE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
+	GET_AND_CACHE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
 	//	Interaction component
-	GET_AND_STORE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
+	GET_AND_CACHE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
 	//	Focus component
-	GET_AND_STORE_COMPONENT(UCOVFocusComponent, FocusComponent)
+	GET_AND_CACHE_COMPONENT(UCOVFocusComponent, FocusComponent)
 	//	Inventory component
-	GET_AND_STORE_COMPONENT(UCOVInventory, Inventory)
+	GET_AND_CACHE_COMPONENT(UCOVInventory, Inventory)
 }
 
 //	Required for network replication of variables
@@ -172,7 +172,7 @@ void ACOVCharacter::Input_MovementInput_Implementation(float amount)
 	}
 }
 
-void ACOVCharacter::Input_MoveForward(float amount)
+void ACOVCharacter::Input_MoveForward_Implementation(float amount)
 {
 	if (this != nullptr)
 	{
@@ -188,7 +188,7 @@ void ACOVCharacter::Input_MoveForward(float amount)
 	}
 }
 
-void ACOVCharacter::Input_MoveRight(float amount)
+void ACOVCharacter::Input_MoveRight_Implementation(float amount)
 {
 	if (this != nullptr)
 	{
@@ -235,20 +235,8 @@ void ACOVCharacter::ShowAimingVectors(bool bOn)
 	_bDebugModeIsOn = bOn;
 }
 
-void ACOVCharacter::DebugHelpers_TICK() const
-{
-	if (_bDebugModeIsOn)
-	{
-		FVector aimLocation = SmoothMotionComponent->GetAimingLocation();
-		DrawDebugSphere(GetWorld(), aimLocation, 5.0f, 4, FColor(255, 0, 0, 255), false, 0.0f, 0, 1.0f);
-		DrawDebugLine(GetWorld(), SmoothMotionComponent->CalculateHeadLocation(), aimLocation, FColor(255, 0, 0, 255), false, 0.0f, 1, 0.5f);
-	}
-}
-
 // Called every frame
 void ACOVCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	DebugHelpers_TICK();
 }

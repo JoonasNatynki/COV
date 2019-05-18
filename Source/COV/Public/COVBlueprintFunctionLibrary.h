@@ -24,7 +24,7 @@ const FString appendText = FString::Printf(_text, ##__VA_ARGS__);\
 UE_LOG(_namespace, _logcategory, TEXT("%s%s"), PRINT_FUNCTION, *appendText);\
 }
 
-#define GET_AND_STORE_COMPONENT(_componentclass, _containervariablename) {\
+#define GET_AND_CACHE_COMPONENT(_componentclass, _containervariablename) {\
 _componentclass* tempComp = nullptr;\
 TSet<UActorComponent*> comps = GetComponents();\
 for (auto & comp : comps)\

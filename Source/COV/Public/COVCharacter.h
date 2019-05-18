@@ -64,15 +64,13 @@ public:
 	virtual void Input_MouseMovementY_Implementation(float amount) override;
 	virtual void Input_MouseMovementX_Implementation(float amount) override;
 
-private:
 	//	INPUTS	#############################################################################################
-	UFUNCTION(Category = "Movement", BLueprintCallable)
+	UFUNCTION(Category = "Movement", BLueprintCallable, BlueprintNativeEvent)
 		//	Move character forward/back
 		void Input_MoveForward(float amount);
-	UFUNCTION(Category = "Movement", BlueprintCallable)
+	UFUNCTION(Category = "Movement", BlueprintNativeEvent)
 		//	Move character left/right
 		void Input_MoveRight(float amount);
-
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
 		void Input_Interact_Server(AActor* interactedActor);
 	//	#####################################################################################################
@@ -93,6 +91,4 @@ public:
 
 	UFUNCTION(Category = "Console", Exec)
 		void ShowAimingVectors(bool bOn);
-
-	void DebugHelpers_TICK() const;
 };

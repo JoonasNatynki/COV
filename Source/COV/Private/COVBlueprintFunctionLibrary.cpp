@@ -12,7 +12,6 @@ FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FV
 {
 	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
 	RV_TraceParams.bTraceComplex = true;
-	RV_TraceParams.bTraceAsyncScene = true;
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 	RV_TraceParams.AddIgnoredActor(Cast<AActor>(inObj));
 	RV_TraceParams.TraceTag = TraceTag;

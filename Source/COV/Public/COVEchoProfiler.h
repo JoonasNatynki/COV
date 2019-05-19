@@ -7,7 +7,7 @@
 #include <vector>
 #include <NoExportTypes.h>
 #include "IcoSphereComponent.h"
-#include "EchoProfiler.generated.h"
+#include "COVEchoProfiler.generated.h"
 
 class UIcoSphereComponent;
 
@@ -16,7 +16,7 @@ static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.Sho
 	TEXT("Show the aproximate size of the echo profile as volume."));
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
-class COV_API UEchoProfiler : public UActorComponent
+class COV_API UCOVEchoProfiler : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -34,7 +34,7 @@ class COV_API UEchoProfiler : public UActorComponent
 public:
 
 	// Sets default values for this component's properties
-	UEchoProfiler();
+	UCOVEchoProfiler();
 
 	//	Getter for the icosphere mesh
 	UFUNCTION(BlueprintCallable)

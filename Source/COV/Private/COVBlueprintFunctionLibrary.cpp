@@ -8,62 +8,6 @@
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 
-FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag)
-{
-	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
-	RV_TraceParams.bTraceComplex = true;
-	RV_TraceParams.bReturnPhysicalMaterial = false;
-	RV_TraceParams.AddIgnoredActor(Cast<AActor>(inObj));
-	RV_TraceParams.TraceTag = TraceTag;
-
-	//Re-initialize hit info
-	FHitResult RV_Hit(ForceInit);
-
-	//call GetWorld() from within an actor extending class
-	bool blockingHit = inObj->GetWorld()->LineTraceSingleByChannel
-	(
-		RV_Hit,
-		startPos,
-		endPos,
-		channel,
-		RV_TraceParams
-	);
-	return RV_Hit;
-}
-
-FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* character, float rayDistance)
-{
-	FHitResult RV_Hit(ForceInit);
-	APawn* pawn = Cast<APawn>(character);
-	AController* controller = pawn->GetController();
-	APlayerController* playerController = Cast<APlayerController>(controller);
-
-	if (!IsValid(playerController))
-		return RV_Hit;
-
-	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
-	//	Ray starting point
-	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
-	//	end point target direction
-	controller = Cast<APawn>(character)->GetController();
-
-	if (!IsValid(controller))
-		return RV_Hit;
-
-	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
-
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
-	(
-		character,
-		playerViewWorldLocation + (controllerForwardVector),
-		playerViewWorldLocation + (controllerForwardVector * rayDistance),
-		ECollisionChannel::ECC_Camera,
-		FName("AimTrace")
-	);
-
-	return RV_Hit;
-}
-
 int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(FString FileName, FString folder)
 {
 	int32 rowCount;

@@ -5,6 +5,12 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "Engine/EngineTypes.h"
+#include <CollisionQueryParams.h>
+#include <GameFramework/Controller.h>
+#include <GameFramework/Pawn.h>
+#include <WorldCollision.h>
+#include <UObjectIterator.h>
+#include <GameFramework/PlayerController.h>
 #include "COVBlueprintFunctionLibrary.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
@@ -84,10 +90,10 @@ class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	//	Simplified line trace function with a baked in Trace Parameter initialization
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		static FHitResult SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
+		static FORCEINLINE FHitResult SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	A simplified line tracer for getting a hit on your cross hairs
-		static FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
+		static FORCEINLINE FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file in a specific folder with the variable name
@@ -101,7 +107,107 @@ public:
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, BlueprintPure)
 		//	Will return the number of commits in a the repository. No repository found = -1
 		static int32 GetRepositoryCommitCount();
+
+	static FORCEINLINE bool SimpleTraceSphere(
+		AActor* ActorToIgnore,
+		const FVector& Start,
+		const FVector& End,
+		const float Radius,
+		FHitResult& HitOut,
+		ECollisionChannel TraceChannel = ECC_Pawn
+	);
 };
+
+FORCEINLINE bool UCOVBlueprintFunctionLibrary::SimpleTraceSphere(
+	AActor* ActorToIgnore,
+	const FVector& Start,
+	const FVector& End,
+	const float Radius,
+	FHitResult& HitOut,
+	ECollisionChannel TraceChannel
+) {
+		 FCollisionQueryParams TraceParams(FName(TEXT("VictoreCore Trace")), true, ActorToIgnore);
+		 TraceParams.bTraceComplex = true;
+		 //TraceParams.bTraceAsyncScene = true;
+		 TraceParams.bReturnPhysicalMaterial = false;
+
+		 //Ignore Actors
+		 TraceParams.AddIgnoredActor(ActorToIgnore);
+
+		 //Re-initialize hit info
+		 HitOut = FHitResult(ForceInit);
+
+		 //Get World Source
+		 TObjectIterator< APlayerController > ThePC;
+		 if (!ThePC) return false;
+
+
+		 return ThePC->GetWorld()->SweepSingleByChannel(
+			 HitOut,
+			 Start,
+			 End,
+			 FQuat(),
+			 TraceChannel,
+			 FCollisionShape::MakeSphere(Radius),
+			 TraceParams
+		 );
+}
+
+FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag)
+{
+	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
+	RV_TraceParams.bTraceComplex = true;
+	RV_TraceParams.bReturnPhysicalMaterial = false;
+	RV_TraceParams.AddIgnoredActor(Cast<AActor>(inObj));
+	RV_TraceParams.TraceTag = TraceTag;
+
+	//Re-initialize hit info
+	FHitResult RV_Hit(ForceInit);
+
+	//call GetWorld() from within an actor extending class
+	bool blockingHit = inObj->GetWorld()->LineTraceSingleByChannel
+	(
+		RV_Hit,
+		startPos,
+		endPos,
+		channel,
+		RV_TraceParams
+	);
+	return RV_Hit;
+}
+
+FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* character, float rayDistance)
+{
+	FHitResult RV_Hit(ForceInit);
+	APawn* pawn = Cast<APawn>(character);
+	AController* controller = pawn->GetController();
+	APlayerController* playerController = Cast<APlayerController>(controller);
+
+	if (!IsValid(playerController))
+		return RV_Hit;
+
+	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
+	//	Ray starting point
+	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
+	//	end point target direction
+	controller = Cast<APawn>(character)->GetController();
+
+	if (!IsValid(controller))
+		return RV_Hit;
+
+	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
+
+	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+	(
+		character,
+		playerViewWorldLocation + (controllerForwardVector),
+		playerViewWorldLocation + (controllerForwardVector * rayDistance),
+		ECollisionChannel::ECC_Camera,
+		FName("AimTrace")
+	);
+
+	return RV_Hit;
+}
 
 /*
 Timer example

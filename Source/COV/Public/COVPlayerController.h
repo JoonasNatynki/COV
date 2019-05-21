@@ -67,9 +67,21 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();
 	UFUNCTION(BlueprintNativeEvent)
+		void Input_RightMouseButton_Pressed();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_RightMouseButton_Released();
+	UFUNCTION(BlueprintNativeEvent)
 		void Input_MovementInput(float amount);
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_MouseMovementY(float amount);
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_MouseMovementX(float amount);
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_MouseWheelUp();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_MouseWheelDown();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_LeftControl_Pressed();
+	UFUNCTION(BlueprintNativeEvent)
+		void Input_LeftControl_Released();
 };

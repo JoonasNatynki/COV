@@ -4,6 +4,7 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include <DrawDebugHelpers.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include "FocusableComponent.h"
 
 // Sets default values for this component's properties
 UCOVFocusComponent::UCOVFocusComponent()
@@ -85,6 +86,17 @@ const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Interna
 
 	for (auto& actor : overlappingActors)
 	{
+		//	Whether or not to only focus on actors with the FocusableComponent and if they are focusable or not
+		if (bFocusOnlyOnFocusables)
+		{
+			UFocusableComponent* focusableComponent = Cast<UFocusableComponent>(actor->GetComponentByClass(UFocusableComponent::StaticClass()));
+
+			if (!IsValid(focusableComponent) || !focusableComponent->IsFocusable())
+			{
+				continue;
+			}
+		}
+
 		float thisDistance = (_focusWorldLocation - actor->GetActorLocation()).Size();
 		if (thisDistance < bestDistance)
 		{

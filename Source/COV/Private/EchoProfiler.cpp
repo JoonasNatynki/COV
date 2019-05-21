@@ -50,12 +50,13 @@ void UCOVEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 		);
 
 		//	Here we calculate how we add this ray trace into the echo float profile
-		float tempResult = (hit.Distance) / (10.0f *verticeCount);
+		float one = (1.0f / 3.0f)*(((4.0f * 3.15826f)*FMath::Pow(hit.Distance, 2))/verticeCount);
+		float aproximateVolumeOfRay = (one)*hit.Distance;
 		FVector rayNormalized = (endPos - sourceLocation);
 		rayNormalized.Normalize();
 		float dotFloat = FVector::DotProduct(hit.ImpactNormal, rayNormalized);
-		tempResult = tempResult * (dotFloat * dotFloat);
-		EchoSpaceSizeProfile += tempResult;
+		aproximateVolumeOfRay = aproximateVolumeOfRay * (dotFloat * dotFloat);
+		EchoSpaceSizeProfile += (aproximateVolumeOfRay)/100000000.0f;
 
 		//	Add into coverage profile
 		hit.bBlockingHit ? EchoCoverageProfile += 1.0f : EchoCoverageProfile;

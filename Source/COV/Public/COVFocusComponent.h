@@ -35,6 +35,9 @@ public:
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
 		float _focusingMaxArea = 80.0f;
 	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
+		//	Whether to ignore all other actors but the ones with the FocusableComponent
+		bool bFocusOnlyOnFocusables = true;
+	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
 		bool bShowDebug = false;
 
 	//	Internal implementation of the updating logic

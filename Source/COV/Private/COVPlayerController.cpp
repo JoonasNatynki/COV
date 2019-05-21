@@ -28,6 +28,13 @@ void ACOVPlayerController::SetupInputComponent()
 	InputComponent->BindAction("LeftShift", IE_Released, this, &ACOVPlayerController::Input_LeftShift_Released);
 	InputComponent->BindAction("LeftMouseButton", IE_Pressed, this, &ACOVPlayerController::Input_LeftMouseButton_Pressed);
 	InputComponent->BindAction("LeftMouseButton", IE_Released, this, &ACOVPlayerController::Input_LeftMouseButton_Released);
+	InputComponent->BindAction("RightMouseButton", IE_Pressed, this, &ACOVPlayerController::Input_RightMouseButton_Pressed);
+	InputComponent->BindAction("RightMouseButton", IE_Released, this, &ACOVPlayerController::Input_RightMouseButton_Released);
+	InputComponent->BindAction("MouseWheelUp", IE_Pressed, this, &ACOVPlayerController::Input_MouseWheelUp);
+	InputComponent->BindAction("MouseWheelDown", IE_Released, this, &ACOVPlayerController::Input_MouseWheelDown);
+	InputComponent->BindAction("LeftControl", IE_Pressed, this, &ACOVPlayerController::Input_LeftControl_Pressed);
+	InputComponent->BindAction("LeftControl", IE_Released, this, &ACOVPlayerController::Input_LeftControl_Released);
+
 
 	InputComponent->BindAxis("W", this, &ACOVPlayerController::Input_Key_W);
 	InputComponent->BindAxis("D", this, &ACOVPlayerController::Input_Key_D);
@@ -112,6 +119,18 @@ void ACOVPlayerController::Input_LeftMouseButton_Released_Implementation()
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftMouseButton_Released)
 }
 
+void ACOVPlayerController::Input_RightMouseButton_Pressed_Implementation()
+{
+	//UE_LOG(COVPlayerController, Log, TEXT("Right mouse button pressed."))
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_RightMouseButton_Pressed)
+}
+
+void ACOVPlayerController::Input_RightMouseButton_Released_Implementation()
+{
+	//UE_LOG(COVPlayerController, Log, TEXT("Right mouse button released."))
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_RightMouseButton_Released)
+}
+
 void ACOVPlayerController::Input_MouseMovementX_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseMovementX, amount)
@@ -127,4 +146,24 @@ void ACOVPlayerController::Input_MouseMovementY_Implementation(float amount)
 void ACOVPlayerController::Input_MovementInput_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MovementInput, amount)
+}
+
+void ACOVPlayerController::Input_MouseWheelUp_Implementation()
+{
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseWheelUp);
+}
+
+void ACOVPlayerController::Input_MouseWheelDown_Implementation()
+{
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseWheelDown);
+}
+
+void ACOVPlayerController::Input_LeftControl_Pressed_Implementation()
+{
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftControl_Pressed);
+}
+
+void ACOVPlayerController::Input_LeftControl_Released_Implementation()
+{
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_LeftControl_Released);
 }

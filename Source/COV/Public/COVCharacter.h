@@ -60,9 +60,15 @@ public:
 	virtual void Input_LeftShift_Released_Implementation() override;
 	virtual void Input_LeftMouseButton_Pressed_Implementation() override;
 	virtual void Input_LeftMouseButton_Released_Implementation() override;
+	virtual void Input_RightMouseButton_Pressed_Implementation() override;
+	virtual void Input_RightMouseButton_Released_Implementation() override;
 	virtual void Input_MovementInput_Implementation(float amount) override;
 	virtual void Input_MouseMovementY_Implementation(float amount) override;
 	virtual void Input_MouseMovementX_Implementation(float amount) override;
+	virtual void Input_MouseWheelUp_Implementation() override;
+	virtual void Input_MouseWheelDown_Implementation() override;
+	virtual void Input_LeftControl_Pressed_Implementation() override;
+	virtual void Input_LeftControl_Released_Implementation() override;
 
 	//	INPUTS	#############################################################################################
 	UFUNCTION(Category = "Movement", BLueprintCallable, BlueprintNativeEvent)

@@ -27,21 +27,21 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 void ACOVCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-}
-
-void ACOVCharacter::PostInitializeComponents()
-{
-	Super::PostInitializeComponents();
 
 	//	Here we see if the character blueprint is configured properly with the proper components that it needs to function properly. If one component is missing, we ensure that it is added to the blueprint. The reason why we add the components in the blueprint instead of code is: it's much easier and designer friendly. No reason to hardcode it here since there is no performance gain in doing so and we can access the component just as well if it is initialized through the blueprint scripting language. Although there is nothing wrong in initializing the components in the constructor here in code either. It is just a personal preference. A good rule of thumb is that you write implementation and the functionality in C++ and you do the higher level logic and execution of those implementations in Blueprints. In other words: "Write the functions in C++, use the functions in Blueprints.".
 	//	Smooth animation component
-	GET_AND_CACHE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
+	//GET_AND_CACHE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
 	//	Interaction component
 	GET_AND_CACHE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
 	//	Focus component
 	GET_AND_CACHE_COMPONENT(UCOVFocusComponent, FocusComponent)
 	//	Inventory component
 	GET_AND_CACHE_COMPONENT(UCOVInventory, Inventory)
+}
+
+void ACOVCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
 }
 
 //	Required for network replication of variables
@@ -154,12 +154,42 @@ void ACOVCharacter::Input_LeftMouseButton_Released_Implementation()
 
 }
 
+void ACOVCharacter::Input_RightMouseButton_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_RightMouseButton_Released_Implementation()
+{
+
+}
+
 void ACOVCharacter::Input_MouseMovementY_Implementation(float amount)
 {
 
 }
 
 void ACOVCharacter::Input_MouseMovementX_Implementation(float amount)
+{
+
+}
+
+void ACOVCharacter::Input_MouseWheelUp_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_MouseWheelDown_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_LeftControl_Pressed_Implementation()
+{
+
+}
+
+void ACOVCharacter::Input_LeftControl_Released_Implementation()
 {
 
 }

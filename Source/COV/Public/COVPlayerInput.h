@@ -47,9 +47,21 @@ public:
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_LeftMouseButton_Released();
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_RightMouseButton_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_RightMouseButton_Released();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_MovementInput(float amount);
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_MouseMovementY(float amount);
 	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
 		void Input_MouseMovementX(float amount);
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_MouseWheelUp();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_MouseWheelDown();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftControl_Pressed();
+	UFUNCTION(Category = "Player Input", BlueprintCallable, BlueprintNativeEvent)
+		void Input_LeftControl_Released();
 };

@@ -195,7 +195,7 @@ FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AAct
 	if (!IsValid(controller))
 		return RV_Hit;
 
-	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
+	FVector controllerForwardVector = playerCameraManagerActor->GetActorForwardVector();
 
 	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
 	(

@@ -25,10 +25,8 @@ class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
 private:
@@ -51,6 +49,7 @@ private:
 	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bShouldBeRotatingHips;
+
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		//	Angle at which the character will start rotating towards aiming location
 		float _angleToStartRotatingHips = 90;

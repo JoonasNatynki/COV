@@ -32,7 +32,6 @@ class COV_API UCOVEchoProfiler : public UActorComponent
 	TWeakObjectPtr<UIcoSphereComponent> IcoSphereMeshComponent;
 
 public:
-
 	// Sets default values for this component's properties
 	UCOVEchoProfiler();
 

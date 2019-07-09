@@ -50,8 +50,8 @@ void UCOVEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 		);
 
 		//	Here we calculate how we add this ray trace into the echo float profile
-		float one = (1.0f / 3.0f)*(((4.0f * 3.15826f)*FMath::Pow(hit.Distance, 2))/verticeCount);
-		float aproximateVolumeOfRay = (one)*hit.Distance;
+		float rayHitLocationBaseAreaOnASphere = (1.0f / 3.0f)*(((4.0f * 3.15826f)*FMath::Pow(hit.Distance, 2))/verticeCount);
+		float aproximateVolumeOfRay = (rayHitLocationBaseAreaOnASphere)*hit.Distance;
 		FVector rayNormalized = (endPos - sourceLocation);
 		rayNormalized.Normalize();
 		float dotFloat = FVector::DotProduct(hit.ImpactNormal, rayNormalized);

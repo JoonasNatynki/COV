@@ -1,0 +1,3 @@
+C:\Users\Katulobotomia\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\Definitions.UE4Helpers.h
+C:\Users\Katulobotomia\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source\UE4Helpers\Public\UE4Helpers.h
+C:\Users\Katulobotomia\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Inc\UE4Helpers\UE4Helpers.generated.h

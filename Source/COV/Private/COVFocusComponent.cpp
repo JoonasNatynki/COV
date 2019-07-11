@@ -68,6 +68,7 @@ void UCOVFocusComponent::UpdateFocusedActor()
 	if (bFocusActorHasChanged)
 	{
 		_cachedFocusedActor = newFocusActor.Get();
+		COV_LOG(LogTemp, Log, TEXT("Focus actor changed to (%s)."), *UKismetSystemLibrary::GetDisplayName(_cachedFocusedActor));
 		OnFocusedActorChanged.Broadcast(newFocusActor.Get());
 	}
 }

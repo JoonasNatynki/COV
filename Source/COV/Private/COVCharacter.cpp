@@ -84,7 +84,7 @@ void ACOVCharacter::Input_F_Pressed_Implementation()
 				return;
 			}
 			//	Interaction will be successful
-			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacted with actor (%s)."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
+			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s)."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
 			Input_Interact_Server(focusedActor);
 		}
 		else

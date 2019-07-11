@@ -25,6 +25,12 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
+	UPROPERTY(Category = "COV Inventory Item", EditDefaultsOnly)
+		FString DisplayName;
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, BlueprintPure)
+		FString GetItemDisplayName() const;
+
 	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
 		//	Gets the inventory that this item is in currently, if any
 		UCOVInventory* GetOwningInventory() const;
@@ -48,3 +54,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;	
 };
+
+FORCEINLINE FString UCOVInventoryItem::GetItemDisplayName() const
+{
+	return DisplayName;
+}

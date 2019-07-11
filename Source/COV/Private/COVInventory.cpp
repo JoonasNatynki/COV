@@ -41,7 +41,7 @@ void UCOVInventory::OnRep_Inventory(TArray<UCOVInventoryItem*> inv) const
 
 	if (GetOwner()->Role != ROLE_Authority)
 	{
-		COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *enumAsString, *UKismetSystemLibrary::GetDisplayName(_cachedLastAction.item));
+		COV_LOG(COVInventory, Log, TEXT("OnRep = (%s). Action = (%s). Changed item = (%s)"), *UKismetSystemLibrary::GetDisplayName(this), *enumAsString, *_cachedLastAction.item->GetItemDisplayName());
 	}
 
 	OnInventoryChanged.Broadcast(_cachedLastAction);
@@ -62,9 +62,9 @@ void UCOVInventory::AddItem_Implementation(UCOVInventoryItem* item)
 		return;
 	}
 
-	_inventory.AddUnique(item);
+	COV_LOG(COVInventory, Log, TEXT("Item (%s) being added to inventory (%s)."), *item->GetItemDisplayName(), *UKismetSystemLibrary::GetDisplayName(this));
 
-	COV_LOG(COVInventory, Log, TEXT("Item (%s) added into inventory (%s)."), *UKismetSystemLibrary::GetDisplayName(item), *UKismetSystemLibrary::GetDisplayName(this));
+	_inventory.AddUnique(item);
 
 	FInventoryAction* action = new FInventoryAction(item, this, EInventoryAction::Add);
 	_cachedLastAction = *action;

@@ -58,12 +58,21 @@ bool UCOVInventoryItem::PackItem_Validate()
 
 void UCOVInventoryItem::PackItem_Implementation()
 {
-	COV_LOG(COVInventoryItem, Log, TEXT("Packing item (%s)"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	COV_LOG(COVInventoryItem, Log, TEXT("Packing item (%s)"), *DisplayName);
 	AActor* itemActor = GetOwner();
 	//itemActor->SetActorHiddenInGame(true);
+	
 	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
-	tempcomp->SetSimulatePhysics(false);
-	tempcomp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
+	if (IsValid(tempcomp))
+	{
+		tempcomp->SetSimulatePhysics(false);
+		tempcomp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		COV_LOG(COVInventoryItem, Warning, TEXT("Could not pack item (%s), root component was not valid or did not inherit from UPrimitiveComponent."), *DisplayName);
+	}
 }
 
 bool UCOVInventoryItem::UnpackItem_Validate()

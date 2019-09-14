@@ -25,22 +25,22 @@ USTRUCT(Blueprintable) struct FInventoryAction
 
 		FInventoryAction() {};
 
-	FInventoryAction(UCOVInventoryItem* itemin, UCOVInventory* invin, EInventoryAction act)
+	FInventoryAction(const FGuid& itemGUID, UCOVInventory* invin, const EInventoryAction act)
 	{
-		item = itemin;
+		UniqueItemGUID = itemGUID;
 		inventory = invin;
 		action = act;
 	};
 
 	UPROPERTY(BlueprintReadOnly)
-		UCOVInventoryItem* item;
+		FGuid UniqueItemGUID;
 	UPROPERTY(BlueprintReadOnly)
 		UCOVInventory* inventory;
 	UPROPERTY(BlueprintReadOnly)
 		TEnumAsByte<EInventoryAction> action;
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryChanged, const FInventoryAction&, _action);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryChanged, const FInventoryAction, _action);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
 class COV_API UCOVInventory : public UActorComponent
@@ -55,13 +55,9 @@ public:
 
 	UPROPERTY(Category = "Inventory", VisibleAnywhere, ReplicatedUsing = OnRep_Inventory)
 		//	The inventory that contains Inventory Items
-		TArray<UCOVInventoryItem*> _inventory;
+		TArray<UCOVInventoryItem*> Inventory;
 	UFUNCTION()
 		void OnRep_Inventory(TArray<UCOVInventoryItem*> inv) const;
-
-	UPROPERTY(Transient, Replicated)
-	//	For storing the last changed item in the inventory so we can retrieve information more quickly for logging.
-	FInventoryAction _cachedLastAction;
 
 	UPROPERTY(Category = "Inventory", BlueprintAssignable)
 		//	Called whenever the inventory changes
@@ -79,6 +75,12 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+
+	UPROPERTY(Transient, Replicated)
+		//	For storing the last changed item in the inventory so we can retrieve information more quickly for logging.
+		FInventoryAction _cachedLastAction;
+
 
 public:	
 	// Called every frame

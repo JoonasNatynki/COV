@@ -15,7 +15,7 @@ UCOVInventoryItem::UCOVInventoryItem()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 	bReplicates = true;
 }
 
@@ -23,31 +23,59 @@ UCOVInventoryItem::UCOVInventoryItem()
 void UCOVInventoryItem::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GenerateNewGUID();
 }
 
 void UCOVInventoryItem::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UCOVInventoryItem, _owningInventory);
+	DOREPLIFETIME(UCOVInventoryItem, OwningInventory);
+	DOREPLIFETIME(UCOVInventoryItem, UniqueItemID);
+}
+
+const FGuid& UCOVInventoryItem::GetUniqueItemID()
+{
+	return UniqueItemID;
+}
+
+TSubclassOf<class AActor> UCOVInventoryItem::GetCorrespondingItemActorType()
+{
+	return CorrespondingItemActorType;
+}
+
+void UCOVInventoryItem::Initialize(const UCOVInventoryItem* copyItem)
+{
+	DisplayName = copyItem->DisplayName;
+	UniqueItemID = copyItem->UniqueItemID;
+	SetOwningInventory(copyItem->OwningInventory);
+}
+
+void UCOVInventoryItem::GenerateNewGUID()
+{
+	if (GetOwner()->HasAuthority())
+	{
+		//	Make a guid for the item that will persist
+		UniqueItemID = FGuid::NewGuid();
+		COV_LOG(COVInventoryItem, Log, TEXT("New GUID (%s) generated for (%s)."), *UniqueItemID.ToString(), *GetNameSafe(GetOwner()));
+	}
 }
 
 UCOVInventory* UCOVInventoryItem::GetOwningInventory() const
 {
-	return _owningInventory;
+	return OwningInventory;
 }
 
 void UCOVInventoryItem::SetOwningInventory(UCOVInventory* inventory)
 {	
 	if (IsValid(inventory))
 	{
-		_owningInventory = inventory;
-		PackItem();
+		OwningInventory = inventory;
 	}
 	else
 	{
-		UnpackItem();
-		_owningInventory = inventory;
+		
 	}
 }
 
@@ -60,7 +88,7 @@ void UCOVInventoryItem::PackItem_Implementation()
 {
 	COV_LOG(COVInventoryItem, Log, TEXT("Packing item (%s)"), *DisplayName);
 	AActor* itemActor = GetOwner();
-	//itemActor->SetActorHiddenInGame(true);
+	itemActor->SetActorHiddenInGame(true);
 	
 	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
 	
@@ -82,7 +110,7 @@ bool UCOVInventoryItem::UnpackItem_Validate()
 
 void UCOVInventoryItem::UnpackItem_Implementation()
 {
-	COV_LOG(COVInventoryItem, Log, TEXT("Unpacking item (%s)"), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	COV_LOG(COVInventoryItem, Log, TEXT("Unpacking item (%s)"), *GetNameSafe(GetOwner()));
 	AActor* itemActor = GetOwner();
 	//itemActor->SetActorHiddenInGame(false);
 	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
@@ -94,7 +122,5 @@ void UCOVInventoryItem::UnpackItem_Implementation()
 void UCOVInventoryItem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
 }
 

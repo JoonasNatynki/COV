@@ -4,8 +4,11 @@
 #include "COVFocusComponent.h"
 #include <GameFramework/Actor.h>
 #include "COVBlueprintFunctionLibrary.h"
+#include <MessageLog.h>
+#include <UObjectToken.h>
 
 DEFINE_LOG_CATEGORY(COVInteractionComponent)
+#define LOCTEXT_NAMESPACE "Interaction"
 
 // Sets default values for this component's properties
 UCOVInteractionComponent::UCOVInteractionComponent()
@@ -46,6 +49,8 @@ AActor* UCOVInteractionComponent::TryGetInteractedActor() const
 	}
 
 	COV_LOG(COVInteractionComponent, Warning, TEXT("No Focus Component found on owner of this component."));
+	FMessageLog("COVBlueprintFunctionLibrary").Warning(FText::Format(LOCTEXT("Interaction", "No focus component found on owner ({0})."), FText::FromString(GetNameSafe(GetOwner()))))->AddToken(FUObjectToken::Create(GetOwner()));
+
 	return nullptr;
 }
 

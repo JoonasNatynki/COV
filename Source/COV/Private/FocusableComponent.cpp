@@ -18,7 +18,7 @@ UFocusableComponent::UFocusableComponent()
 void UFocusableComponent::SetIsFocusable(bool bIsFocusable)
 {
 	bCanBeFocusedAt = bIsFocusable;
-	UE_LOG(LogFocusable, Log, TEXT("(%s) set as %s."), *UKismetSystemLibrary::GetDisplayName(GetOwner()), (bCanBeFocusedAt ? (TEXT("FOCUSABLE")) : (TEXT("UNFOCUSABLE"))));
+	UE_LOG(LogFocusable, Log, TEXT("(%s) set as %s."), *GetNameSafe(GetOwner()), (bCanBeFocusedAt ? (TEXT("FOCUSABLE")) : (TEXT("UNFOCUSABLE"))));
 }
 
 // Called when the game starts

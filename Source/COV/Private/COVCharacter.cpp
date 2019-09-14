@@ -68,34 +68,48 @@ bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor)
 
 void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor)
 {
-	ICOVInteractable::Execute_Interact(interactedActor, this);
+	if (ICOVInteractable::Execute_Interact(interactedActor, this))
+	{
+		COV_LOG(LogTemp, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+	}
+	else
+	{
+		COV_LOG(LogTemp, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+	}
 }
 
 void ACOVCharacter::Input_F_Pressed_Implementation()
 {
+	//	Find out the actor that the player is focusing on
 	AActor* focusedActor = FocusComponent->GetFocusedActor();
 	if (IsValid(focusedActor))
 	{
+		//	Make sure the focused actor is interactable
 		if (focusedActor->Implements<UCOVInteractable>())
 		{
-			if (!ICOVInteractable::Execute_GetIsInteractable(focusedActor))
+			//	Can the focused actor be interacted with right now?
+			if (ICOVInteractable::Execute_GetIsInteractable(focusedActor))
 			{
-				COV_LOG(LogTemp, Warning, TEXT("Character (%s) interacted with actor (%s), but it was set not interactable."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
+				//	Interaction will be successful
+				COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+				Input_Interact_Server(focusedActor);
+
+			}
+			else
+			{
+				COV_LOG(LogTemp, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 				return;
 			}
-			//	Interaction will be successful
-			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s)."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
-			Input_Interact_Server(focusedActor);
 		}
 		else
 		{
-			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *UKismetSystemLibrary::GetDisplayName(this), *UKismetSystemLibrary::GetDisplayName(focusedActor));
+			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 			return;
 		}
 	}
 	else
 	{
-		COV_LOG(LogTemp, Log, TEXT("Character (%s) has nothing to interact with."), *UKismetSystemLibrary::GetDisplayName(this));
+		COV_LOG(LogTemp, Log, TEXT("Character (%s) has nothing to interact with."), *GetNameSafe(this));
 	}
 }
 
@@ -260,9 +274,10 @@ ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const
 	return playerController;
 }
 
-void ACOVCharacter::ShowAimingVectors(bool bOn)
+void ACOVCharacter::COV_ShowCharacterAimingVectors(bool bOn)
 {
 	_bDebugModeIsOn = bOn;
+	COV_LOG(COVCharacter, Warning, TEXT("TODO"));
 }
 
 // Called every frame

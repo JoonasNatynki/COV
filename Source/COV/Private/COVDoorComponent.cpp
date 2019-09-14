@@ -25,7 +25,7 @@ void UCOVDoorComponent::BeginPlay()
 
 	if (!IsValid(_doorHinge))
 	{
-		COV_LOG(COVDoor, Error, TEXT("Door hinge not set for door (%s). Make sure the OPEN and CLOSED transforms are set as well."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+		COV_LOG(COVDoor, Error, TEXT("Door hinge not set for door (%s). Make sure the OPEN and CLOSED transforms are set as well."), *GetNameSafe(GetOwner()));
 	}
 }
 

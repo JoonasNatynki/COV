@@ -7,6 +7,10 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include <CollisionQueryParams.h>
 
+static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.ShowEchoProfilerDebugSphere"),
+	0,
+	TEXT("Show the aproximate size of the echo profile as volume."));
+
 // Sets default values for this component's properties
 UCOVEchoProfiler::UCOVEchoProfiler()
 {

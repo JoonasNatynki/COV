@@ -11,6 +11,14 @@
 #include <WorldCollision.h>
 #include <UObjectIterator.h>
 #include <GameFramework/PlayerController.h>
+
+#include "UObject/Script.h"
+#include "UObject/ObjectMacros.h"
+#include "UObject/Object.h"
+#include "Templates/SubclassOf.h"
+#include "UObject/UnrealType.h"
+#include "UObject/ScriptMacros.h"
+
 #include "COVBlueprintFunctionLibrary.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
@@ -27,7 +35,8 @@ DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
 #define COV_LOG(_namespace, _logcategory, _text, ...) \
 {\
 const FString appendText = FString::Printf(_text, ##__VA_ARGS__);\
-UE_LOG(_namespace, _logcategory, TEXT("%s%s"), PRINT_FUNCTION, *appendText);\
+const FString netModePrefix = UCOVBlueprintFunctionLibrary::GetNetModePrefix(this);\
+UE_LOG(_namespace, _logcategory, TEXT("%s%s%s"), *netModePrefix, PRINT_FUNCTION, *appendText);\
 }
 
 #define GET_AND_CACHE_COMPONENT(_componentclass, _containervariablename) {\
@@ -70,11 +79,20 @@ if (interfaceObject.IsValid())\
 	}\
 	else\
 	{\
-		UE_LOG(LogTemp, Log, TEXT("Using interface failed! The object (%s) does not implement such."), *UKismetSystemLibrary::GetDisplayName(_objectwithinterface));\
+		UE_LOG(LogTemp, Log, TEXT("Using interface failed! The object (%s) does not implement such."), *GetNameSafe(_objectwithinterface));\
 	}\
 }\
 //	END OF USING INTERFACE MAKRO	###################################################################################
 //	#####################################################################################################################
+
+#define SIMPLE_DELAY(_funcDef, rate, bLooping, firstDelay)\
+FTimerHandle smallDelay;\
+FTimerDelegate timerCallback;\
+timerCallback.BindLambda([&]\
+{\
+	_funcDef\
+});\
+GetWorld()->GetTimerManager().SetTimer(smallDelay, timerCallback, rate, bLooping, firstDelay);\
 
 template<typename T>
 static FString EnumToString(const FString& enumName, const T value)
@@ -90,23 +108,70 @@ class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 public:
 	//	Simplified line trace function with a baked in Trace Parameter initialization
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		static FORCEINLINE FHitResult SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag);
+		static FORCEINLINE FHitResult SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag);
+
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	A simplified line tracer for getting a hit on your cross hairs
-		static FORCEINLINE FHitResult CastCrossHairLineTrace(AActor* character, float rayDistance);
+		static FORCEINLINE FHitResult CastCrossHairLineTrace(const AActor* character, float rayDistance);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file in a specific folder with the variable name
-		static FString GetFileLine(FString InFileName, FString Folder, FString ConfigName);
+		static FString GetFileLine(const FString& InFileName, const FString& Folder, const FString& ConfigName);
+
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will read a file's variable's value in the config folder
-		static FString GetConfigFileLine(FString InFileName, FString ConfigName);
+		static FString GetConfigFileLine(const FString& InFileName, const FString& ConfigName);
+
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will return the number of lines in a file. No file found = -1
-		static int32 GetNumberOfRowsInFile(FString InFileName, FString Folder);
+		static int32 GetNumberOfRowsInFile(const FString& InFileName, const FString& Folder);
+
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, BlueprintPure)
 		//	Will return the number of commits in a the repository. No repository found = -1
 		static int32 GetRepositoryCommitCount();
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		static APlayerCameraManager* TryGetPawnCameraManager(const APawn* pawn);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+		static FString GetNetModePrefix(const UObject* WorldContextObject);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	Simply checks if the object is of type or not
+		static bool IsOfType(const UObject* object, TSubclassOf<UObject> type);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+		static TArray<FVector> CalculateBarabolicTrajectory(const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float samplingResolutionCoefficient, const int32 numberOfTrajectoryPoints, const UObject* WorldContextObject);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, CustomThunk, meta = (DisplayName = "Is array empty", CompactNodeTitle = "ISEMPTY", ArrayParm = "TargetArray"), Category = "Utilities|Array")
+		static bool IsArrayEmpty(const TArray<int32>& TargetArray);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
+
+	static bool GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp);
+
+	DECLARE_FUNCTION(execIsArrayEmpty)
+	{
+		Stack.MostRecentProperty = nullptr;
+		Stack.StepCompiledIn<UArrayProperty>(NULL);
+		void* ArrayAddr = Stack.MostRecentPropertyAddress;
+		UArrayProperty* ArrayProperty = Cast<UArrayProperty>(Stack.MostRecentProperty);
+		if (!ArrayProperty)
+		{
+			Stack.bArrayContextFailed = true;
+			return;
+		}
+
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)RESULT_PARAM = GenericIsArrayEmpty(ArrayAddr, ArrayProperty);
+		P_NATIVE_END;
+	}
+
+
+
+	static FString GetNetModeName(const UObject* worldContextObject);
 
 	static FORCEINLINE bool SimpleTraceSphere(
 		AActor* ActorToIgnore,
@@ -118,6 +183,13 @@ public:
 	);
 };
 
+
+
+
+
+
+
+
 FORCEINLINE bool UCOVBlueprintFunctionLibrary::SimpleTraceSphere(
 	AActor* ActorToIgnore,
 	const FVector& Start,
@@ -126,7 +198,7 @@ FORCEINLINE bool UCOVBlueprintFunctionLibrary::SimpleTraceSphere(
 	FHitResult& HitOut,
 	ECollisionChannel TraceChannel
 ) {
-		 FCollisionQueryParams TraceParams(FName(TEXT("VictoreCore Trace")), true, ActorToIgnore);
+		 FCollisionQueryParams TraceParams(FName(TEXT("SimpleTraceSphere")), true, ActorToIgnore);
 		 TraceParams.bTraceComplex = true;
 		 //TraceParams.bTraceAsyncScene = true;
 		 TraceParams.bReturnPhysicalMaterial = false;
@@ -138,7 +210,7 @@ FORCEINLINE bool UCOVBlueprintFunctionLibrary::SimpleTraceSphere(
 		 HitOut = FHitResult(ForceInit);
 
 		 //Get World Source
-		 TObjectIterator< APlayerController > ThePC;
+		 TObjectIterator<APlayerController> ThePC;
 		 if (!ThePC) return false;
 
 
@@ -153,9 +225,9 @@ FORCEINLINE bool UCOVBlueprintFunctionLibrary::SimpleTraceSphere(
 		 );
 }
 
-FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObject* inObj, FVector startPos, FVector endPos, ECollisionChannel channel, FName TraceTag)
+FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag)
 {
-	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
+	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(TraceTag, false);
 	RV_TraceParams.bTraceComplex = true;
 	RV_TraceParams.bReturnPhysicalMaterial = false;
 	RV_TraceParams.AddIgnoredActor(Cast<AActor>(inObj));
@@ -176,26 +248,23 @@ FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::SimpleTraceByChannel(UObjec
 	return RV_Hit;
 }
 
-FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(AActor* character, float rayDistance)
+FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(const AActor* character, float rayDistance)
 {
 	FHitResult RV_Hit(ForceInit);
-	APawn* pawn = Cast<APawn>(character);
-	AController* controller = pawn->GetController();
-	APlayerController* playerController = Cast<APlayerController>(controller);
+	const APawn* pawn = Cast<APawn>(character);
 
-	if (!IsValid(playerController))
+	if (!ensureMsgf(IsValid(pawn), TEXT("Could not cast crosshair line trace. The actor wasn't a pawn or the pawn wasn't valid anymore.")))
+	{
 		return RV_Hit;
+	}
 
-	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
+	AActor* pawnCameraManager = Cast<AActor>(TryGetPawnCameraManager(pawn));
+
 	//	Ray starting point
-	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
+	FVector playerViewWorldLocation = pawnCameraManager->GetActorLocation();
 	//	end point target direction
-	controller = Cast<APawn>(character)->GetController();
 
-	if (!IsValid(controller))
-		return RV_Hit;
-
-	FVector controllerForwardVector = playerCameraManagerActor->GetActorForwardVector();
+	FVector controllerForwardVector = pawnCameraManager->GetActorForwardVector();
 
 	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
 	(

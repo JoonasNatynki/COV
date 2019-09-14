@@ -172,14 +172,14 @@ FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
 {
 	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
 
-	ensureMsgf(ownerSkeletalMeshComp.IsValid(), TEXT("Owner (%s) did not have a SkeletalMeshComponent."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+	ensureMsgf(ownerSkeletalMeshComp.IsValid(), TEXT("Owner (%s) did not have a SkeletalMeshComponent."), *GetNameSafe(GetOwner()));
 
 	if (ownerSkeletalMeshComp.IsValid())
 	{
 		bool socketDoesExist = ownerSkeletalMeshComp->DoesSocketExist("Head");
 		if (!socketDoesExist)
 		{
-			ensureMsgf(socketDoesExist, TEXT("Owner (%s) did not have a socket named 'head'."), *UKismetSystemLibrary::GetDisplayName(GetOwner()));
+			ensureMsgf(socketDoesExist, TEXT("Owner (%s) did not have a socket named 'head'."), *GetNameSafe(GetOwner()));
 			return FVector(0, 0, 0);
 		}
 

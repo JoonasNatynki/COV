@@ -18,7 +18,7 @@ void UIcoSphereComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& vertices, FIndex first, FIndex second)
+FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& _vertices, FIndex first, FIndex second)
 {
 	TPair<FIndex, FIndex> key(first, second);
 	if (first > second)
@@ -44,14 +44,14 @@ FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& vertice
 
 	if (bShouldMakeVertice)
 	{
-		lookup.Add(key, vertices.Num());
-		auto& edge0 = vertices[first];
-		auto& edge1 = vertices[second];
+		lookup.Add(key, _vertices.Num());
+		auto& edge0 = _vertices[first];
+		auto& edge1 = _vertices[second];
 		auto point = (edge0 + edge1);
 		point.Normalize();
-		vertices.Add(point);
+		_vertices.Add(point);
 
-		return vertices.Num() - 1;
+		return _vertices.Num() - 1;
 	}
 
 	return midVertexIndex;

@@ -70,11 +70,12 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09""A simplified line tracer for getting a hit on your cross hairs\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "A simplified line tracer for getting a hit on your cross hairs" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "CastCrossHairLineTrace", sizeof(E4CodeHelpers_eventCastCrossHairLineTrace_Parms), Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "CastCrossHairLineTrace", nullptr, nullptr, sizeof(E4CodeHelpers_eventCastCrossHairLineTrace_Parms), Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -128,11 +129,12 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09Will read a file's variable's value in the config folder\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Will read a file's variable's value in the config folder" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetConfigFileLine", sizeof(E4CodeHelpers_eventGetConfigFileLine_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetConfigFileLine", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetConfigFileLine_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -186,11 +188,12 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09Will return the number of lines in a file. No file found = -1\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Will return the number of lines in a file. No file found = -1" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetNumberOfRowsInFile", sizeof(E4CodeHelpers_eventGetNumberOfRowsInFile_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetNumberOfRowsInFile", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetNumberOfRowsInFile_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -220,11 +223,12 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09Will return the number of commits in a the repository. No repository found = -1\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Will return the number of commits in a the repository. No repository found = -1" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetRepositoryCommitCount", sizeof(E4CodeHelpers_eventGetRepositoryCommitCount_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x14022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetRepositoryCommitCount", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetRepositoryCommitCount_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x14022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -290,11 +294,12 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09Will read a file in a specific folder with the variable name\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Will read a file in a specific folder with the variable name" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetVariableValueFromFile", sizeof(E4CodeHelpers_eventGetVariableValueFromFile_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetVariableValueFromFile", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetVariableValueFromFile_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -376,12 +381,13 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UE4CodeHelpers" },
+		{ "Comment", "//\x09Simplified line trace function with a baked in Trace Parameter initialization\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Simplified line trace function with a baked in Trace Parameter initialization" },
 		{ "WorldContext", "WorldContextObject" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "SimpleTraceByChannel", sizeof(E4CodeHelpers_eventSimpleTraceByChannel_Parms), Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C22401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "SimpleTraceByChannel", nullptr, nullptr, sizeof(E4CodeHelpers_eventSimpleTraceByChannel_Parms), Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C22401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -410,15 +416,16 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_UE4Helpers,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UE4CodeHelpers_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace, "CastCrossHairLineTrace" }, // 3244152144
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine, "GetConfigFileLine" }, // 3133433100
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile, "GetNumberOfRowsInFile" }, // 4023186151
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount, "GetRepositoryCommitCount" }, // 968699407
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile, "GetVariableValueFromFile" }, // 3712736780
-		{ &Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel, "SimpleTraceByChannel" }, // 3047050365
+		{ &Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace, "CastCrossHairLineTrace" }, // 3861776310
+		{ &Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine, "GetConfigFileLine" }, // 2275498968
+		{ &Z_Construct_UFunction_UE4CodeHelpers_GetNumberOfRowsInFile, "GetNumberOfRowsInFile" }, // 2983791027
+		{ &Z_Construct_UFunction_UE4CodeHelpers_GetRepositoryCommitCount, "GetRepositoryCommitCount" }, // 428362912
+		{ &Z_Construct_UFunction_UE4CodeHelpers_GetVariableValueFromFile, "GetVariableValueFromFile" }, // 1970568930
+		{ &Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel, "SimpleTraceByChannel" }, // 820675430
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UE4CodeHelpers_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "//\x09""Blueprint function library class\n" },
 		{ "IncludePath", "UE4Helpers.h" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Blueprint function library class" },
@@ -451,7 +458,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UE4CodeHelpers, 1485787255);
+	IMPLEMENT_CLASS(UE4CodeHelpers, 2298932533);
 	template<> UE4HELPERS_API UClass* StaticClass<UE4CodeHelpers>()
 	{
 		return UE4CodeHelpers::StaticClass();

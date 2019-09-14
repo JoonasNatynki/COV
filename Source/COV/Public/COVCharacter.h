@@ -93,8 +93,8 @@ public:
 	//	GETTERS	############################################################################################
 
 	UPROPERTY(Category = "Debug", BlueprintReadWrite, EditAnywhere)
-		bool _bDebugModeIsOn = true;
+		bool _bDebugModeIsOn = false;
 
 	UFUNCTION(Category = "Console", Exec)
-		void ShowAimingVectors(bool bOn);
+		void COV_ShowCharacterAimingVectors(bool bAimingVectorsVisible);
 };

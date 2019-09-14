@@ -17,7 +17,17 @@ class COV_API UCOVInventoryItem : public UActorComponent
 
 private:
 	UPROPERTY(Category = "COV Inventory Item", Replicated, VisibleAnywhere)
-		UCOVInventory* _owningInventory;
+		UCOVInventory* OwningInventory;
+
+	UPROPERTY(Category = "COV Inventory Item", EditDefaultsOnly)
+		FString DisplayName;
+
+	UPROPERTY(Category = "COV Inventory Item", EditDefaultsOnly)
+		//	This actor represents the corresponding actor type that is created when putting this item into an inventory or taking it out.
+		TSubclassOf<AActor> CorrespondingItemActorType;
+
+	UPROPERTY(Category = "COV Inventory Item", Replicated, VisibleAnywhere)
+		FGuid UniqueItemID;
 
 public:	
 	// Sets default values for this component's properties
@@ -25,11 +35,21 @@ public:
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
-	UPROPERTY(Category = "COV Inventory Item", EditDefaultsOnly)
-		FString DisplayName;
 
 	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, BlueprintPure)
 		FString GetItemDisplayName() const;
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, BlueprintPure)
+		const FGuid& GetUniqueItemID();
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, BlueprintPure)
+		TSubclassOf<class AActor> GetCorrespondingItemActorType();
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
+		void Initialize(const UCOVInventoryItem* copyItem);
+
+	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
+		void GenerateNewGUID();
 
 	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable)
 		//	Gets the inventory that this item is in currently, if any

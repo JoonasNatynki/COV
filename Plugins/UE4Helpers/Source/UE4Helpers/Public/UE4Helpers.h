@@ -82,7 +82,7 @@ if (interfaceObject.IsValid())\
 	}\
 	else\
 	{\
-		UE_LOG(LogUE4CodeHelpers, Log, TEXT("Using interface failed! The object (%s) does not implement such."), *UKismetSystemLibrary::GetDisplayName(_objectwithinterface));\
+		UE_LOG(LogUE4CodeHelpers, Log, TEXT("Using interface failed! The object (%s) does not implement such."), *GetNameSafe(_objectwithinterface));\
 	}\
 }\
 

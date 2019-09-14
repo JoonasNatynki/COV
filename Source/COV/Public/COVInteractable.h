@@ -23,16 +23,16 @@ class COV_API ICOVInteractable
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
-		//	Call this when interacting with the object. Most often only the client should be calling this function.
+		//	If the object is currently interactable or not.
 		bool GetIsInteractable();
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent, BlueprintAuthorityOnly)
-		//	Call this when interacting with the object. Most often only the client should be calling this function.
+		//	Call this when interacting with the object. Most often only the client should be calling this function. Returns TRUE if interaction is successful
 		bool Interact(AActor* Interactor);
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
-		//	Call this when interacting with the object. Most often only the client should be calling this function.
+		//	Returns the default text about the type of interaction that will happen when interacting with this object.
 		FText GetDefaultPromptText();
 	UFUNCTION(Category = "Interaction", BlueprintCallable, BlueprintImplementableEvent)
-		//	Call this when interacting with the object. Most often only the client should be calling this function.
+		//	Returns the default location in world space of the text that is displayed on the interactable object about its interaction type.
 		FVector GetDefaultPromptLocation();
 
 };

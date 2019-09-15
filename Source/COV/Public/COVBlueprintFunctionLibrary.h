@@ -147,7 +147,10 @@ public:
 		static bool IsArrayEmpty(const TArray<int32>& TargetArray);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
+		static FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		static TArray<UClass*> GetAllChildClassesOfType(TSubclassOf<AActor> type);
 
 	static bool GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp);
 

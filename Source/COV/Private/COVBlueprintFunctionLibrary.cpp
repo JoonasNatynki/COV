@@ -7,6 +7,7 @@
 #include <GameFramework/InputSettings.h>
 #include <MessageLog.h>
 #include <UObjectToken.h>
+#include <KismetEditorUtilities.h>
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 #define LOCTEXT_NAMESPACE "COVBlueprintFunctionLibrary"
@@ -189,12 +190,12 @@ TArray<FVector> UCOVBlueprintFunctionLibrary::CalculateBarabolicTrajectory(const
 		if (CVarShowBarabolicTrajectoryCalculationDebugs.GetValueOnGameThread() == 1)
 		{
 			//	Draw the sample points
-			UKismetSystemLibrary::DrawDebugPoint(WorldContextObject->GetWorld(), tempPoint, 10.0f, FLinearColor::Red, 60.0f);
+			UKismetSystemLibrary::DrawDebugPoint(WorldContextObject->GetWorld(), tempPoint, 10.0f, FLinearColor::Red, 10.0f);
 
 			//	Draw lines between points
 			if ((x > 0))
 			{
-				UKismetSystemLibrary::DrawDebugLine(WorldContextObject->GetWorld(), tempPoint, trajectoryPathPoints[x - 1], FLinearColor::Green, 60.0f, 5.0f);
+				UKismetSystemLibrary::DrawDebugLine(WorldContextObject->GetWorld(), tempPoint, trajectoryPathPoints[x - 1], FLinearColor::Green, 10.0f, 5.0f);
 			}
 		}
 	}
@@ -217,6 +218,41 @@ FRotator UCOVBlueprintFunctionLibrary::OrientRotationToNormalVector(const FRotat
 	const FQuat NewQuat = Quat * RootQuat;
 
 	return NewQuat.Rotator();
+}
+
+TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclassOf<AActor> type)
+{
+	TArray<UClass*> SubClasses;
+
+	for (TObjectIterator< UClass > ClassIt; ClassIt; ++ClassIt)
+	{
+		UClass* Class = *ClassIt;
+
+		// Ignore deprecated
+		if (Class->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists))
+		{
+			continue;
+		}
+
+#if WITH_EDITOR
+		// Ignore skeleton classes (semi-compiled versions that only exist in-editor)
+		if (FKismetEditorUtilities::IsClassABlueprintSkeleton(Class))
+		{
+			continue;
+		}
+#endif
+
+		// Check this class is a subclass of Base
+		if (!Class->IsChildOf(type))
+		{
+			continue;
+		}
+
+		// Add this class
+		SubClasses.Add(Class);
+	}
+
+	return SubClasses;
 }
 
 bool UCOVBlueprintFunctionLibrary::GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp)

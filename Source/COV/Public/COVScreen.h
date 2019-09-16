@@ -14,7 +14,9 @@ class COV_API UCOVScreen : public UUserWidget
 {
 	GENERATED_BODY()
 
-public:	
+public:
+
+	UCOVScreen(const FObjectInitializer& ObjInit);
 	
 	UPROPERTY(Category = "Screen", EditAnywhere)
 		//	Is this screen being forced to stay in stack?

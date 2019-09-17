@@ -17,13 +17,23 @@ public:
 	// Sets default values for this component's properties
 	UFocusableComponent();
 
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const;
+
 	UFUNCTION(Category = "Focusable", BlueprintCallable, BlueprintPure)
 		FORCEINLINE bool IsFocusable() const;
 
+	UFUNCTION(Category = "Focusable", BlueprintCallable, BlueprintPure)
+		FORCEINLINE float GetFocusDistance() const;
+
 	UFUNCTION(Category = "Focusable", BlueprintCallable)
 		void SetIsFocusable(bool bIsFocusable);
-	UPROPERTY(Category = "Focusable", EditDefaultsOnly)
+
+	UPROPERTY(Category = "Focusable", EditDefaultsOnly, Replicated)
 		bool bCanBeFocusedAt = true;
+
+	UPROPERTY(Category = "Focusable", EditDefaultsOnly)
+		//	The maximum distance this focusable can be focused at maximum
+		float FocusDistance = 300.0f;
 
 
 protected:
@@ -38,7 +48,12 @@ public:
 private:
 };
 
-bool UFocusableComponent::IsFocusable() const
+FORCEINLINE bool UFocusableComponent::IsFocusable() const
 {
 	return bCanBeFocusedAt;
+}
+
+FORCEINLINE float UFocusableComponent::GetFocusDistance() const
+{
+	return FocusDistance;
 }

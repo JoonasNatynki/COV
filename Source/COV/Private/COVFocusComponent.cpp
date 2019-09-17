@@ -87,22 +87,24 @@ const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Interna
 
 	for (auto& actor : overlappingActors)
 	{
+		float distanceToFocusWorldLocation = (_focusWorldLocation - actor->GetActorLocation()).Size();
+		float distanceToActorWhoIsFocusing = (GetOwner()->GetActorLocation() - actor->GetActorLocation()).Size();
+
 		//	Whether or not to only focus on actors with the FocusableComponent and if they are focusable or not
 		if (bFocusOnlyOnFocusables)
 		{
 			UFocusableComponent* focusableComponent = Cast<UFocusableComponent>(actor->GetComponentByClass(UFocusableComponent::StaticClass()));
 
-			if (!IsValid(focusableComponent) || !focusableComponent->IsFocusable())
+			if (!IsValid(focusableComponent) || !focusableComponent->IsFocusable() || (distanceToActorWhoIsFocusing > focusableComponent->GetFocusDistance()))
 			{
 				continue;
 			}
 		}
 
-		float thisDistance = (_focusWorldLocation - actor->GetActorLocation()).Size();
-		if (thisDistance < bestDistance)
+		if (distanceToFocusWorldLocation < bestDistance)
 		{
 			candidate = actor;
-			bestDistance = thisDistance;
+			bestDistance = distanceToFocusWorldLocation;
 		}
 	}
 

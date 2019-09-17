@@ -15,7 +15,7 @@ UENUM(BlueprintType) enum EDoorState
 	Closing,
 	Open,
 	Opening,
-	Cracked
+	Locked
 };
 
 DECLARE_LOG_CATEGORY_EXTERN(COVDoor, All, Log)
@@ -39,32 +39,42 @@ public:
 	UPROPERTY(Category = "Door", BlueprintAssignable)
 		//	Called when the door state changes
 		FOnDoorStateChanged OnDoorStateChanged;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly, ReplicatedUsing = OnRep_DoorState)
 		//	The current state of the door and that it is in
 		TEnumAsByte<EDoorState> _doorState = EDoorState::Closed;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
-		//	The state alpha. From 0 to 1 with 0 being fully closed and 1 is fully open
+		//	The state alpha. From 0 to 1 with 0 being fully closed and 1is fully open
 		float _doorStateAlpha = 0.0f;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The value at which the door will be considered closed
-		float _doorClosedAlphaThreshold = 0.1f;
+		float _doorClosedAlphaThreshold = 0.0f;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The value at which the door will be considered opened
-		float _doorOpenAlphaThreshold = 0.9f;
+		float _doorOpenAlphaThreshold = 1.0f;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The door motion interpolation exponent
 		float _motionInterpolationExponent = 2.0f;
+
 	UPROPERTY(Category = "Door", BlueprintReadOnly, EditDefaultsOnly)
 		//	The door motion interpolation step count
 		int32 _motionInterpolationSteps = 2;
+
 	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully closed
 		FTransform _initialClosedTransform;
+
 	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		//	The transform of the door when it is fully open
 		FTransform _finalOpenTransform;
+
 	UPROPERTY(Category = "Configuration", BlueprintReadOnly, EditDefaultsOnly)
 		USceneComponent* _doorHinge;
+
 
 	float _doorPreviousFrameAlpha;
 

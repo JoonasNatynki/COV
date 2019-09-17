@@ -4,6 +4,8 @@
 #include "FocusableComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include <GameFramework/Actor.h>
+#include <UnrealNetwork.h>
+#include "COVBlueprintFunctionLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogFocusable)
 
@@ -15,10 +17,17 @@ UFocusableComponent::UFocusableComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UFocusableComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UFocusableComponent, bCanBeFocusedAt);
+}
+
 void UFocusableComponent::SetIsFocusable(bool bIsFocusable)
 {
 	bCanBeFocusedAt = bIsFocusable;
-	UE_LOG(LogFocusable, Log, TEXT("(%s) set as %s."), *GetNameSafe(GetOwner()), (bCanBeFocusedAt ? (TEXT("FOCUSABLE")) : (TEXT("UNFOCUSABLE"))));
+	COV_LOG(LogFocusable, Log, TEXT("(%s) set as %s."), *GetNameSafe(GetOwner()), (bCanBeFocusedAt ? (TEXT("FOCUSABLE")) : (TEXT("UNFOCUSABLE"))));
 }
 
 // Called when the game starts

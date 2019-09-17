@@ -34,7 +34,7 @@ void UCOVDoorComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDe
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME_CONDITION(UCOVDoorComponent, _doorState, COND_SkipOwner);
+	DOREPLIFETIME(UCOVDoorComponent, _doorState);
 }
 
 void UCOVDoorComponent::OnRep_DoorState()
@@ -46,37 +46,35 @@ void UCOVDoorComponent::UpdateDoorState()
 {
 	EDoorState newDoorState;
 
-	if (_doorStateAlpha <= _doorClosedAlphaThreshold)
+	if (_doorState == EDoorState::Locked)
+	{
+		return;
+	}
+
+	if (_doorStateAlpha <= _doorClosedAlphaThreshold && _doorState != EDoorState::Closed && _doorState != EDoorState::Opening)
 	{
 		newDoorState = EDoorState::Closed;
 		SetDoorState(newDoorState);
 		return;
 	}
 
-	if (_doorStateAlpha >= _doorOpenAlphaThreshold)
+	if (_doorStateAlpha >= _doorOpenAlphaThreshold && _doorState != EDoorState::Open && _doorState != EDoorState::Closing)
 	{
 		newDoorState = EDoorState::Open;
 		SetDoorState(newDoorState);
 		return;
 	}
 
-	if (_doorPreviousFrameAlpha < _doorStateAlpha)
+	if (_doorPreviousFrameAlpha < _doorStateAlpha && _doorState != EDoorState::Opening && _doorState != EDoorState::Closing && _doorState != EDoorState::Open)
 	{
 		newDoorState = EDoorState::Opening;
 		SetDoorState(newDoorState);
 		return;
 	}
 
-	if (_doorPreviousFrameAlpha > _doorStateAlpha)
+	if (_doorPreviousFrameAlpha > _doorStateAlpha && _doorState != EDoorState::Closing && _doorState != EDoorState::Opening && _doorState != EDoorState::Closed)
 	{
 		newDoorState = EDoorState::Closing;
-		SetDoorState(newDoorState);
-		return;
-	}
-
-	if (_doorStateAlpha <= _doorOpenAlphaThreshold && _doorStateAlpha >= _doorClosedAlphaThreshold)
-	{
-		newDoorState = EDoorState::Cracked;
 		SetDoorState(newDoorState);
 		return;
 	}
@@ -92,6 +90,13 @@ void UCOVDoorComponent::SetDoorState(EDoorState doorState)
 
 void UCOVDoorComponent::SetDoorStateAlpha(float alpha)
 {
+	//	If door is locked, do nothing.
+	if (_doorState == EDoorState::Locked)
+	{
+		COV_LOG(COVDoor, Log, TEXT("Door (%s) is locked. Door state alpha not changed."), *GetNameSafe(GetOwner()));
+		return;
+	}
+
 	_doorStateAlpha = alpha;
 	FTransform tempTrans = UKismetMathLibrary::TEase(_initialClosedTransform, _finalOpenTransform, _doorStateAlpha, EEasingFunc::EaseInOut, _motionInterpolationExponent, _motionInterpolationSteps);
 	_doorHinge->SetRelativeTransform(tempTrans);

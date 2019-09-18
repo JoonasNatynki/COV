@@ -263,20 +263,26 @@ FORCEINLINE FHitResult UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(cons
 
 	AActor* pawnCameraManager = Cast<AActor>(TryGetPawnCameraManager(pawn));
 
-	//	Ray starting point
-	FVector playerViewWorldLocation = pawnCameraManager->GetActorLocation();
-	//	end point target direction
+	if (IsValid(pawnCameraManager))
+	{
 
-	FVector controllerForwardVector = pawnCameraManager->GetActorForwardVector();
+		//	Ray starting point
+		FVector playerViewWorldLocation = pawnCameraManager->GetActorLocation();
+		//	end point target direction
 
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
-	(
-		character,
-		playerViewWorldLocation + (controllerForwardVector),
-		playerViewWorldLocation + (controllerForwardVector * rayDistance),
-		ECollisionChannel::ECC_Camera,
-		FName("AimTrace")
-	);
+		FVector controllerForwardVector = pawnCameraManager->GetActorForwardVector();
+
+		RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+		(
+			character,
+			playerViewWorldLocation + (controllerForwardVector),
+			playerViewWorldLocation + (controllerForwardVector * rayDistance),
+			ECollisionChannel::ECC_Camera,
+			FName("AimTrace")
+		);
+
+		return RV_Hit;
+	}
 
 	return RV_Hit;
 }

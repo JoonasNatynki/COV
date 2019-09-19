@@ -28,17 +28,27 @@ public:
 
 	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere, Transient)
 		AActor* _cachedFocusedActor;
+
 	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere, Transient)
 		FVector _focusWorldLocation;
+
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
 		float _focusingMaxDistance = 700.0f;
+
+	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
+		//	If TRUE, you can focus on everything and on focusable things regardless of their set distance limits.
+		bool bDeveloperMode = false;
+
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
 		float _focusingMaxArea = 80.0f;
+
 	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
 		//	Whether to ignore all other actors but the ones with the FocusableComponent
 		bool bFocusOnlyOnFocusables = true;
+
 	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
 		bool bShowDebug = false;
+
 
 	//	Internal implementation of the updating logic
 	TWeakObjectPtr<AActor> UpdateFocusedActor_Internal();

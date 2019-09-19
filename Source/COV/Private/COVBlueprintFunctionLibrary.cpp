@@ -101,7 +101,7 @@ APlayerCameraManager* UCOVBlueprintFunctionLibrary::TryGetPawnCameraManager(cons
 		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::FromString("Could not get pawn camera manager. Pawn wasn't valid."));
 		return nullptr;
 	}
-
+	AController* temp = pawn->GetController();
 	APlayerController* playerController = Cast<APlayerController>(pawn->GetController());
 
 	if (!ensureMsgf(IsValid(playerController), TEXT("The player controller was not valid for the pawn.")))

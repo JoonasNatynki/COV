@@ -90,14 +90,18 @@ const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Interna
 		float distanceToFocusWorldLocation = (_focusWorldLocation - actor->GetActorLocation()).Size();
 		float distanceToActorWhoIsFocusing = (GetOwner()->GetActorLocation() - actor->GetActorLocation()).Size();
 
-		//	Whether or not to only focus on actors with the FocusableComponent and if they are focusable or not
-		if (bFocusOnlyOnFocusables)
+		//	If using the developer mode, ignore every setting and just focus on everything.
+		if (!bDeveloperMode)
 		{
-			UFocusableComponent* focusableComponent = Cast<UFocusableComponent>(actor->GetComponentByClass(UFocusableComponent::StaticClass()));
-
-			if (!IsValid(focusableComponent) || !focusableComponent->IsFocusable() || (distanceToActorWhoIsFocusing > focusableComponent->GetFocusDistance()))
+			//	Whether or not to only focus on actors with the FocusableComponent and if they are focusable or not
+			if (bFocusOnlyOnFocusables)
 			{
-				continue;
+				UFocusableComponent* focusableComponent = Cast<UFocusableComponent>(actor->GetComponentByClass(UFocusableComponent::StaticClass()));
+
+				if (!IsValid(focusableComponent) || !focusableComponent->IsFocusable() || (distanceToActorWhoIsFocusing > focusableComponent->GetFocusDistance()))
+				{
+					continue;
+				}
 			}
 		}
 

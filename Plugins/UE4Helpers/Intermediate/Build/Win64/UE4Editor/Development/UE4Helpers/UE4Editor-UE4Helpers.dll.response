@@ -17,7 +17,7 @@
 /ignore:4099
 /DELAYLOAD:"d3d12.dll"
 /DELAYLOAD:"DBGHELP.DLL"
-/LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.16.27023\lib\x64"
+/LIBPATH:"C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\lib\x64"
 /LIBPATH:"C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\lib\um\x64"
 /LIBPATH:"C:\Program Files (x86)\Windows Kits\10\lib\10.0.16299.0\ucrt\x64"
 /LIBPATH:"C:\Program Files (x86)\Windows Kits\10\lib\10.0.16299.0\um\x64"
@@ -32,11 +32,11 @@
 /NODEFAULTLIB:"LIBCD"
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h.obj"
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.cpp.obj"
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.gen.cpp.obj"
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.init.gen.cpp.obj"
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\Default.rc2.res"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.init.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\Default.rc2.res"
 "delayimp.lib"
 "wininet.lib"
 "rpcrt4.lib"
@@ -66,8 +66,8 @@
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Slate\UE4Editor-Slate.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\SlateCore\UE4Editor-SlateCore.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Core\UE4Editor-Core.lib"
-/OUT:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Binaries\Win64\UE4Editor-UE4Helpers.dll"
-/IMPLIB:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Editor-UE4Helpers.suppressed.lib"
-/PDB:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Binaries\Win64\UE4Editor-UE4Helpers.pdb"
+/OUT:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Binaries\Win64\UE4Editor-UE4Helpers.dll"
+/IMPLIB:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Editor-UE4Helpers.suppressed.lib"
+/PDB:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Binaries\Win64\UE4Editor-UE4Helpers.pdb"
 /ignore:4078
 /INCLUDE:IMPLEMENT_MODULE_UE4Helpers

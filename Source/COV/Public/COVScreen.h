@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include <InputCoreTypes.h>
 
 #include "COVScreen.generated.h"
 
@@ -21,20 +22,25 @@ public:
 	UCOVScreen(const FObjectInitializer& ObjInit);
 	
 	UPROPERTY(Category = "Screen", EditAnywhere)
-		//	Is this screen being forced to stay in stack?
+		//	Is this screen being forced to stay in stack? Screen can not be removed, only hidden.
 		bool bScreenIsLocked = false;
 
 	UPROPERTY(Category = "Screen", EditDefaultsOnly)
-		//	If the screen is an overlay, which means it will not hide the screens under it
+		//	If the screen is an overlay. Screen under it will be visible until a screen that is not an overlay.
 		bool bScreenIsAnOverlay = false;
 
 	UPROPERTY(Category = "Screen", EditDefaultsOnly)
-		//	If there can exist more than one of these screen or just one
+		//	If there can exist more than one of these screen or just one. If only one instance is allowed and the same screen is being pushed back into the stack, the stack will simply move that screen to the top and display it instead.
 		bool bAllowMultipleInstances = false;
 
 	UPROPERTY(Category = "Screen", EditDefaultsOnly)
-		//	If this screen should take over the mouse and display a cursor
-		bool bTakeOverMouse = false;
+		//	If this screen should take over mouse and keyboard input
+		bool bTakeOverInput = false;
+
+	UPROPERTY(Category = "Screen", EditDefaultsOnly)
+		//	Bind a key to automatically close the screen with
+		FKey KeyToCloseScreenWith;
+
 
 
 
@@ -44,7 +50,7 @@ public:
 
 	UFUNCTION(Category = "Screen", BlueprintCallable, BlueprintPure)
 		//	Should this screen capture the mouse cursor?
-		bool GetShouldScreenTakeOverMouse() const { return bTakeOverMouse; };
+		bool GetShouldScreenTakeOverMouse() const { return bTakeOverInput; };
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		// Locks the screen so that it can't be removed from the stack.

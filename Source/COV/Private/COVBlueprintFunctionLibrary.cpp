@@ -33,7 +33,7 @@ int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(const FString& InFileN
 	}
 
 	UE_LOG(COVBlueprintFunctionLibrary, Error, TEXT("Could not read the number of lines in a file (%s). No file found!"), *InFileName);
-	FMessageLog("COVBlueprintFunctionLibrary").Error(FText::Format(LOCTEXT("COVBlueprintFunctionLibrary", "Could not read the number of lines in a file ({0}). No file found!."), FText::FromString(InFileName)));
+	FMessageLog("PIE").Error(FText::Format(LOCTEXT("COVBlueprintFunctionLibrary", "Could not read the number of lines in a file ({0}). No file found!."), FText::FromString(InFileName)));
 
 	return -1;
 }
@@ -77,7 +77,7 @@ FString UCOVBlueprintFunctionLibrary::GetFileLine(const FString& InFileName, con
 	else
 	{
 		UE_LOG(COVBlueprintFunctionLibrary, Error, TEXT("Did not find a file named (%s)."), *InFileName);
-		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::Format(LOCTEXT("COVBlueprintFunctionLibrary", "Could not find a file named ({0})."), FText::FromString(InFileName)));
+		FMessageLog("PIE").Error(FText::Format(LOCTEXT("COVBlueprintFunctionLibrary", "Could not find a file named ({0})."), FText::FromString(InFileName)));
 		return FString(TEXT(""));
 	}
 }
@@ -89,7 +89,7 @@ int32 UCOVBlueprintFunctionLibrary::GetRepositoryCommitCount()
 	if (numberOfCommits == -1)
 	{
 		UE_LOG(COVBlueprintFunctionLibrary, Error, TEXT("No git repository folder found. Could not find the number of commits."));
-		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::FromString("No git repository folder found. Could not find the number of commits."));
+		FMessageLog("PIE").Error(FText::FromString("No git repository folder found. Could not find the number of commits."));
 		return -1;
 	}
 
@@ -100,22 +100,22 @@ APlayerCameraManager* UCOVBlueprintFunctionLibrary::TryGetPawnCameraManager(cons
 {
 	if (!ensureMsgf(IsValid(pawn), TEXT("The pawn wasn't valid anymore.")))
 	{
-		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::FromString("Could not get pawn camera manager. Pawn wasn't valid."));
+		FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. Pawn wasn't valid."));
 		return nullptr;
 	}
 	AController* temp = pawn->GetController();
 	APlayerController* playerController = Cast<APlayerController>(pawn->GetController());
 
-	if (!ensureMsgf(IsValid(playerController), TEXT("The player controller was not valid for the pawn.")))
+	if (!IsValid(playerController))
 	{
-		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::FromString("Could not get pawn camera manager. The pawn's controller was not valid."))->AddToken(FUObjectToken::Create(pawn));
+		//FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. The pawn's controller was not valid."))->AddToken(FUObjectToken::Create(pawn));
 		return nullptr;
 	}
 
 
 	if (!ensureMsgf(IsValid(playerController->PlayerCameraManager), TEXT("The player camera manager was not valid.")))
 	{
-		FMessageLog("COVBlueprintFunctionLibrary").Error(FText::FromString("Could not get pawn camera manager. The camera manager was not valid for pawn."))->AddToken(FUObjectToken::Create(pawn));
+		FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. The camera manager was not valid for pawn."))->AddToken(FUObjectToken::Create(pawn));
 		return nullptr;
 	}
 

@@ -150,7 +150,7 @@ public:
 		static FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		//	Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME.
+		//	Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME. Remember to start path with "/Game/". For example: "/Game/Weapons"
 		static TArray<UClass*> GetAllChildClassesOfType(TSubclassOf<AActor> type, bool bBlueprintsOnly, const FString& pathToSearchFor);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)

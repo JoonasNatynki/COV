@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+
 #include "COVScreen.generated.h"
 
-/**
- * 
- */
+DECLARE_LOG_CATEGORY_EXTERN(COVScreen, Log, All)
+
+class FReply;
+
 UCLASS()
 class COV_API UCOVScreen : public UUserWidget
 {
@@ -63,4 +65,8 @@ public:
 	UFUNCTION(Category = "Screen", BlueprintCallable, BlueprintPure)
 		//	Can more than one screen exist at the same time in the stack?
 		bool GetAllowMultipleInstances() const { return bAllowMultipleInstances; };
+
+
+	//	Bind button to close the screen
+	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 };

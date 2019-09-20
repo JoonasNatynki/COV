@@ -8,7 +8,7 @@ public class COV : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd", "UE4Helpers" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UnrealEd", "SlateCore", "UE4Helpers" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

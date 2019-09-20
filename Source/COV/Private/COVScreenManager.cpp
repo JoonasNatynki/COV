@@ -47,9 +47,7 @@ void UCOVScreenManager::UpdateScreenStackVisibilities_Internal()
 				FInputModeUIOnly input_mode;
 
 				input_mode.SetWidgetToFocus(screen->TakeWidget());
-
-				input_mode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-				
+				input_mode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);				
 				GetOwnerPlayerController()->SetInputMode(input_mode);
 			}
 			else

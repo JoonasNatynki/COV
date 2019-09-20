@@ -150,7 +150,13 @@ public:
 		static FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
-		static TArray<UClass*> GetAllChildClassesOfType(TSubclassOf<AActor> type);
+		//	Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME.
+		static TArray<UClass*> GetAllChildClassesOfType(TSubclassOf<AActor> type, bool bBlueprintsOnly, const FString& pathToSearchFor);
+
+	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
+		//	A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory.
+		static TArray<UClass*> GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type);
+
 
 	static bool GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp);
 

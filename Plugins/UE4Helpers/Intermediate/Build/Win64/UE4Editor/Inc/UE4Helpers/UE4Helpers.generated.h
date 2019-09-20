@@ -17,7 +17,7 @@ struct FVector;
 #endif
 #define UE4HELPERS_UE4Helpers_generated_h
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execGetRepositoryCommitCount) \
 	{ \
@@ -82,7 +82,7 @@ struct FVector;
 	}
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execGetRepositoryCommitCount) \
 	{ \
@@ -147,7 +147,7 @@ struct FVector;
 	}
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUE4CodeHelpers(); \
 	friend struct Z_Construct_UClass_UE4CodeHelpers_Statics; \
@@ -156,7 +156,7 @@ public: \
 	DECLARE_SERIALIZER(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS \
 private: \
 	static void StaticRegisterNativesUE4CodeHelpers(); \
 	friend struct Z_Construct_UClass_UE4CodeHelpers_Statics; \
@@ -165,7 +165,7 @@ public: \
 	DECLARE_SERIALIZER(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_STANDARD_CONSTRUCTORS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UE4CodeHelpers(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UE4CodeHelpers) \
@@ -178,7 +178,7 @@ private: \
 public:
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_ENHANCED_CONSTRUCTORS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UE4CodeHelpers(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -191,26 +191,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UE4CodeHelpers); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_107_PROLOG
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_GENERATED_BODY_LEGACY \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_107_PROLOG
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_STANDARD_CONSTRUCTORS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_GENERATED_BODY \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS_NO_PURE_DECLS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS_NO_PURE_DECLS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_ENHANCED_CONSTRUCTORS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_RPC_WRAPPERS_NO_PURE_DECLS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_INCLASS_NO_PURE_DECLS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_110_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -218,7 +218,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> UE4HELPERS_API UClass* StaticClass<class UE4CodeHelpers>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h
+#define CURRENT_FILE_ID COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

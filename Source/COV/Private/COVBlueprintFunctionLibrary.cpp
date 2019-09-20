@@ -8,6 +8,8 @@
 #include <MessageLog.h>
 #include <UObjectToken.h>
 #include <KismetEditorUtilities.h>
+#include <IAssetRegistry.h>
+#include <AssetRegistryModule.h>
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 #define LOCTEXT_NAMESPACE "COVBlueprintFunctionLibrary"
@@ -220,7 +222,57 @@ FRotator UCOVBlueprintFunctionLibrary::OrientRotationToNormalVector(const FRotat
 	return NewQuat.Rotator();
 }
 
-TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclassOf<AActor> type)
+TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclassOf<AActor> type, bool bBlueprintsOnly, const FString& pathToSearchFor)
+{
+	// Load asset registry module
+	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+
+	// Scan specific path
+	TArray<FString> PathsToScan;
+	PathsToScan.Add(pathToSearchFor);
+	AssetRegistry.ScanPathsSynchronous(PathsToScan);
+
+	// Get all assets in the path, does not load them
+	TArray<FAssetData> ScriptAssetList;
+	AssetRegistry.GetAssetsByPath(FName(*pathToSearchFor), ScriptAssetList, /*bRecursive=*/true);
+
+	// Ensure all assets are loaded and store their class
+	TArray<UClass*> EventClasses;
+	for (const FAssetData& Asset : ScriptAssetList)
+	{
+		if (bBlueprintsOnly)
+		{
+			// Skip non blueprint assets
+			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.GetAsset());
+			if (!BlueprintObj)
+				continue;
+
+			// Check whether blueprint class has parent class we're looking for
+			UClass* BlueprintClass = BlueprintObj->GeneratedClass;
+			if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
+				continue;
+
+			// Store class
+			EventClasses.Add(BlueprintClass);
+		}
+		else
+		{
+			UObject* object = Asset.GetAsset();
+			UClass* classObject = object->GetClass();
+
+			if(!IsValid(classObject) || !classObject->IsChildOf(type))
+				continue;
+
+			// Store class
+			EventClasses.Add(classObject);
+		}
+	}
+
+	return EventClasses;
+}
+
+TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type)
 {
 	TArray<UClass*> SubClasses;
 

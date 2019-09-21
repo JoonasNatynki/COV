@@ -35,25 +35,26 @@ void UCOVScreenManager::UpdateScreenStackVisibilities_Internal()
 	{
 		auto screen = screenStack[x];
 
-		//	Set first one to always be visible
 		if (x == screenStack.Num() - 1)
 		{
-			screen->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
-			if (screen->GetShouldScreenTakeOverMouse())
+			//	Is the screen hidden by someone else? If it is, don't touch its visibility
+			if (screen->bShouldScreenBeShownWhenPossible)
 			{
-				GetOwnerPlayerController()->bShowMouseCursor = true;
-				screen->SetUserFocus(GetOwnerPlayerController());
+				//	Set first one to always be visible
+				SetScreenVisible_Internal(screen);
 
-				FInputModeUIOnly input_mode;
-
-				input_mode.SetWidgetToFocus(screen->TakeWidget());
-				input_mode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);				
-				GetOwnerPlayerController()->SetInputMode(input_mode);
+				if (screen->GetShouldScreenTakeOverMouse())
+				{
+					screen->TakeOverInputControl();
+				}
+				else
+				{
+					screen->ReleaseInputControl();
+				}
 			}
 			else
 			{
-				GetOwnerPlayerController()->bShowMouseCursor = false;
-				GetOwnerPlayerController()->SetInputMode(FInputModeGameOnly());
+				screen->ReleaseInputControl();
 			}
 		}
 		else
@@ -61,7 +62,10 @@ void UCOVScreenManager::UpdateScreenStackVisibilities_Internal()
 			//	If the screen above is an overlay, this screen should be visible as well no matter what if the one above is visible
 			if (screenStack[x + 1]->GetIsScreenAnOverlay() && screenStack[x + 1]->GetVisibility() != ESlateVisibility::Hidden)
 			{
-				screen->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
+				if (screen->bShouldScreenBeShownWhenPossible)
+				{
+					SetScreenVisible_Internal(screen);
+				}
 			}
 			else
 			{
@@ -85,7 +89,7 @@ APlayerController* UCOVScreenManager::GetOwnerPlayerController() const
 
 bool UCOVScreenManager::PushScreenByClass(TSubclassOf<UCOVScreen> widgetClass)
 {	
-	UCOVScreen* foundScreen = FindScreenOfType(widgetClass);
+	UCOVScreen* foundScreen = FindScreenByType(widgetClass);
 
 	bool bCanHaveMultipleInstances = Cast<UCOVScreen>(widgetClass->GetDefaultObject())->GetAllowMultipleInstances();
 
@@ -110,7 +114,7 @@ bool UCOVScreenManager::PushScreenByClass(TSubclassOf<UCOVScreen> widgetClass)
 	}
 	else
 	{
-		COV_LOG(COVScreenManager, Warning, TEXT("No new screens of type (%s) allowed. Pushing the screen to the top instead."), *GetNameSafe(widgetClass->StaticClass()));
+		COV_LOG(COVScreenManager, Log, TEXT("No new screens of type (%s) allowed. Pushing the screen to the top instead."), *GetNameSafe(widgetClass->StaticClass()));
 		screenStack.Remove(foundScreen);
 		screenStack.Add(foundScreen);
 	}
@@ -141,7 +145,7 @@ bool UCOVScreenManager::PopTopScreen()
 	}
 	else
 	{
-		COV_LOG(COVScreenManager, Warning, TEXT("Screen (%s) could not be popped from the stack. The screen was locked."), *widgetClassName);
+		COV_LOG(COVScreenManager, Log, TEXT("Screen (%s) could not be popped from the stack. The screen was locked."), *widgetClassName);
 		
 		return false;
 	}
@@ -155,18 +159,28 @@ bool UCOVScreenManager::PopScreen(UCOVScreen* screen)
 
 	if (HasScreen(screen))
 	{
+		//	If screen is locked, don't pop it
+		if (screen->GetIsScreenLocked())
+		{
+			COV_LOG(COVScreenManager, Log, TEXT("Screen (%s) could not be popped from the stack. The screen was locked."), *GetNameSafe(screen));
+
+			return false;
+		}
+
 		screenStack.RemoveSingleSwap(screen, true);
 		UpdateScreenStackVisibilities_Internal();
 
 		COV_LOG(COVScreenManager, Log, TEXT("Screen (%s) popped from stack. Broadcasting OnScreenRemoval..."), *widgetClassName);
 		OnScreenRemoval.Broadcast(screen);
 		screen->RemoveFromParent();
+
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
-UCOVScreen* UCOVScreenManager::FindScreenOfType(TSubclassOf<UCOVScreen> screenType)
+UCOVScreen* UCOVScreenManager::FindScreenByType(TSubclassOf<UCOVScreen> screenType)
 {
 	UCOVScreen* foundScreen = nullptr;
 
@@ -184,6 +198,11 @@ UCOVScreen* UCOVScreenManager::FindScreenOfType(TSubclassOf<UCOVScreen> screenTy
 	return foundScreen;
 }
 
+UCOVScreen* UCOVScreenManager::GetScreenByType(TSubclassOf<UCOVScreen> screenType)
+{
+	return FindScreenByType(screenType);
+}
+
 bool UCOVScreenManager::HasScreen(UCOVScreen* screen)
 {
 	if (screenStack.Num() > 0)
@@ -198,6 +217,12 @@ bool UCOVScreenManager::HasScreen(UCOVScreen* screen)
 	}
 
 	return false;
+}
+
+void UCOVScreenManager::SetScreenVisible_Internal(UCOVScreen* screen) const
+{
+	screen->bScreenStackManagerChangesVisibility = true;
+	screen->SetVisibility(ESlateVisibility::SelfHitTestInvisible);
 }
 
 // Called every frame

@@ -24,13 +24,17 @@ public:
 	// Sets default values for this component's properties
 	UCOVScreenManager();
 
-	TArray<UCOVScreen*> screenStack;
+	UPROPERTY()
+		TArray<UCOVScreen*> screenStack;
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	void UpdateScreenStackVisibilities_Internal();
+
+	//	This function handles screen visibility properly for screens
+	void SetScreenVisible_Internal(UCOVScreen* screen) const;
 
 public:	
 	// Called every frame
@@ -55,10 +59,16 @@ public:
 		UCOVScreen* GetTopMostScreen();
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
+		//	Remove a screen from the stack
 		bool PopScreen(UCOVScreen* screen);
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
-		UCOVScreen* FindScreenOfType(TSubclassOf<UCOVScreen> screenType);
+		//	Find a screen of the type in the stack, if any.
+		UCOVScreen* FindScreenByType(TSubclassOf<UCOVScreen> screenType);
+
+	UFUNCTION(Category = "Screen", BlueprintCallable)
+		//	Find a screen of the type in the stack, if any.
+		UCOVScreen* GetScreenByType(TSubclassOf<UCOVScreen> screenType);
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool HasScreen(UCOVScreen* screen);

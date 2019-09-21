@@ -15,6 +15,24 @@ UCOVScreen::UCOVScreen(const FObjectInitializer& ObjInit) : Super(ObjInit)
 	bIsFocusable = true;
 }
 
+void UCOVScreen::ReleaseInputControl()
+{
+	GetOwningPlayer()->bShowMouseCursor = false;
+	GetOwningPlayer()->SetInputMode(FInputModeGameOnly());
+}
+
+void UCOVScreen::TakeOverInputControl()
+{
+	GetOwningPlayer()->bShowMouseCursor = true;
+	SetUserFocus(GetOwningPlayer());
+
+	FInputModeUIOnly input_mode;
+
+	input_mode.SetWidgetToFocus(TakeWidget());
+	input_mode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	GetOwningPlayer()->SetInputMode(input_mode);
+}
+
 FReply UCOVScreen::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
 	FKey key = InKeyEvent.GetKey();
@@ -39,4 +57,19 @@ FReply UCOVScreen::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent&
 	FReply result(FReply::Handled());
 
 	return result;
+}
+
+void UCOVScreen::SetVisibility(ESlateVisibility visibility)
+{
+	if (bScreenStackManagerChangesVisibility)
+	{
+		bScreenStackManagerChangesVisibility = false;
+		Super::SetVisibility(visibility);
+
+		return;
+	}
+
+	bShouldScreenBeShownWhenPossible = ((visibility != ESlateVisibility::Hidden) && (visibility != ESlateVisibility::Collapsed));
+
+	Super::SetVisibility(visibility);
 }

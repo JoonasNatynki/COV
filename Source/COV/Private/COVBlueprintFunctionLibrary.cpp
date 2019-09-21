@@ -244,7 +244,7 @@ TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclass
 		if (bBlueprintsOnly)
 		{
 			// Skip non blueprint assets
-			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.GetAsset());
+			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(true));
 			if (!BlueprintObj)
 				continue;
 
@@ -258,7 +258,7 @@ TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclass
 		}
 		else
 		{
-			UObject* object = Asset.GetAsset();
+			UObject* object = Asset.FastGetAsset(true);
 			UClass* classObject = object->GetClass();
 
 			if(!IsValid(classObject) || !classObject->IsChildOf(type))

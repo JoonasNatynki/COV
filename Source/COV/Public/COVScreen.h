@@ -73,6 +73,13 @@ public:
 		bool GetAllowMultipleInstances() const { return bAllowMultipleInstances; };
 
 
+	void ReleaseInputControl();
+	void TakeOverInputControl();
+
+
 	//	Bind button to close the screen
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	bool bScreenStackManagerChangesVisibility = false;
+	bool bShouldScreenBeShownWhenPossible = true;	//	Basically tells you if something else wanted to hide this screen or not
+	virtual void SetVisibility(ESlateVisibility visibility) override;
 };

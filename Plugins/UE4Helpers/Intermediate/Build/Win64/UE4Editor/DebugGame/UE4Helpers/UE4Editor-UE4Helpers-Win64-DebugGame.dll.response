@@ -32,7 +32,7 @@
 /NODEFAULTLIB:"LIBCD"
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h.obj"
+"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\DebugGame\UE4Helpers\UE4Helpers.cpp.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\DebugGame\UE4Helpers\UE4Helpers.gen.cpp.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\DebugGame\UE4Helpers\UE4Helpers.init.gen.cpp.obj"
@@ -65,6 +65,7 @@
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Engine\UE4Editor-Engine.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Slate\UE4Editor-Slate.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\SlateCore\UE4Editor-SlateCore.lib"
+"C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\UnrealEd\UE4Editor-UnrealEd.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Core\UE4Editor-Core.lib"
 /OUT:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Binaries\Win64\UE4Editor-UE4Helpers-Win64-DebugGame.dll"
 /IMPLIB:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\DebugGame\UE4Helpers\UE4Editor-UE4Helpers-Win64-DebugGame.suppressed.lib"

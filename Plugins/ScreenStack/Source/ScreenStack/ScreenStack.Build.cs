@@ -25,8 +25,8 @@ public class ScreenStack : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				"Core"
+                // ... add other public dependencies that you statically link with here ...
 			}
 			);
 			

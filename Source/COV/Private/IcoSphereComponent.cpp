@@ -31,7 +31,7 @@ FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& vertice
 	lookup.GetKeys(keys);
 
 	bool bShouldMakeVertice = true;
-	int32 midVertexIndex;
+	int32 midVertexIndex = -1;
 
 	for (auto & keyt : keys)
 	{

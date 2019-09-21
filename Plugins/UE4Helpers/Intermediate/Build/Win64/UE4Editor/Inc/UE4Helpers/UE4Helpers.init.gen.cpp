@@ -11,18 +11,22 @@
 #endif
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeUE4Helpers_init() {}
+	UE4HELPERS_API UFunction* Z_Construct_UDelegateFunction_UE4Helpers_AsyncChildClassLoadSignature__DelegateSignature();
 	UPackage* Z_Construct_UPackage__Script_UE4Helpers()
 	{
 		static UPackage* ReturnPackage = nullptr;
 		if (!ReturnPackage)
 		{
+			static UObject* (*const SingletonFuncArray[])() = {
+				(UObject* (*)())Z_Construct_UDelegateFunction_UE4Helpers_AsyncChildClassLoadSignature__DelegateSignature,
+			};
 			static const UE4CodeGen_Private::FPackageParams PackageParams = {
 				"/Script/UE4Helpers",
-				nullptr,
-				0,
+				SingletonFuncArray,
+				ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x13728DE5,
-				0x0AD336DA,
+				0xF35AEE06,
+				0x523074C5,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);

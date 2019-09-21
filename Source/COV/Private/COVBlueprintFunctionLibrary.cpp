@@ -28,7 +28,7 @@ int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(const FString& InFileN
 {
 	int32 rowCount;
 	TArray<FString> rows;
-	FString filePath = FString(FPaths::GameDir()).Append(Folder).Append(InFileName);
+	FString filePath = FString(FPaths::ProjectDir()).Append(Folder).Append(InFileName);
 	bool foundSomething = FFileHelper::LoadANSITextFileToStrings(*filePath, NULL, rows);
 
 	if (foundSomething)
@@ -52,7 +52,7 @@ FString UCOVBlueprintFunctionLibrary::GetConfigFileLine(const FString& InFileNam
 FString UCOVBlueprintFunctionLibrary::GetFileLine(const FString& InFileName, const FString& Folder, const FString& ConfigName)
 {
 	TArray<FString> rows;
-	FString filePath = FString(FPaths::GameDir()).Append(Folder).Append(InFileName);
+	FString filePath = FString(FPaths::ProjectDir()).Append(Folder).Append(InFileName);
 	bool foundSomething = FFileHelper::LoadFileToStringArray(rows, *filePath);
 
 	if (foundSomething)

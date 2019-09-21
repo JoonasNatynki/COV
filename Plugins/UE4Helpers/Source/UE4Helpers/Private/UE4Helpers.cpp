@@ -1,8 +1,15 @@
 // Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
 
 #include "UE4Helpers.h"
-
-#define LOCTEXT_NAMESPACE "FUE4HelpersModule"
+#include "Engine.h"
+#include <Engine/EngineBaseTypes.h>
+#include <Engine/EngineTypes.h>
+#include <Camera/PlayerCameraManager.h>
+#include <MessageLog.h>
+#include <UObjectToken.h>
+#include <IAssetRegistry.h>
+#include <Engine/AssetManager.h>
+#include <KismetEditorUtilities.h>
 
 void FUE4HelpersModule::StartupModule()
 {
@@ -15,102 +22,69 @@ void FUE4HelpersModule::ShutdownModule()
 	// we call this function before unloading the module.
 }
 
-DEFINE_LOG_CATEGORY(LogUE4CodeHelpers)
-
-FHitResult UE4CodeHelpers::SimpleTraceByChannel(UObject* WorldContextObject, const FVector& startPos, const FVector& endPos, const ECollisionChannel& channel, const FName& TraceTag)
+UE4CodeHelpers::UE4CodeHelpers(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
-	FCollisionQueryParams RV_TraceParams = FCollisionQueryParams(false);
-	RV_TraceParams.bTraceComplex = true;
-	//RV_TraceParams.bTraceAsyncScene = true;
-	RV_TraceParams.bReturnPhysicalMaterial = false;
-	RV_TraceParams.AddIgnoredActor(Cast<AActor>(WorldContextObject));
-	RV_TraceParams.TraceTag = TraceTag;
 
-	//Re-initialize hit info
-	FHitResult RV_Hit(ForceInit);
-
-	//call GetWorld() from within an actor extending class
-	bool blockingHit = WorldContextObject->GetWorld()->LineTraceSingleByChannel
-	(
-		RV_Hit,
-		startPos,
-		endPos,
-		channel,
-		RV_TraceParams
-	);
-	return RV_Hit;
 }
 
-FHitResult UE4CodeHelpers::CastCrossHairLineTrace(AActor* character, float rayDistance)
+static TAutoConsoleVariable<int32> CVarShowBarabolicTrajectoryCalculationDebugLine(TEXT("UE4CodeHelpers.ShowBarabolicTrajectoryCalculationDebugs"),
+	0,
+	TEXT("Show barabolic trajectory calculation debugs."));
+
+#define LOCTEXT_NAMESPACE "UE4CodeHelpers"
+
+FString UE4CodeHelpers::GetNetModePrefix(const UObject* WorldContextObject)
 {
-	FHitResult RV_Hit(ForceInit);
-	APawn* pawn = Cast<APawn>(character);
-	AController* controller = pawn->GetController();
-	APlayerController* playerController = Cast<APlayerController>(controller);
-
-	if (!IsValid(playerController))
-		return RV_Hit;
-
-	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
-	//	Ray starting point
-	FVector playerViewWorldLocation = playerCameraManagerActor->GetActorLocation();
-	//	end point target direction
-	controller = Cast<APawn>(character)->GetController();
-
-	if (!IsValid(controller))
-		return RV_Hit;
-
-	FVector controllerForwardVector = Cast<AActor>(controller)->GetActorForwardVector();
-
-	RV_Hit = UE4CodeHelpers::SimpleTraceByChannel
-	(
-		character,
-		playerViewWorldLocation + (controllerForwardVector),
-		playerViewWorldLocation + (controllerForwardVector * rayDistance),
-		ECollisionChannel::ECC_Camera,
-		FName("AimTrace")
-	);
-
-	return RV_Hit;
+	FString netModePrefix = GetNetModeName(WorldContextObject);
+	return netModePrefix.IsEmpty() ? TEXT("") : FString::Printf(TEXT("%s: "), *netModePrefix);
 }
 
-int32 UE4CodeHelpers::GetNumberOfRowsInFile(const FString& FileName, const FString& folder)
+bool UE4CodeHelpers::IsOfType(const UObject* object, TSubclassOf<UObject> type)
 {
-	int32 rowCount;
-	TArray<FString> rows;
-	FString filePath = FString(FPaths::GameDir()).Append(folder).Append(FileName);
-	bool foundSomething = FFileHelper::LoadANSITextFileToStrings(*filePath, NULL, rows);
+	return object->IsA(type);
+}
 
-	if (foundSomething)
+TArray<FVector> UE4CodeHelpers::CalculateBarabolicTrajectory(const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float samplingResolutionCoefficient, const int32 numberOfTrajectoryPoints, const UObject* WorldContextObject)
+{
+	TArray<FVector> trajectoryPathPoints;
+
+	for (int x = 0; x < numberOfTrajectoryPoints; x++)
 	{
-		rowCount = rows.Num();
-		UE_ELOG(LogUE4CodeHelpers, Log, TEXT("Found a number of (%d) rows in the file (%s)."), rowCount, *FileName);
-		return rowCount;
+		float time = x * samplingResolutionCoefficient;
+		FVector tempPoint = startLocation + FVector(velocity * time);
+		FVector offset = (gravity * time * time);
+		tempPoint = tempPoint + offset;
+		trajectoryPathPoints.Add(tempPoint);
+
+		if (CVarShowBarabolicTrajectoryCalculationDebugLine.GetValueOnGameThread() == 1)
+		{
+			//	Draw the sample points
+			UKismetSystemLibrary::DrawDebugPoint(WorldContextObject->GetWorld(), tempPoint, 10.0f, FLinearColor::Red, 10.0f);
+
+			//	Draw lines between points
+			if ((x > 0))
+			{
+				UKismetSystemLibrary::DrawDebugLine(WorldContextObject->GetWorld(), tempPoint, trajectoryPathPoints[x - 1], FLinearColor::Green, 10.0f, 5.0f);
+			}
+		}
 	}
 
-	UE_ELOG(LogUE4CodeHelpers, Error, TEXT("Could not read the number of lines in a file (%s). No file found!"), *FileName);
-
-	return -1;
+	return trajectoryPathPoints;
 }
 
-FString UE4CodeHelpers::GetConfigFileLine(const FString& fileName, const FString& configName)
-{
-	return GetVariableValueFromFile(fileName, FString(TEXT("/Config/")), configName);
-}
-
-FString UE4CodeHelpers::GetVariableValueFromFile(const FString& fileName, const FString& folder, const FString& configName)
+FString UE4CodeHelpers::GetFileLine(const FString& InFileName, const FString& Folder, const FString& ConfigName)
 {
 	TArray<FString> rows;
-	FString filePath = FString(FPaths::GameDir()).Append(folder).Append(fileName);
+	FString filePath = FString(FPaths::ProjectDir()).Append(Folder).Append(InFileName);
 	bool foundSomething = FFileHelper::LoadFileToStringArray(rows, *filePath);
 
 	if (foundSomething)
 	{
-		UE_ELOG(LogUE4CodeHelpers, Log, TEXT("Found a file with the name (%s). Processing file to locate the value for variable (%s)."), *fileName, *configName);
+		UE_LOG(LogTemp, Log, TEXT("Found a file with the name (%s). Processing words to locate the setting for configuration (%s)."), *InFileName, *ConfigName);
 
 		for (auto & row : rows)
 		{
-			bool containsString = row.Contains(configName, ESearchCase::IgnoreCase, ESearchDir::FromStart);
+			bool containsString = row.Contains(ConfigName, ESearchCase::IgnoreCase, ESearchDir::FromStart);
 
 			if (containsString)
 			{
@@ -121,20 +95,45 @@ FString UE4CodeHelpers::GetVariableValueFromFile(const FString& fileName, const 
 				//	Remove spaces if any
 				valueFound.RemoveFromStart(TEXT(" "));
 
-				UE_ELOG(LogUE4CodeHelpers, Log, TEXT("Configuration (%s) found with the value of (%s)"), *configName, *valueFound);
+				UE_LOG(LogTemp, Log, TEXT("Configuration (%s) found with the value of (%s)"), *ConfigName, *valueFound);
 				return parsedLine[parsedArrayLength - 1];
 			}
 		}
-
-		UE_ELOG(LogUE4CodeHelpers, Warning, TEXT("No line (%s) was found´in the config file (%s)."), *configName, *fileName);
+		UE_LOG(LogTemp, Error, TEXT("No line (%s) was found´in the config file (%s)."), *ConfigName, *InFileName);
 
 		return FString(TEXT(""));
 	}
 	else
 	{
-		UE_ELOG(LogUE4CodeHelpers, Warning, TEXT("Did not find a file named (%s)."), *fileName);
+		UE_LOG(LogTemp, Error, TEXT("Did not find a file named (%s)."), *InFileName);
+		FMessageLog("PIE").Error(FText::Format(LOCTEXT("COVBlueprintFunctionLibrary", "Could not find a file named ({0})."), FText::FromString(InFileName)));
 		return FString(TEXT(""));
 	}
+}
+
+FString UE4CodeHelpers::GetConfigFileLine(const FString& InFileName, const FString& ConfigName)
+{
+	return GetFileLine(InFileName, FString(TEXT("/Config/")), ConfigName);
+}
+
+int32 UE4CodeHelpers::GetNumberOfRowsInFile(const FString& InFileName, const FString& Folder)
+{
+	int32 rowCount;
+	TArray<FString> rows;
+	FString filePath = FString(FPaths::ProjectDir()).Append(Folder).Append(InFileName);
+	bool foundSomething = FFileHelper::LoadANSITextFileToStrings(*filePath, NULL, rows);
+
+	if (foundSomething)
+	{
+		rowCount = rows.Num();
+		UE_LOG(LogTemp, Log, TEXT("Found a number of (%d) rows in the file (%s)."), rowCount, *InFileName);
+		return rowCount;
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Could not read the number of lines in a file (%s). No file found!"), *InFileName);
+	FMessageLog("PIE").Error(FText::Format(LOCTEXT("UE4CodeHelpers", "Could not read the number of lines in a file ({0}). No file found!."), FText::FromString(InFileName)));
+
+	return -1;
 }
 
 int32 UE4CodeHelpers::GetRepositoryCommitCount()
@@ -143,13 +142,245 @@ int32 UE4CodeHelpers::GetRepositoryCommitCount()
 
 	if (numberOfCommits == -1)
 	{
-		UE_ELOG(LogUE4CodeHelpers, Error, TEXT("Could not find the number of commits. No git repository folder found!"));
+		UE_LOG(LogTemp, Error, TEXT("No git repository folder found. Could not find the number of commits."));
+		FMessageLog("PIE").Error(FText::FromString("No git repository folder found. Could not find the number of commits."));
 		return -1;
 	}
 
 	return numberOfCommits;
 }
 
-#undef LOCTEXT_NAMESPACE
-	
+APlayerCameraManager* UE4CodeHelpers::TryGetPawnCameraManager(const APawn* pawn)
+{
+	if (!ensureMsgf(IsValid(pawn), TEXT("The pawn wasn't valid anymore.")))
+	{
+		FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. Pawn wasn't valid."));
+		return nullptr;
+	}
+	AController* temp = pawn->GetController();
+	APlayerController* playerController = Cast<APlayerController>(pawn->GetController());
+
+	if (!IsValid(playerController))
+	{
+		//FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. The pawn's controller was not valid."))->AddToken(FUObjectToken::Create(pawn));
+		return nullptr;
+	}
+
+
+	if (!ensureMsgf(IsValid(playerController->PlayerCameraManager), TEXT("The player camera manager was not valid.")))
+	{
+		FMessageLog("PIE").Error(FText::FromString("Could not get pawn camera manager. The camera manager was not valid for pawn."))->AddToken(FUObjectToken::Create(pawn));
+		return nullptr;
+	}
+
+	return playerController->PlayerCameraManager;
+}
+
+FString UE4CodeHelpers::GetNetModeName(const UObject* worldContextObject)
+{
+	FString result;
+
+	if (UWorld* world = GEngine->GetWorldFromContextObject(worldContextObject, EGetWorldErrorMode::ReturnNull))
+	{
+		// Minus one to match the engine.
+		int32 client_id = -1;
+
+#if WITH_EDITOR
+		if (world->WorldType == EWorldType::PIE)
+		{
+			client_id = GPlayInEditorID;
+
+			const TIndirectArray<FWorldContext>& contexts = GEngine->GetWorldContexts();
+
+			for (int32 i = 0, icount = contexts.Num(); i < icount; ++i)
+			{
+				if (contexts[i].World() == world)
+				{
+					client_id = contexts[i].PIEInstance;
+					break;
+				}
+			}
+		}
+#endif
+
+		switch (world->GetNetMode())
+		{
+		case NM_Client:
+			result = FString::Printf(TEXT("Client %d"), client_id - 1);
+			break;
+		case NM_DedicatedServer:
+		case NM_ListenServer:
+			result = TEXT("Server");
+			break;
+		case NM_Standalone:
+			break;
+		}
+	}
+
+	return result;
+}
+
+FRotator UE4CodeHelpers::OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal)
+{
+	const FQuat RootQuat = CurrentRotation.Quaternion();
+	const FVector UpVector = RootQuat.GetUpVector();
+	FVector RotationAxis = FVector::CrossProduct(UpVector, Normal);
+	RotationAxis.Normalize();
+
+	const float DotProduct = FVector::DotProduct(UpVector, Normal);
+	const float RotationAngle = FMath::Acos(DotProduct);
+
+	const FQuat Quat = FQuat(RotationAxis, RotationAngle);
+
+	const FQuat NewQuat = Quat * RootQuat;
+
+	return NewQuat.Rotator();
+}
+
+TArray<UClass*> UE4CodeHelpers::GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor, const FAsyncChildClassLoadSignature& delegate)
+{
+	// Load asset registry module
+	FAssetRegistryModule& AssetRegistryModule_ = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
+	IAssetRegistry& AssetRegistry = AssetRegistryModule_.Get();
+
+	//	Get streamable manager for the asynchronous loading phase
+	FStreamableManager& streamable = UAssetManager::GetStreamableManager();
+
+	// Scan specific path
+	TArray<FString> PathsToScan;
+	PathsToScan.Add(pathToSearchFor);
+	AssetRegistry.ScanPathsSynchronous(PathsToScan);
+
+	// Get all assets in the path, does not load them
+	TArray<FAssetData> assetsInThePath;
+	AssetRegistry.GetAssetsByPath(FName(*pathToSearchFor), assetsInThePath, /*bRecursive=*/true);
+
+	// Ensure all assets are loaded and store their class
+	TArray<UClass*> ClassesOfType;
+
+	for (const FAssetData& Asset : assetsInThePath)
+	{
+		//	If asset is not loaded, load it asynchronously
+		if (!Asset.IsAssetLoaded())
+		{
+			FSoftObjectPath softPathOfAsset = Asset.ToSoftObjectPath();
+
+			TSharedPtr<FStreamableHandle> handle;
+			handle = streamable.RequestAsyncLoad(softPathOfAsset, [delegate, Asset, type]()
+			{
+				// Skip non blueprint assets
+				const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
+				if (!BlueprintObj)
+					return;
+
+				// Check whether blueprint class has parent class we're looking for
+				UClass* BlueprintClass = BlueprintObj->GeneratedClass;
+				if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
+					return;
+
+				delegate.ExecuteIfBound(BlueprintClass);
+			}, 0, false, false);
+		}
+		else
+		{
+			// Skip non blueprint assets
+			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
+			if (!BlueprintObj)
+				continue;
+
+			// Check whether blueprint class has parent class we're looking for
+			UClass* BlueprintClass = BlueprintObj->GeneratedClass;
+			if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
+				continue;
+
+			// Store class
+			ClassesOfType.Add(BlueprintClass);
+		}
+
+		//	DEPRECATED CODE FOR ALL ASSETS NOT MADE IN BLUEPRINTS
+		/*
+		//	If asset is not loaded, load it asynchronously
+		if (!Asset.IsAssetLoaded())
+		{
+			FSoftObjectPath softPath = Asset.ToSoftObjectPath();
+			TSharedPtr<FStreamableHandle> handle;
+
+			handle = streamable.RequestAsyncLoad(softPath, [delegate, Asset, type]()
+			{
+				UObject* object = Asset.FastGetAsset(false);
+				UClass* classObject = object->GetClass();
+
+				if (!IsValid(classObject) || !classObject->IsChildOf(type))
+					return;
+
+				delegate.ExecuteIfBound(classObject);
+			}, 0, false, false);
+		}
+		else
+		{
+			UObject* object = Asset.FastGetAsset(false);
+			UClass* classObject = object->GetClass();
+
+			if (!IsValid(classObject) || !classObject->IsChildOf(type))
+				continue;
+
+			// Store class
+			ClassesOfType.Add(classObject);
+		}
+		*/
+	}
+
+	return ClassesOfType;
+}
+
+TArray<UClass*> UE4CodeHelpers::GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type)
+{
+	TArray<UClass*> SubClasses;
+
+	for (TObjectIterator< UClass > ClassIt; ClassIt; ++ClassIt)
+	{
+		UClass* Class = *ClassIt;
+
+		// Ignore deprecated
+		if (Class->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists))
+		{
+			continue;
+		}
+
+#if WITH_EDITOR
+		// Ignore skeleton classes (semi-compiled versions that only exist in-editor)
+		if (FKismetEditorUtilities::IsClassABlueprintSkeleton(Class))
+		{
+			continue;
+		}
+#endif
+
+		// Check this class is a subclass of Base
+		if (!Class->IsChildOf(type))
+		{
+			continue;
+		}
+
+		// Add this class
+		SubClasses.Add(Class);
+	}
+
+	return SubClasses;
+}
+
+bool UE4CodeHelpers::GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp)
+{
+	if (targetArray)
+	{
+		FScriptArrayHelper arrayHelper(arrayProp, targetArray);
+
+		if (arrayHelper.Num() == 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 IMPLEMENT_MODULE(FUE4HelpersModule, UE4Helpers)

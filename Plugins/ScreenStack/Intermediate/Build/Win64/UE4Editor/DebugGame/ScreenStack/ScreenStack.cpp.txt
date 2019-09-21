@@ -113,3 +113,4 @@ C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\In
 C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Inc\UMG\WidgetBlueprintGeneratedClass.generated.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Inc\UMG\UserWidget.generated.h
 C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack\ScreenStack.generated.h
+C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\Misc\UObjectToken.h

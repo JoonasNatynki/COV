@@ -11,7 +11,7 @@
  */
 
 class ACOVCharacter;
-class UCOVScreenManager;
+class UScreenStack;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVPlayerController, All, Log)
 
@@ -35,7 +35,7 @@ public:
 		float _YSensitivity = 1;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UCOVScreenManager* _screenManager;
+		UScreenStack* ScreenStack;
 
 	UFUNCTION(BlueprintPure)
 		//	Get the AXYZ_Character this controller should be controlling

@@ -9,9 +9,13 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
-				"Engine",
-				"UMG"
+				"Engine"
 			]
+		},
+		{
+			"Name": "ScreenStack",
+			"Type": "Runtime",
+			"LoadingPhase":  "PostEngineInit"
 		}
 	]
 }

@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVEchoProfiler.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include "Runtime/Engine/Classes/GameFramework/Actor.h"
 #include <Map.h>
 #include <Kismet/KismetSystemLibrary.h>
 #include <CollisionQueryParams.h>
+#include "UE4Helpers.h"
 
 static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.ShowEchoProfilerDebugSphere"),
 	0,
@@ -44,7 +44,7 @@ void UCOVEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 	for (auto & vertex : meshVertices)
 	{
 		endPos = ownerLocation + (vertex * EchoMeasureMaximumDistance);
-		FHitResult hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+		FHitResult hit = UE4CodeHelpers::SimpleTraceByChannel
 		(
 			ownerActor,
 			sourceLocation,

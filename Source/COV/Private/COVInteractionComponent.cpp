@@ -3,9 +3,9 @@
 #include "COVInteractionComponent.h"
 #include "COVFocusComponent.h"
 #include <GameFramework/Actor.h>
-#include "COVBlueprintFunctionLibrary.h"
 #include <MessageLog.h>
 #include <UObjectToken.h>
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVInteractionComponent)
 #define LOCTEXT_NAMESPACE "Interaction"

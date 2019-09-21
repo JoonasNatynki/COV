@@ -25,7 +25,7 @@
 /wd4838
 /we4668
 /I .
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack\Private"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\Private"
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
 /I Runtime
 /I Runtime\CoreUObject\Public
@@ -497,9 +497,9 @@
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I Runtime\ClothingSystemRuntimeInterface
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack\Public"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\Public"
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
 /I ThirdParty\PhysX3\PxShared\include\filebuf
@@ -529,9 +529,9 @@
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"
-/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h"
-/Yu"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h"
-/Fp"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h.pch"
+/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h"
+/Yu"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h"
+/Fp"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h.pch"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack\ScreenStack.gen.cpp"
 /FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStack\Definitions.ScreenStack.h"
 /Fo"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStack\ScreenStack.gen.cpp.obj"

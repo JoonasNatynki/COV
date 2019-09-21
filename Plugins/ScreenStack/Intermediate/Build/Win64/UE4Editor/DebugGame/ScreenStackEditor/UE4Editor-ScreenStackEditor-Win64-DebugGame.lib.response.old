@@ -1,0 +1,11 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-ScreenStackEditor-Win64-DebugGame.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStackEditor\Default.rc2.res"
+/OUT:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStackEditor\UE4Editor-ScreenStackEditor-Win64-DebugGame.lib"
+/INCLUDE:IMPLEMENT_MODULE_ScreenStackEditor

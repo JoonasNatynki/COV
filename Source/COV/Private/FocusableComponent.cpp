@@ -5,7 +5,7 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include <GameFramework/Actor.h>
 #include <UnrealNetwork.h>
-#include "COVBlueprintFunctionLibrary.h"
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(LogFocusable)
 

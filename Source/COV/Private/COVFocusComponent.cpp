@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVFocusComponent.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include <DrawDebugHelpers.h>
 #include <Kismet/KismetSystemLibrary.h>
 #include "FocusableComponent.h"
+#include "UE4Helpers.h"
 
 static TAutoConsoleVariable<int32> CVarShowFocusDebugs(TEXT("COV.DebugFocusPoint"),
 	0,
@@ -29,7 +29,7 @@ TWeakObjectPtr<AActor> UCOVFocusComponent::UpdateFocusedActor_Internal()
 {
 	TWeakObjectPtr<AActor> focusedActor;
 	//	Just simply get the actor pointed at
-	FHitResult RV_Hit = UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance);
+	FHitResult RV_Hit = UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance);
 	_focusWorldLocation = RV_Hit.ImpactPoint;
 
 	if (!_focusWorldLocation.IsZero())
@@ -79,9 +79,9 @@ void UCOVFocusComponent::UpdateFocusedActor()
 
 const void UCOVFocusComponent::DrawDebugs(float deltaTime) const
 {
-	DrawDebugSphere(GetWorld(), UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, 5.0f, 4, FColor::Magenta, false, -1.0f, 0, 2.0f);
+	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, 5.0f, 4, FColor::Magenta, false, -1.0f, 0, 2.0f);
 
-	DrawDebugSphere(GetWorld(), UCOVBlueprintFunctionLibrary::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, _focusingMaxArea, 16, FColor::Cyan, false, -1.0f, 0, 2.0f);
+	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, _focusingMaxArea, 16, FColor::Cyan, false, -1.0f, 0, 2.0f);
 }
 
 const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Internal(TArray<AActor*> overlappingActors) const

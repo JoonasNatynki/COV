@@ -4,7 +4,6 @@
 #include <UnrealNetwork.h>
 #include <GameFramework/Character.h>
 #include <GameFramework/CharacterMovementComponent.h>
-#include "COVBlueprintFunctionLibrary.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Camera/CameraComponent.h>
 #include <Components/SkeletalMeshComponent.h>
@@ -13,6 +12,7 @@
 #include <GameFramework/Pawn.h>
 #include <GameFramework/PlayerController.h>
 #include <CoreGlobals.h>
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
@@ -279,7 +279,7 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 	
 	float lineTraceLength = _aimingLocationTraceLength;
 
-	RV_Hit = UCOVBlueprintFunctionLibrary::SimpleTraceByChannel
+	RV_Hit = UE4CodeHelpers::SimpleTraceByChannel
 	(
 		GetOwner(),
 		playerViewWorldLocation + (controllerForwardVector),

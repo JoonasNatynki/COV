@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVInventory.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include <Components/ActorComponent.h>
 #include <Kismet/KismetSystemLibrary.h>
 #include <GameFramework/Actor.h>
@@ -11,6 +10,7 @@
 #include <Components/PrimitiveComponent.h>
 #include <MessageLog.h>
 #include <UObjectToken.h>
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVInventory)
 #define LOCTEXT_NAMESPACE "COVInventory"

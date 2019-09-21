@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVDoorComponent.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include <UnrealNetwork.h>
 #include <Kismet/KismetMathLibrary.h>
 #include <Components/SceneComponent.h>
 #include <Kismet/KismetSystemLibrary.h>
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVDoor)
 

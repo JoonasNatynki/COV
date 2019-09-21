@@ -2,7 +2,6 @@
 
 #include "COVCharacter.h"
 #include "COVPlayerController.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include "Engine.h"
 #include "UnrealNetwork.h"
 #include <Kismet/KismetMathLibrary.h>
@@ -11,6 +10,7 @@
 #include "COVFocusComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include "COVInventory.h"
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVCharacter)
 

@@ -3,10 +3,10 @@
 #include "COVInventoryItem.h"
 #include <UnrealNetwork.h>
 #include "COVInventory.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include <GameFramework/Actor.h>
 #include <Components/PrimitiveComponent.h>
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVInventoryItem)
 

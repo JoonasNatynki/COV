@@ -2,10 +2,10 @@
 
 #include "COVPlayerController.h"
 #include "COVCharacter.h"
-#include "COVBlueprintFunctionLibrary.h"
 #include <EngineUtils.h>
 #include <Kismet/KismetSystemLibrary.h>
 #include "ScreenStack.h"
+#include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVPlayerController)
 

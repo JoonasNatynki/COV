@@ -31,7 +31,7 @@ class COV_API UIcoSphereComponent : public UActorComponent
 		int32 IcoSphereSubdivisions = 2;
 	
 	//	The generated icosphere
-	TArray<FVector> _meshVertices;
+	TArray<FVector> MeshVertices;
 
 	FIndex GetVertexForEdge(Lookup& lookup, VertexList& vertices, FIndex first, FIndex second);
 	TriangleList SubdivideIcoSphereMesh(VertexList& vertices, const TriangleList& triangles);
@@ -63,7 +63,7 @@ public:
 	UIcoSphereComponent();
 
 	UFUNCTION(Category = "Icosphere", BlueprintCallable, BlueprintPure)
-		TArray<FVector>& GetMesh() { return _meshVertices; }
+		TArray<FVector>& GetMesh() { return MeshVertices; }
 
 	UFUNCTION(Category = "Icosphere", BlueprintCallable)
 		void GenerateIcoSphere(int32 SubDivisionCount);

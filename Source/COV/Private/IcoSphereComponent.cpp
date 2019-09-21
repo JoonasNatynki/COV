@@ -80,9 +80,9 @@ TriangleList UIcoSphereComponent::SubdivideIcoSphereMesh(VertexList& verticesIn,
 	return result;
 }
 
-void UIcoSphereComponent::GenerateIcoSphere(int32 IcoSphereSubdivisions)
+void UIcoSphereComponent::GenerateIcoSphere(int32 IcoSphereSubdivisionsIn)
 {
-	_meshVertices = GenerateIcoSphere_Internal(IcoSphereSubdivisions).Key;
+	MeshVertices = GenerateIcoSphere_Internal(IcoSphereSubdivisionsIn).Key;
 }
 
 IndexedMesh UIcoSphereComponent::GenerateIcoSphere_Internal(int32 subdivisions)

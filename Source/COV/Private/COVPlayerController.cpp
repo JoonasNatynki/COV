@@ -5,7 +5,6 @@
 #include "COVBlueprintFunctionLibrary.h"
 #include <EngineUtils.h>
 #include <Kismet/KismetSystemLibrary.h>
-#include "COVScreenManager.h"
 #include "ScreenStack.h"
 
 DEFINE_LOG_CATEGORY(COVPlayerController)

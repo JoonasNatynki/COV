@@ -34,7 +34,7 @@ class COV_API UIcoSphereComponent : public UActorComponent
 	TArray<FVector> _meshVertices;
 
 	FIndex GetVertexForEdge(Lookup& lookup, VertexList& vertices, FIndex first, FIndex second);
-	TriangleList SubdivideIcoSphereMesh(VertexList& vertices, TriangleList triangles);
+	TriangleList SubdivideIcoSphereMesh(VertexList& vertices, const TriangleList& triangles);
 	IndexedMesh GenerateIcoSphere_Internal(int32 subdivisions);
 	//	Initial values
 	float X = .525731112119133606f;

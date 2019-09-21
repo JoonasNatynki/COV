@@ -35,9 +35,9 @@ USTRUCT(Blueprintable) struct FInventoryAction
 	UPROPERTY(BlueprintReadOnly)
 		FGuid UniqueItemGUID;
 	UPROPERTY(BlueprintReadOnly)
-		UCOVInventory* inventory;
+		UCOVInventory* inventory = nullptr;
 	UPROPERTY(BlueprintReadOnly)
-		TEnumAsByte<EInventoryAction> action;
+		TEnumAsByte<EInventoryAction> action = EInventoryAction::Add;
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventoryChanged, const FInventoryAction, _action);

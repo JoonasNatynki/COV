@@ -7,10 +7,6 @@
 #include <DelegateCombinations.h>
 #include "COVFocusComponent.generated.h"
 
-static TAutoConsoleVariable<int32> CVarShowFocusDebugs(TEXT("COV.DebugFocusPoint"),
-	0,
-	TEXT("Show the point of focus in the world."));
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFocusedActorChanged, AActor*, NewFocusedActor);
 
 //	Component that casts either a ray from the camera or a more complex area focus mechanic to determine which object in the game world is being focused on.

@@ -6,6 +6,10 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include "FocusableComponent.h"
 
+static TAutoConsoleVariable<int32> CVarShowFocusDebugs(TEXT("COV.DebugFocusPoint"),
+	0,
+	TEXT("Show the point of focus in the world."));
+
 // Sets default values for this component's properties
 UCOVFocusComponent::UCOVFocusComponent()
 {

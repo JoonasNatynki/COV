@@ -18,8 +18,11 @@
 #include "Templates/SubclassOf.h"
 #include "UObject/UnrealType.h"
 #include "UObject/ScriptMacros.h"
+#include <DelegateCombinations.h>
 
 #include "COVBlueprintFunctionLibrary.generated.h"
+
+class FAssetRegistryModule;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVBlueprintFunctionLibrary, Log, All)
 
@@ -101,11 +104,17 @@ static FString EnumToString(const FString& enumName, const T value)
 	return *(pEnum ? pEnum->GetNameStringByIndex(static_cast<uint8>(value)) : "null");
 }
 
+
+DECLARE_DYNAMIC_DELEGATE_OneParam(FAllChildClassesOfTypeSignature, const UClass*, AsyncLoadedClassType);
+
 UCLASS()
 class COV_API UCOVBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
+
+	UCOVBlueprintFunctionLibrary(const FObjectInitializer& ObjectInitializer);
+
 	//	Simplified line trace function with a baked in Trace Parameter initialization
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		static FORCEINLINE FHitResult SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag);
@@ -151,7 +160,7 @@ public:
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME. Remember to start path with "/Game/". For example: "/Game/Weapons"
-		static TArray<UClass*> GetAllChildClassesOfType(TSubclassOf<AActor> type, bool bBlueprintsOnly, const FString& pathToSearchFor);
+		static TArray<UClass*> GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor, const FAllChildClassesOfTypeSignature& delegate);
 
 	UFUNCTION(Category = "COVFunctionLibrary", BlueprintCallable)
 		//	A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory.

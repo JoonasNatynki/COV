@@ -10,6 +10,7 @@
 #include <KismetEditorUtilities.h>
 #include <IAssetRegistry.h>
 #include <AssetRegistryModule.h>
+#include <Engine/AssetManager.h>
 
 DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 #define LOCTEXT_NAMESPACE "COVBlueprintFunctionLibrary"
@@ -17,6 +18,11 @@ DEFINE_LOG_CATEGORY(COVBlueprintFunctionLibrary)
 static TAutoConsoleVariable<int32> CVarShowBarabolicTrajectoryCalculationDebugs(TEXT("COV.ShowBarabolicTrajectoryCalculationDebugs"),
 	0,
 	TEXT("Show barabolic trajectory calculation debugs."));
+
+UCOVBlueprintFunctionLibrary::UCOVBlueprintFunctionLibrary(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+
+}
 
 int32 UCOVBlueprintFunctionLibrary::GetNumberOfRowsInFile(const FString& InFileName, const FString& Folder)
 {
@@ -222,11 +228,15 @@ FRotator UCOVBlueprintFunctionLibrary::OrientRotationToNormalVector(const FRotat
 	return NewQuat.Rotator();
 }
 
-TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclassOf<AActor> type, bool bBlueprintsOnly, const FString& pathToSearchFor)
+TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor, const FAllChildClassesOfTypeSignature& delegate)
 {
+	
 	// Load asset registry module
-	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
-	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
+	FAssetRegistryModule& AssetRegistryModule_ = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));	
+	IAssetRegistry& AssetRegistry = AssetRegistryModule_.Get();
+
+	//	Get streamable manager for the asynchronous loading phase
+	FStreamableManager& streamable = UAssetManager::GetStreamableManager();
 
 	// Scan specific path
 	TArray<FString> PathsToScan;
@@ -234,17 +244,39 @@ TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclass
 	AssetRegistry.ScanPathsSynchronous(PathsToScan);
 
 	// Get all assets in the path, does not load them
-	TArray<FAssetData> ScriptAssetList;
-	AssetRegistry.GetAssetsByPath(FName(*pathToSearchFor), ScriptAssetList, /*bRecursive=*/true);
+	TArray<FAssetData> assetsInThePath;
+	AssetRegistry.GetAssetsByPath(FName(*pathToSearchFor), assetsInThePath, /*bRecursive=*/true);
 
 	// Ensure all assets are loaded and store their class
-	TArray<UClass*> EventClasses;
-	for (const FAssetData& Asset : ScriptAssetList)
+	TArray<UClass*> ClassesOfType;
+
+	for (const FAssetData& Asset : assetsInThePath)
 	{
-		if (bBlueprintsOnly)
+		//	If asset is not loaded, load it asynchronously
+		if (!Asset.IsAssetLoaded())
+		{
+			FSoftObjectPath softPathOfAsset = Asset.ToSoftObjectPath();
+
+			TSharedPtr<FStreamableHandle> handle;
+			handle = streamable.RequestAsyncLoad(softPathOfAsset, [delegate, Asset, type]()
+			{
+				// Skip non blueprint assets
+				const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
+				if (!BlueprintObj)
+					return;
+
+				// Check whether blueprint class has parent class we're looking for
+				UClass* BlueprintClass = BlueprintObj->GeneratedClass;
+				if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
+					return;
+
+				delegate.ExecuteIfBound(BlueprintClass);
+			}, 0, false, false);
+		}
+		else
 		{
 			// Skip non blueprint assets
-			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(true));
+			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
 			if (!BlueprintObj)
 				continue;
 
@@ -254,22 +286,43 @@ TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllChildClassesOfType(TSubclass
 				continue;
 
 			// Store class
-			EventClasses.Add(BlueprintClass);
+			ClassesOfType.Add(BlueprintClass);
+		}
+
+		//	DEPRECATED CODE FOR ALL ASSETS NOT MADE IN BLUEPRINTS
+		/*
+		//	If asset is not loaded, load it asynchronously
+		if (!Asset.IsAssetLoaded())
+		{
+			FSoftObjectPath softPath = Asset.ToSoftObjectPath();
+			TSharedPtr<FStreamableHandle> handle;
+
+			handle = streamable.RequestAsyncLoad(softPath, [delegate, Asset, type]()
+			{
+				UObject* object = Asset.FastGetAsset(false);
+				UClass* classObject = object->GetClass();
+
+				if (!IsValid(classObject) || !classObject->IsChildOf(type))
+					return;
+
+				delegate.ExecuteIfBound(classObject);
+			}, 0, false, false);
 		}
 		else
 		{
-			UObject* object = Asset.FastGetAsset(true);
+			UObject* object = Asset.FastGetAsset(false);
 			UClass* classObject = object->GetClass();
 
-			if(!IsValid(classObject) || !classObject->IsChildOf(type))
+			if (!IsValid(classObject) || !classObject->IsChildOf(type))
 				continue;
 
 			// Store class
-			EventClasses.Add(classObject);
+			ClassesOfType.Add(classObject);
 		}
+		*/
 	}
 
-	return EventClasses;
+	return ClassesOfType;
 }
 
 TArray<UClass*> UCOVBlueprintFunctionLibrary::GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type)

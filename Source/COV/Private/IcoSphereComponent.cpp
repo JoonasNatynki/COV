@@ -18,7 +18,7 @@ void UIcoSphereComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& _vertices, FIndex first, FIndex second)
+FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& verticesIn, FIndex first, FIndex second)
 {
 	TPair<FIndex, FIndex> key(first, second);
 	if (first > second)
@@ -44,30 +44,30 @@ FIndex UIcoSphereComponent::GetVertexForEdge(Lookup& lookup, VertexList& _vertic
 
 	if (bShouldMakeVertice)
 	{
-		lookup.Add(key, _vertices.Num());
-		auto& edge0 = _vertices[first];
-		auto& edge1 = _vertices[second];
+		lookup.Add(key, verticesIn.Num());
+		auto& edge0 = verticesIn[first];
+		auto& edge1 = verticesIn[second];
 		auto point = (edge0 + edge1);
 		point.Normalize();
-		_vertices.Add(point);
+		verticesIn.Add(point);
 
-		return _vertices.Num() - 1;
+		return verticesIn.Num() - 1;
 	}
 
 	return midVertexIndex;
 }
 
-TriangleList UIcoSphereComponent::SubdivideIcoSphereMesh(VertexList& vertices, TriangleList triangles)
+TriangleList UIcoSphereComponent::SubdivideIcoSphereMesh(VertexList& verticesIn, const TriangleList& trianglesIn)
 {
 	Lookup lookup;
 	TriangleList result;
 
-	for (auto & each : triangles)
+	for (auto & each : trianglesIn)
 	{
 		TArray<FIndex> mid;
 		for (int edge = 0; edge < 3; ++edge)
 		{
-			mid.Add(GetVertexForEdge(lookup, vertices,
+			mid.Add(GetVertexForEdge(lookup, verticesIn,
 				each.vertex[edge], each.vertex[(edge + 1) % 3]));
 		}
 

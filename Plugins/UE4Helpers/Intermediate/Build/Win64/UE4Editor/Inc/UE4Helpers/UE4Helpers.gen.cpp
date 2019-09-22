@@ -26,7 +26,6 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
 	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 	UE4HELPERS_API UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType();
-	UE4HELPERS_API UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType();
 	UE4HELPERS_API UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine();
 	UE4HELPERS_API UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetFileLine();
 	UE4HELPERS_API UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetNetModePrefix();
@@ -89,7 +88,6 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 			{ "CalculateBarabolicTrajectory", &UE4CodeHelpers::execCalculateBarabolicTrajectory },
 			{ "CastCrossHairLineTrace", &UE4CodeHelpers::execCastCrossHairLineTrace },
 			{ "GetAllAssetsOfType", &UE4CodeHelpers::execGetAllAssetsOfType },
-			{ "GetAllLoadedChildClassesOfType", &UE4CodeHelpers::execGetAllLoadedChildClassesOfType },
 			{ "GetConfigFileLine", &UE4CodeHelpers::execGetConfigFileLine },
 			{ "GetFileLine", &UE4CodeHelpers::execGetFileLine },
 			{ "GetNetModePrefix", &UE4CodeHelpers::execGetNetModePrefix },
@@ -269,15 +267,10 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		{
 			TSubclassOf<AActor>  type;
 			FString pathToSearchFor;
-			FScriptDelegate delegate;
 			TArray<UClass*> ReturnValue;
 		};
 		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_ReturnValue_Inner;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_delegate_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FDelegatePropertyParams NewProp_delegate;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_pathToSearchFor_MetaData[];
 #endif
@@ -292,12 +285,6 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventGetAllAssetsOfType_Parms, ReturnValue), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UObject_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_delegate_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif
-	const UE4CodeGen_Private::FDelegatePropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_delegate = { "delegate", nullptr, (EPropertyFlags)0x0010000008000182, UE4CodeGen_Private::EPropertyGenFlags::Delegate, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventGetAllAssetsOfType_Parms, delegate), Z_Construct_UDelegateFunction_UE4Helpers_AsyncChildClassLoadSignature__DelegateSignature, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_delegate_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_delegate_MetaData)) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_pathToSearchFor_MetaData[] = {
 		{ "NativeConst", "" },
 	};
@@ -307,67 +294,24 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_ReturnValue,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_ReturnValue_Inner,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_delegate,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_pathToSearchFor,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::NewProp_type,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::Function_MetaDataParams[] = {
 		{ "Category", "UEHelperFunctions" },
-		{ "Comment", "//\x09Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME. Remember to start path with \"/Game/\". For example: \"/Game/Weapons\"\n" },
+		{ "Comment", "//\x09""A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory.\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
-		{ "ToolTip", "Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME. Remember to start path with \"/Game/\". For example: \"/Game/Weapons\"" },
+		{ "ToolTip", "A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory." },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetAllAssetsOfType", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetAllAssetsOfType_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetAllAssetsOfType", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetAllAssetsOfType_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType_Statics::FuncParams);
-		}
-		return ReturnFunction;
-	}
-	struct Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics
-	{
-		struct E4CodeHelpers_eventGetAllLoadedChildClassesOfType_Parms
-		{
-			TSubclassOf<AActor>  type;
-			TArray<UClass*> ReturnValue;
-		};
-		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
-		static const UE4CodeGen_Private::FClassPropertyParams NewProp_ReturnValue_Inner;
-		static const UE4CodeGen_Private::FClassPropertyParams NewProp_type;
-		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
-#endif
-		static const UE4CodeGen_Private::FFunctionParams FuncParams;
-	};
-	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventGetAllLoadedChildClassesOfType_Parms, ReturnValue), METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UObject_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_type = { "type", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventGetAllLoadedChildClassesOfType_Parms, type), Z_Construct_UClass_AActor_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_ReturnValue,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_ReturnValue_Inner,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::NewProp_type,
-	};
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::Function_MetaDataParams[] = {
-		{ "Category", "UEHelperFunctions" },
-		{ "Comment", "//\x09""A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory.\n" },
-		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
-		{ "ToolTip", "A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory." },
-	};
-#endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "GetAllLoadedChildClassesOfType", nullptr, nullptr, sizeof(E4CodeHelpers_eventGetAllLoadedChildClassesOfType_Parms), Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04022401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType()
-	{
-		static UFunction* ReturnFunction = nullptr;
-		if (!ReturnFunction)
-		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -964,8 +908,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	const FClassFunctionLinkInfo Z_Construct_UClass_UE4CodeHelpers_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory, "CalculateBarabolicTrajectory" }, // 1666412081
 		{ &Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace, "CastCrossHairLineTrace" }, // 3765076241
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType, "GetAllAssetsOfType" }, // 1974198023
-		{ &Z_Construct_UFunction_UE4CodeHelpers_GetAllLoadedChildClassesOfType, "GetAllLoadedChildClassesOfType" }, // 4186731044
+		{ &Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType, "GetAllAssetsOfType" }, // 4197750907
 		{ &Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine, "GetConfigFileLine" }, // 2358270040
 		{ &Z_Construct_UFunction_UE4CodeHelpers_GetFileLine, "GetFileLine" }, // 124932291
 		{ &Z_Construct_UFunction_UE4CodeHelpers_GetNetModePrefix, "GetNetModePrefix" }, // 2082024812
@@ -1013,7 +956,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UE4CodeHelpers, 428065371);
+	IMPLEMENT_CLASS(UE4CodeHelpers, 3754604371);
 	template<> UE4HELPERS_API UClass* StaticClass<UE4CodeHelpers>()
 	{
 		return UE4CodeHelpers::StaticClass();

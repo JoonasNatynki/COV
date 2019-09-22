@@ -7,10 +7,9 @@ public class ScreenStack : ModuleRules
 	public ScreenStack(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicDependencyModuleNames.AddRange(new string[] { "Core" });
 
-			
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "UMG" });
+
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -22,12 +21,6 @@ public class ScreenStack : ModuleRules
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
-
-        if (Target.Type == TargetRules.TargetType.Editor)
-        {
-            PublicDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
-            PrivateDependencyModuleNames.AddRange(new string[] {"UMG" });
-        }
 
         DynamicallyLoadedModuleNames.AddRange(
 			new string[]

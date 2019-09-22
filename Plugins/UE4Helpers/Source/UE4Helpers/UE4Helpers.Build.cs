@@ -38,10 +38,19 @@ public class UE4Helpers : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-                "UnrealEd"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
+
+        if (Target.Type == TargetRules.TargetType.Editor)
+        {
+            PrivateDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "UnrealEd"
+			}
+            );
+        }
 		
 		
 		DynamicallyLoadedModuleNames.AddRange(

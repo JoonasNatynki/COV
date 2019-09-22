@@ -269,45 +269,6 @@
 /I ..\Intermediate\Build\Win64\UE4\Inc\AnimationCore
 /I Runtime\AnimationCore\Public
 /I Runtime\AnimationCore
-/I ..\Intermediate\Build\Win64\UE4\Inc\UMG
-/I Runtime\UMG\Public
-/I Runtime\UMG
-/I Runtime\UMG\Public\Animation
-/I Runtime\UMG\Public\Binding
-/I Runtime\UMG\Public\Blueprint
-/I Runtime\UMG\Public\Components
-/I Runtime\UMG\Public\Editor
-/I Runtime\UMG\Public\Slate
-/I Runtime\Online
-/I Runtime\Online\HTTP\Public
-/I Runtime\Online\HTTP
-/I Runtime\Online\HTTP\Public\GenericPlatform
-/I Runtime\Online\HTTP\Public\Interfaces
-/I Runtime\Online\HTTP\Public\Windows
-/I ..\Intermediate\Build\Win64\UE4\Inc\MovieScene
-/I Runtime\MovieScene\Public
-/I Runtime\MovieScene
-/I Runtime\MovieScene\Public\Channels
-/I Runtime\MovieScene\Public\Compilation
-/I Runtime\MovieScene\Public\Evaluation
-/I Runtime\MovieScene\Public\Evaluation\Blending
-/I Runtime\MovieScene\Public\Generators
-/I Runtime\MovieScene\Public\Sections
-/I Runtime\MovieScene\Public\Tracks
-/I ..\Intermediate\Build\Win64\UE4\Inc\TimeManagement
-/I Runtime\TimeManagement\Public
-/I Runtime\TimeManagement
-/I Runtime\TimeManagement\Public\Widgets
-/I ..\Intermediate\Build\Win64\UE4\Inc\MovieSceneTracks
-/I Runtime\MovieSceneTracks\Public
-/I Runtime\MovieSceneTracks
-/I Runtime\MovieSceneTracks\Public\Channels
-/I Runtime\MovieSceneTracks\Public\Evaluation
-/I Runtime\MovieSceneTracks\Public\Sections
-/I Runtime\MovieSceneTracks\Public\Tracks
-/I ..\Intermediate\Build\Win64\UE4\Inc\PropertyPath
-/I Runtime\PropertyPath\Public
-/I Runtime\PropertyPath
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4\Inc\ScreenStack"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"

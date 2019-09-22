@@ -8,12 +8,12 @@ public class COV : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
-
-        if (Target.Type == TargetRules.TargetType.Editor)
-        {
-            PrivateDependencyModuleNames.AddRange(new string[] { "ScreenStack", "UE4Helpers" });
-        }
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ScreenStack", "UE4Helpers" });
+		
+        //if (Target.Type == TargetRules.TargetType.Editor)
+        //{
+        //   PrivateDependencyModuleNames.AddRange(new string[] { "ScreenStack", "UE4Helpers" });
+        //}
 
         // Uncomment if you are using Slate UI
         //PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

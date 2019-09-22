@@ -35,23 +35,13 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
 
 #define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execGetAllLoadedChildClassesOfType) \
-	{ \
-		P_GET_OBJECT(UClass,Z_Param_type); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllLoadedChildClassesOfType(Z_Param_type); \
-		P_NATIVE_END; \
-	} \
- \
 	DECLARE_FUNCTION(execGetAllAssetsOfType) \
 	{ \
 		P_GET_OBJECT(UClass,Z_Param_type); \
 		P_GET_PROPERTY(UStrProperty,Z_Param_pathToSearchFor); \
-		P_GET_PROPERTY_REF(UDelegateProperty,Z_Param_Out_delegate); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllAssetsOfType(Z_Param_type,Z_Param_pathToSearchFor,FAsyncChildClassLoadSignature(Z_Param_Out_delegate)); \
+		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllAssetsOfType(Z_Param_type,Z_Param_pathToSearchFor); \
 		P_NATIVE_END; \
 	} \
  \
@@ -172,23 +162,13 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
 
 #define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execGetAllLoadedChildClassesOfType) \
-	{ \
-		P_GET_OBJECT(UClass,Z_Param_type); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllLoadedChildClassesOfType(Z_Param_type); \
-		P_NATIVE_END; \
-	} \
- \
 	DECLARE_FUNCTION(execGetAllAssetsOfType) \
 	{ \
 		P_GET_OBJECT(UClass,Z_Param_type); \
 		P_GET_PROPERTY(UStrProperty,Z_Param_pathToSearchFor); \
-		P_GET_PROPERTY_REF(UDelegateProperty,Z_Param_Out_delegate); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllAssetsOfType(Z_Param_type,Z_Param_pathToSearchFor,FAsyncChildClassLoadSignature(Z_Param_Out_delegate)); \
+		*(TArray<UClass*>*)Z_Param__Result=UE4CodeHelpers::GetAllAssetsOfType(Z_Param_type,Z_Param_pathToSearchFor); \
 		P_NATIVE_END; \
 	} \
  \

@@ -9,7 +9,12 @@
 #include <UObjectToken.h>
 #include <IAssetRegistry.h>
 #include <Engine/AssetManager.h>
+
+#if WITH_EDITOR
+
 #include <KismetEditorUtilities.h>
+
+#endif
 
 void FUE4HelpersModule::StartupModule()
 {
@@ -237,135 +242,35 @@ FRotator UE4CodeHelpers::OrientRotationToNormalVector(const FRotator& CurrentRot
 	return NewQuat.Rotator();
 }
 
-TArray<UClass*> UE4CodeHelpers::GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor, const FAsyncChildClassLoadSignature& delegate)
+TArray<UClass*> UE4CodeHelpers::GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor)
 {
-	// Load asset registry module
-	FAssetRegistryModule& AssetRegistryModule_ = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(FName("AssetRegistry"));
-	IAssetRegistry& AssetRegistry = AssetRegistryModule_.Get();
+	UE_LOG(LogTemp, Log, TEXT("Getting all assets of type (%s) from path('%s')."), *GetNameSafe(type->GetClass()), *pathToSearchFor);
 
-	//	Get streamable manager for the asynchronous loading phase
-	FStreamableManager& streamable = UAssetManager::GetStreamableManager();
+	TArray<UClass*> Into;
 
-	// Scan specific path
-	TArray<FString> PathsToScan;
-	PathsToScan.Add(pathToSearchFor);
-	AssetRegistry.ScanPathsSynchronous(PathsToScan);
+	auto items = UObjectLibrary::CreateLibrary(type, true, GIsEditor);
+	items->AddToRoot();
+	items->LoadBlueprintsFromPath(pathToSearchFor);
 
-	// Get all assets in the path, does not load them
-	TArray<FAssetData> assetsInThePath;
-	AssetRegistry.GetAssetsByPath(FName(*pathToSearchFor), assetsInThePath, /*bRecursive=*/true);
+	TArray<UBlueprintGeneratedClass*> classes;
+	items->GetObjects<UBlueprintGeneratedClass>(classes);
 
-	// Ensure all assets are loaded and store their class
-	TArray<UClass*> ClassesOfType;
+	for (int32 i = 0; i < classes.Num(); ++i) {
+		UBlueprintGeneratedClass* item = classes[i];
+		FString name = item->GetName();
+		FString path = item->GetPathName();
 
-	for (const FAssetData& Asset : assetsInThePath)
-	{
-		//	If asset is not loaded, load it asynchronously
-		if (!Asset.IsAssetLoaded())
-		{
-			FSoftObjectPath softPathOfAsset = Asset.ToSoftObjectPath();
+		//skip editor debug stuff...
+		if (name.StartsWith(TEXT("SKEL_"))) continue;
 
-			TSharedPtr<FStreamableHandle> handle;
-			handle = streamable.RequestAsyncLoad(softPathOfAsset, [delegate, Asset, type]()
-			{
-				// Skip non blueprint assets
-				const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
-				if (!BlueprintObj)
-					return;
+		UE_LOG(LogTemp, Warning, TEXT("- found / `%s` / in `%s`"), *name, *path);
 
-				// Check whether blueprint class has parent class we're looking for
-				UClass* BlueprintClass = BlueprintObj->GeneratedClass;
-				if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
-					return;
+		//:note: you can use ContainsByPredicate instead for more nuance
+		Into.AddUnique(item);
 
-				delegate.ExecuteIfBound(BlueprintClass);
-			}, 0, false, false);
-		}
-		else
-		{
-			// Skip non blueprint assets
-			const UBlueprint* BlueprintObj = Cast<UBlueprint>(Asset.FastGetAsset(false));
-			if (!BlueprintObj)
-				continue;
+	} //for each generated class
 
-			// Check whether blueprint class has parent class we're looking for
-			UClass* BlueprintClass = BlueprintObj->GeneratedClass;
-			if (!BlueprintClass || !BlueprintClass->IsChildOf(type))
-				continue;
-
-			// Store class
-			ClassesOfType.Add(BlueprintClass);
-		}
-
-		//	DEPRECATED CODE FOR ALL ASSETS NOT MADE IN BLUEPRINTS
-		/*
-		//	If asset is not loaded, load it asynchronously
-		if (!Asset.IsAssetLoaded())
-		{
-			FSoftObjectPath softPath = Asset.ToSoftObjectPath();
-			TSharedPtr<FStreamableHandle> handle;
-
-			handle = streamable.RequestAsyncLoad(softPath, [delegate, Asset, type]()
-			{
-				UObject* object = Asset.FastGetAsset(false);
-				UClass* classObject = object->GetClass();
-
-				if (!IsValid(classObject) || !classObject->IsChildOf(type))
-					return;
-
-				delegate.ExecuteIfBound(classObject);
-			}, 0, false, false);
-		}
-		else
-		{
-			UObject* object = Asset.FastGetAsset(false);
-			UClass* classObject = object->GetClass();
-
-			if (!IsValid(classObject) || !classObject->IsChildOf(type))
-				continue;
-
-			// Store class
-			ClassesOfType.Add(classObject);
-		}
-		*/
-	}
-
-	return ClassesOfType;
-}
-
-TArray<UClass*> UE4CodeHelpers::GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type)
-{
-	TArray<UClass*> SubClasses;
-
-	for (TObjectIterator< UClass > ClassIt; ClassIt; ++ClassIt)
-	{
-		UClass* Class = *ClassIt;
-
-		// Ignore deprecated
-		if (Class->HasAnyClassFlags(CLASS_Deprecated | CLASS_NewerVersionExists))
-		{
-			continue;
-		}
-
-#if WITH_EDITOR
-		// Ignore skeleton classes (semi-compiled versions that only exist in-editor)
-		if (FKismetEditorUtilities::IsClassABlueprintSkeleton(Class))
-		{
-			continue;
-		}
-#endif
-
-		// Check this class is a subclass of Base
-		if (!Class->IsChildOf(type))
-		{
-			continue;
-		}
-
-		// Add this class
-		SubClasses.Add(Class);
-	}
-
-	return SubClasses;
+	return Into;
 }
 
 bool UE4CodeHelpers::GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp)

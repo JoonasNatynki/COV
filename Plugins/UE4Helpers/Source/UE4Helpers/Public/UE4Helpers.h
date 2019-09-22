@@ -148,6 +148,7 @@ public:
 	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
 		static TArray<FVector> CalculateBarabolicTrajectory(const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float samplingResolutionCoefficient, const int32 numberOfTrajectoryPoints, const UObject* WorldContextObject);
 
+
 	static FString GetNetModeName(const UObject* worldContextObject);
 
 
@@ -158,12 +159,9 @@ public:
 		static FRotator OrientRotationToNormalVector(const FRotator& CurrentRotation, const FVector& Normal);
 
 	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable)
-		//	Will search AND LOAD all assets under the path. WARNING! CAN BE VERY HEAVY WHEN DONE THE FIRST TIME. Remember to start path with "/Game/". For example: "/Game/Weapons"
-		static TArray<UClass*> GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor, const FAsyncChildClassLoadSignature& delegate);
-
-	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable)
 		//	A more lightweight version of the GetAllChildClassesOfType. This will only search the classes that are already loaded in memory.
-		static TArray<UClass*> GetAllLoadedChildClassesOfType(TSubclassOf<AActor> type);
+		static TArray<UClass*> GetAllAssetsOfType(TSubclassOf<AActor> type, const FString& pathToSearchFor);
+
 
 
 	static bool GenericIsArrayEmpty(void* targetArray, const UArrayProperty* arrayProp);

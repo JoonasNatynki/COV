@@ -3,19 +3,14 @@
 	"EngineAssociation": "4.23",
 	"Category": "",
 	"Description": "",
-	"Modules": [
-		{
-			"Name": "COV",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine"
-			]
-		},
-		{
-			"Name": "ScreenStack",
-			"Type": "Runtime",
-			"LoadingPhase":  "PostEngineInit"
-		}
-	]
+  "Modules": [
+    {
+      "Name": "COV",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+      "AdditionalDependencies": [
+        "Engine"
+      ]
+    }
+  ]
 }

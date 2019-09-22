@@ -29,6 +29,7 @@ void ACOVCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	//	Here we see if the character blueprint is configured properly with the proper components that it needs to function properly. If one component is missing, we ensure that it is added to the blueprint. The reason why we add the components in the blueprint instead of code is: it's much easier and designer friendly. No reason to hardcode it here since there is no performance gain in doing so and we can access the component just as well if it is initialized through the blueprint scripting language. Although there is nothing wrong in initializing the components in the constructor here in code either. It is just a personal preference. A good rule of thumb is that you write implementation and the functionality in C++ and you do the higher level logic and execution of those implementations in Blueprints. In other words: "Write the functions in C++, use the functions in Blueprints.".
+
 	//	Smooth animation component
 	//GET_AND_CACHE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
 	//	Interaction component
@@ -140,13 +141,10 @@ void ACOVCharacter::Input_Spacebar_Released_Implementation()
 
 void ACOVCharacter::Input_LeftShift_Pressed_Implementation()
 {
+	//	If using smooth motion component, use it to set the current movement speed. Otherwise just use the character movement component
 	if (SmoothMotionComponent)
 	{
 		SmoothMotionComponent->SetCurrentMovementSpeed(SmoothMotionComponent->GetDefaultRunningSpeed());
-	}
-	else
-	{
-		COV_LOG(LogTemp, Error, TEXT("VITTU!"));
 	}
 }
 
@@ -220,9 +218,9 @@ void ACOVCharacter::Input_MoveForward_Implementation(float amount)
 {
 	if (this != nullptr)
 	{
-		TWeakObjectPtr<UCameraComponent> cam = GetCharacterCamera();
+		auto cam = GetCharacterCamera();
 
-		if (!cam.IsValid())
+		if (!IsValid(cam))
 			return;
 
 		FVector dir = cam->GetForwardVector();
@@ -251,15 +249,15 @@ void ACOVCharacter::Input_MoveRight_Implementation(float amount)
 
 UCameraComponent* ACOVCharacter::GetCharacterCamera() const
 {
-	TWeakObjectPtr<UCameraComponent> cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
+	auto cam = Cast<UCameraComponent>(FindComponentByClass(UCameraComponent::StaticClass()));
 
 	//	Error handling
-	if (!cam.IsValid())
+	if (!IsValid(cam))
 	{
 		COV_LOG(COVCharacter, Error, TEXT("Could not find camera on COVCharacter or it is pending kill."));
 	}
 
-	return cam.Get();
+	return cam;
 }
 
 ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const

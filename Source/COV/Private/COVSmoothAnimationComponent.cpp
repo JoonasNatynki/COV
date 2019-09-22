@@ -16,7 +16,7 @@
 
 DEFINE_LOG_CATEGORY(COVSmoothAnimation)
 
-#define IS_LOCALLY_CONTROLLED Cast<ACharacter>(GetOwner())->IsLocallyControlled()
+#define IS_LOCALLY_CONTROLLED Cast<APawn>(GetOwner())->IsLocallyControlled()
 
 // Sets default values for this component's properties
 UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
@@ -103,7 +103,6 @@ void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(
 {
 	_currentMovementSpeed = currentWalkingSpeed;
 	OnRep_currentMaximumMovementSpeed();
-	//UE_LOG(XYZCharacter, Log, TEXT("%s: SERVER FUNCTION CALLED!."), PRINT_FUNCTION);
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(FVector loc)
@@ -118,10 +117,9 @@ void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implement
 
 void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
 {
-	//UE_LOG(XYZCharacter, Log, TEXT("%s: ONREP!."), PRINT_FUNCTION);
-	TWeakObjectPtr<UCharacterMovementComponent> charMove = Cast<ACharacter>(GetOwner())->GetCharacterMovement();
+	auto charMove = Cast<ACharacter>(GetOwner())->GetCharacterMovement();
 
-	if (charMove.IsValid())
+	if (IsValid(charMove))
 	{
 		Cast<ACharacter>(GetOwner())->GetCharacterMovement()->MaxWalkSpeed = _currentMovementSpeed;
 	}
@@ -231,8 +229,11 @@ void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
 
 void UCOVSmoothAnimationComponent::SetLocationOfSpecialInterest(FVector location)
 {
-	_specialInterestLocation = location;
-	Server_SetLocationOfSpecialInterest(location);
+	if (IS_LOCALLY_CONTROLLED)
+	{
+		_specialInterestLocation = location;
+		Server_SetLocationOfSpecialInterest(location);
+	}
 }
 
 FVector UCOVSmoothAnimationComponent::GetCameraViewLocation() const

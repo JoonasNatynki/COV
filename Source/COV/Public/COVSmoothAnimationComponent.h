@@ -68,7 +68,7 @@ private:
 
 	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed, Transient)
 		//	The default maximum speed the character will be running at without sprinting
-		float _currentMovementSpeed;
+		float _currentMovementSpeed = 0.0f;
 	UPROPERTY(Category = "Movement", EditDefaultsOnly, Config)
 		//	The default maximum speed the character will be running at without sprinting
 		float _defaultMaximumRunningSpeed = 600.0f;

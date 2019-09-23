@@ -70,6 +70,8 @@ public:
 	virtual void Input_LeftControl_Pressed_Implementation() override;
 	virtual void Input_LeftControl_Released_Implementation() override;
 
+
+
 	//	INPUTS	#############################################################################################
 	UFUNCTION(Category = "Movement", BLueprintCallable, BlueprintNativeEvent)
 		//	Move character forward/back
@@ -79,6 +81,8 @@ public:
 		void Input_MoveRight(float amount);
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
 		void Input_Interact_Server(AActor* interactedActor);
+	UFUNCTION(Category = "Interaction", BlueprintNativeEvent)
+		void Input_Interact();
 	//	#####################################################################################################
 
 public:

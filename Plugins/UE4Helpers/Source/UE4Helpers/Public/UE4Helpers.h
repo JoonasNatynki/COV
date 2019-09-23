@@ -115,8 +115,8 @@ public:
 		static FString GetNetModePrefix(const UObject* WorldContextObject);
 
 	//	Simplified line trace function with a baked in Trace Parameter initialization
-	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable)
-		static FHitResult SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag);
+	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+		static FHitResult SimpleTraceByChannel(const UObject* WorldContextObject, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag);
 
 	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable)
 		//	A simplified line tracer for getting a hit on your cross hairs

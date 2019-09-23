@@ -25,7 +25,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers_init() {}
 				SingletonFuncArray,
 				ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0x04F231A8,
+				0x53CE83EE,
 				0x00164C80,
 				METADATA_PARAMS(nullptr, 0)
 			};

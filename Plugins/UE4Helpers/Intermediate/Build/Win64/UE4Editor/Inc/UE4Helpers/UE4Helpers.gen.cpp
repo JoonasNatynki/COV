@@ -759,7 +759,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	{
 		struct E4CodeHelpers_eventSimpleTraceByChannel_Parms
 		{
-			const UObject* inObj;
+			const UObject* WorldContextObject;
 			FVector startPos;
 			FVector endPos;
 			TEnumAsByte<ECollisionChannel> channel;
@@ -781,9 +781,9 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #endif
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_startPos;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_inObj_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WorldContextObject_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_inObj;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_WorldContextObject;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -811,18 +811,18 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 #endif
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_startPos = { "startPos", nullptr, (EPropertyFlags)0x0010000008000182, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventSimpleTraceByChannel_Parms, startPos), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_startPos_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_startPos_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_inObj_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_WorldContextObject_MetaData[] = {
 		{ "NativeConst", "" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_inObj = { "inObj", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventSimpleTraceByChannel_Parms, inObj), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_inObj_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_inObj_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventSimpleTraceByChannel_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_WorldContextObject_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_WorldContextObject_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_ReturnValue,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_TraceTag,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_channel,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_endPos,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_startPos,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_inObj,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::NewProp_WorldContextObject,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams[] = {
@@ -830,6 +830,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		{ "Comment", "//\x09Simplified line trace function with a baked in Trace Parameter initialization\n" },
 		{ "ModuleRelativePath", "Public/UE4Helpers.h" },
 		{ "ToolTip", "Simplified line trace function with a baked in Trace Parameter initialization" },
+		{ "WorldContext", "WorldContextObject" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UE4CodeHelpers, nullptr, "SimpleTraceByChannel", nullptr, nullptr, sizeof(E4CodeHelpers_eventSimpleTraceByChannel_Parms), Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C22401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel_Statics::Function_MetaDataParams)) };
@@ -917,7 +918,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		{ &Z_Construct_UFunction_UE4CodeHelpers_IsArrayEmpty, "IsArrayEmpty" }, // 2699092360
 		{ &Z_Construct_UFunction_UE4CodeHelpers_IsOfType, "IsOfType" }, // 3928095784
 		{ &Z_Construct_UFunction_UE4CodeHelpers_OrientRotationToNormalVector, "OrientRotationToNormalVector" }, // 694675484
-		{ &Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel, "SimpleTraceByChannel" }, // 1751647153
+		{ &Z_Construct_UFunction_UE4CodeHelpers_SimpleTraceByChannel, "SimpleTraceByChannel" }, // 3025328414
 		{ &Z_Construct_UFunction_UE4CodeHelpers_TryGetPawnCameraManager, "TryGetPawnCameraManager" }, // 3495217226
 	};
 #if WITH_METADATA
@@ -956,7 +957,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UE4CodeHelpers, 3754604371);
+	IMPLEMENT_CLASS(UE4CodeHelpers, 3637981722);
 	template<> UE4HELPERS_API UClass* StaticClass<UE4CodeHelpers>()
 	{
 		return UE4CodeHelpers::StaticClass();

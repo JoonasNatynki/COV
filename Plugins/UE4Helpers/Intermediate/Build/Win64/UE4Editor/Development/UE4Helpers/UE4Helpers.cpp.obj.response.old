@@ -28,7 +28,7 @@
 /wd4838
 /we4668
 /I .
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source\UE4Helpers\Private"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source\UE4Helpers\Private"
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
 /I Runtime
 /I Runtime\CoreUObject\Public
@@ -499,10 +499,10 @@
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ClothingSystemRuntimeInterface
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I Runtime\ClothingSystemRuntimeInterface
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Inc\UE4Helpers"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source\UE4Helpers\Public"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source\UE4Helpers"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Inc\UE4Helpers"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source\UE4Helpers\Public"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source\UE4Helpers"
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
 /I ThirdParty\PhysX3\PxShared\include\filebuf
@@ -526,18 +526,18 @@
 /I ThirdParty\PhysX3\APEX_1.4\shared\general\RenderDebug\public
 /I ThirdParty\PhysX3\APEX_1.4\shared\general\PairFilter\include
 /I ThirdParty\PhysX3\APEX_1.4\shared\internal\include
-/I "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.16.27023\INCLUDE"
+/I "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Tools\MSVC\14.16.27023\INCLUDE"
 /I "C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"
-/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
-/Yu"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
-/Fp"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h.pch"
-"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source\UE4Helpers\Private\UE4Helpers.cpp"
-/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\Definitions.UE4Helpers.h"
-/Fo"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.cpp.obj"
+/FI"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
+/Yu"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
+/Fp"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h.pch"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Source\UE4Helpers\Private\UE4Helpers.cpp"
+/FI"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\Definitions.UE4Helpers.h"
+/Fo"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4Editor\Development\UE4Helpers\UE4Helpers.cpp.obj"
 /TP
 /GR-
 /W4

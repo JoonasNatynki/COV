@@ -46,7 +46,7 @@ void UCOVEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
 		endPos = ownerLocation + (vertex * EchoMeasureMaximumDistance);
 		FHitResult hit = UE4CodeHelpers::SimpleTraceByChannel
 		(
-			ownerActor,
+			GetOwner(),
 			sourceLocation,
 			endPos,
 			collisionChannel,

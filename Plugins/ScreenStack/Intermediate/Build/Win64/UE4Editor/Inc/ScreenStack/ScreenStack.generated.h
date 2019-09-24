@@ -15,7 +15,7 @@ class APlayerController;
 #endif
 #define SCREENSTACK_ScreenStack_generated_h
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_102_DELEGATE \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_102_DELEGATE \
 struct _Script_ScreenStack_eventOnScreenPushedTostack_Parms \
 { \
 	UScreen* PushedScreen; \
@@ -28,7 +28,7 @@ static inline void FOnScreenPushedTostack_DelegateWrapper(const FMulticastScript
 }
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_101_DELEGATE \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_101_DELEGATE \
 struct _Script_ScreenStack_eventOnScreenRemovedFromStack_Parms \
 { \
 	UScreen* RemovedScreen; \
@@ -41,7 +41,7 @@ static inline void FOnScreenRemovedFromStack_DelegateWrapper(const FMulticastScr
 }
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execGetAllowMultipleInstances) \
 	{ \
@@ -100,7 +100,7 @@ static inline void FOnScreenRemovedFromStack_DelegateWrapper(const FMulticastScr
 	}
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS_NO_PURE_DECLS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execGetAllowMultipleInstances) \
 	{ \
@@ -159,7 +159,7 @@ static inline void FOnScreenRemovedFromStack_DelegateWrapper(const FMulticastScr
 	}
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS_NO_PURE_DECLS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUScreen(); \
 	friend struct Z_Construct_UClass_UScreen_Statics; \
@@ -168,7 +168,7 @@ public: \
 	DECLARE_SERIALIZER(UScreen)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS \
 private: \
 	static void StaticRegisterNativesUScreen(); \
 	friend struct Z_Construct_UClass_UScreen_Statics; \
@@ -177,7 +177,7 @@ public: \
 	DECLARE_SERIALIZER(UScreen)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_STANDARD_CONSTRUCTORS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UScreen(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UScreen) \
@@ -190,7 +190,7 @@ private: \
 public:
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_ENHANCED_CONSTRUCTORS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UScreen(UScreen&&); \
@@ -201,33 +201,33 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UScreen); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UScreen)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_29_PROLOG
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_GENERATED_BODY_LEGACY \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_29_PROLOG
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_STANDARD_CONSTRUCTORS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_GENERATED_BODY \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS_NO_PURE_DECLS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS_NO_PURE_DECLS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_ENHANCED_CONSTRUCTORS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_PRIVATE_PROPERTY_OFFSET \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_RPC_WRAPPERS_NO_PURE_DECLS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_INCLASS_NO_PURE_DECLS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_32_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
 template<> SCREENSTACK_API UClass* StaticClass<class UScreen>();
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execHasScreen) \
 	{ \
@@ -299,7 +299,7 @@ template<> SCREENSTACK_API UClass* StaticClass<class UScreen>();
 	}
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS_NO_PURE_DECLS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execHasScreen) \
 	{ \
@@ -371,7 +371,7 @@ template<> SCREENSTACK_API UClass* StaticClass<class UScreen>();
 	}
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS_NO_PURE_DECLS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUScreenStack(); \
 	friend struct Z_Construct_UClass_UScreenStack_Statics; \
@@ -380,7 +380,7 @@ public: \
 	DECLARE_SERIALIZER(UScreenStack)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS \
 private: \
 	static void StaticRegisterNativesUScreenStack(); \
 	friend struct Z_Construct_UClass_UScreenStack_Statics; \
@@ -389,7 +389,7 @@ public: \
 	DECLARE_SERIALIZER(UScreenStack)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_STANDARD_CONSTRUCTORS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UScreenStack(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UScreenStack) \
@@ -402,7 +402,7 @@ private: \
 public:
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_ENHANCED_CONSTRUCTORS \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UScreenStack(UScreenStack&&); \
@@ -413,26 +413,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UScreenStack); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UScreenStack)
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_104_PROLOG
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_GENERATED_BODY_LEGACY \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_104_PROLOG
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_STANDARD_CONSTRUCTORS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_GENERATED_BODY \
+#define COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS_NO_PURE_DECLS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS_NO_PURE_DECLS \
-	COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_ENHANCED_CONSTRUCTORS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_PRIVATE_PROPERTY_OFFSET \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_RPC_WRAPPERS_NO_PURE_DECLS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_INCLASS_NO_PURE_DECLS \
+	COV_Plugins_ScreenStack_Source_Public_ScreenStack_h_107_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -440,7 +440,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> SCREENSTACK_API UClass* StaticClass<class UScreenStack>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID COV_4_23_Plugins_ScreenStack_Source_Public_ScreenStack_h
+#define CURRENT_FILE_ID COV_Plugins_ScreenStack_Source_Public_ScreenStack_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

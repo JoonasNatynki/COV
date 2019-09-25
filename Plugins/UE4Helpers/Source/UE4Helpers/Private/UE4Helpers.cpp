@@ -68,9 +68,8 @@ TArray<FVector> UE4CodeHelpers::CalculateBarabolicTrajectory(const UObject* Worl
 		else
 		{
 			time = (timeToSimulate / numberOfTrajectoryPoints) * (x);
-			tempPoint = startLocation + (velocity * time);
 			offset = (gravity * (time * time));
-			tempPoint = tempPoint + offset;
+			tempPoint = (startLocation + (velocity * time)) + offset;
 			trajectoryPathPoints.Add(tempPoint);
 		}
 		if (CVarShowBarabolicTrajectoryCalculationDebugLine.GetValueOnGameThread() == 1)

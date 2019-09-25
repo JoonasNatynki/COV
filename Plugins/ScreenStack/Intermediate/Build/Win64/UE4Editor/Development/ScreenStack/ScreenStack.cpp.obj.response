@@ -28,7 +28,7 @@
 /wd4838
 /we4668
 /I .
-/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\Private"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\ScreenStack\Private"
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
 /I Runtime
 /I Runtime\CoreUObject\Public
@@ -500,9 +500,9 @@
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I Runtime\ClothingSystemRuntimeInterface
 /I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack"
-/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack"
 /I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source"
-/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\Public"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\ScreenStack\Public"
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\ScreenStack"
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
 /I ThirdParty\PhysX3\PxShared\include\filebuf
@@ -535,7 +535,7 @@
 /FI"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
 /Yu"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h"
 /Fp"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\Engine\SharedPCH.Engine.h.pch"
-"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\Private\ScreenStack.cpp"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Source\ScreenStack\Private\ScreenStack.cpp"
 /FI"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Development\ScreenStack\Definitions.ScreenStack.h"
 /Fo"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Development\ScreenStack\ScreenStack.cpp.obj"
 /TP

@@ -103,14 +103,19 @@ APlayerController* UScreenStack::GetOwnerPlayerController() const
 	return Cast<APlayerController>(controller);
 }
 
-bool UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
+UObject* UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
 {
-	UScreen* foundScreen = FindScreenByType(widgetClass);
+	if (!ensure(widgetClass))
+	{
+		return nullptr;
+	}
+
+	TArray<UScreen*> foundScreens = FindScreensOfType(widgetClass);
 
 	bool bCanHaveMultipleInstances = Cast<UScreen>(widgetClass->GetDefaultObject())->GetAllowMultipleInstances();
 
 	//	If multiple screen can exist at the same time, allow creation
-	if ((bCanHaveMultipleInstances) || (!bCanHaveMultipleInstances && !foundScreen))
+	if ((foundScreens.Num() == 0) || ((foundScreens.Num() == 0) && bCanHaveMultipleInstances))
 	{
 		UScreen* screen = CreateWidget<UScreen>(GetOwnerPlayerController(), widgetClass);
 		FString widgetClassName = GetNameSafe(screen);
@@ -120,7 +125,7 @@ bool UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
 			UE_LOG(ScreenStack, Warning, TEXT("Screen (%s) could not be added to stack. Creation failed."), *widgetClassName);
 			FMessageLog("COVScreenManager").Error(FText::Format(NSLOCTEXT("ScreenManager", "ScreenManager", "Screen ({0}) could not be added to stack. Creation failed."), FText::FromString(widgetClassName)));
 
-			return false;
+			return screen;
 		}
 
 		screenStack.Add(screen);
@@ -130,14 +135,21 @@ bool UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
 	}
 	else
 	{
-		UE_LOG(ScreenStack, Log, TEXT("No new screens of type (%s) allowed. Pushing the screen to the top instead."), *GetNameSafe(widgetClass->StaticClass()));
-		screenStack.Remove(foundScreen);
-		screenStack.Add(foundScreen);
+		UE_LOG(ScreenStack, Log, TEXT("No new screens of type (%s) allowed."), *GetNameSafe(widgetClass->StaticClass()));
+
+		//	There should only be one screen of this type. Push it to the top
+		if (ensureMsgf(foundScreens.Num() == 1, TEXT("More than one screen of this type exists in the stack.")))
+		{
+			UE_LOG(ScreenStack, Log, TEXT("Pushing the existing screen of type (%s) to the top."), *GetNameSafe(widgetClass->StaticClass()));
+
+			screenStack.Remove(foundScreens[0]);
+			screenStack.Add(foundScreens[0]);
+		}
 	}
 
 	UpdateScreenStackVisibilities_Internal();
 
-	return true;
+	return nullptr;
 }
 
 bool UScreenStack::PopTopScreen()
@@ -201,9 +213,9 @@ bool UScreenStack::PopScreen(UScreen* screen)
 	return false;
 }
 
-UScreen* UScreenStack::FindScreenByType(TSubclassOf<UScreen> screenType)
+TArray<UScreen*> UScreenStack::FindScreensOfType(TSubclassOf<UScreen> screenType)
 {
-	UScreen* foundScreen = nullptr;
+	TArray<UScreen*> foundScreens;
 
 	if (screenStack.Num() > 0)
 	{
@@ -211,17 +223,17 @@ UScreen* UScreenStack::FindScreenByType(TSubclassOf<UScreen> screenType)
 		{
 			if (screen->IsA(screenType))
 			{
-				foundScreen = screen;
+				foundScreens.Add(screen);
 			}
 		}
 	}
 
-	return foundScreen;
+	return foundScreens;
 }
 
-UScreen* UScreenStack::GetScreenByType(TSubclassOf<UScreen> screenType)
+TArray<UScreen*> UScreenStack::GetScreensOfType(TSubclassOf<UScreen> screenType)
 {
-	return FindScreenByType(screenType);
+	return FindScreensOfType(screenType);
 }
 
 bool UScreenStack::HasScreen(UScreen* screen)

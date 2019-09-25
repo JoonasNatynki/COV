@@ -6,6 +6,8 @@
 #include "Modules/ModuleManager.h"
 #include <Engine/EngineTypes.h>
 #include <GameFramework/PlayerController.h>
+#include <MessageLog.h>
+#include <UObjectToken.h>
 #include "UE4Helpers.generated.h"
 
 class FUE4HelpersModule : public IModuleInterface
@@ -49,7 +51,8 @@ for (auto & comp : comps)\
 		break;\
 	}\
 }\
-ensureMsgf(tempComp != nullptr, TEXT("##_componentclass Component was not found! Please add it as a component to this actor or the actor won't work properly!"));\
+UE_LOG(LogTemp, Warning, TEXT("%s Component was not found."), *FString(#_componentclass));\
+FMessageLog("Blueprint").Warning(FText::Format(NSLOCTEXT("UE4CodeHelpers", "Help", "No {0} found in "), FText::FromString(FString(#_componentclass))))->AddToken(FUObjectToken::Create(this));\
 }\
 
 #define GET_AND_STORE_COMPONENT_FROM_COMPONENT(_componentclass, _containervariablename) {\
@@ -146,7 +149,7 @@ public:
 		static bool IsOfType(const UObject* object, TSubclassOf<UObject> type);
 
 	UFUNCTION(Category = "UEHelperFunctions", BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-		static TArray<FVector> CalculateBarabolicTrajectory(const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float samplingResolutionCoefficient, const int32 numberOfTrajectoryPoints, const UObject* WorldContextObject);
+		static TArray<FVector> CalculateBarabolicTrajectory(const UObject* WorldContextObject, const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float timeToSimulate, const int32 numberOfTrajectoryPoints);
 
 
 	static FString GetNetModeName(const UObject* worldContextObject);

@@ -1,5 +1,7 @@
 C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4\DebugGame\UE4Helpers\Definitions.UE4Helpers.h
 C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Source\UE4Helpers\Public\UE4Helpers.h
+C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\Core\Public\Logging\MessageLog.h
+C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\Misc\UObjectToken.h
 C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4\Inc\UE4Helpers\UE4Helpers.generated.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\Engine\Public\Engine.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\Core\Public\Misc/MonolithicHeaderBoilerplate.h
@@ -667,8 +669,6 @@ c:\program files\epic games\ue_4.23\engine\source\runtime\slate\public\Widgets/I
 c:\program files\epic games\ue_4.23\engine\source\runtime\slate\public\Widgets/Input/SSlider.h
 c:\program files\epic games\ue_4.23\engine\source\runtime\slate\public\Widgets/Input/SComboBox.h
 c:\program files\epic games\ue_4.23\engine\source\runtime\slate\public\Framework/Docking/LayoutService.h
-C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\Core\Public\Logging\MessageLog.h
-C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\Misc\UObjectToken.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\AssetRegistry\Public\IAssetRegistry.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\Misc/AssetRegistryInterface.h
 c:\program files\epic games\ue_4.23\engine\source\runtime\assetregistry\public\ARFilter.h

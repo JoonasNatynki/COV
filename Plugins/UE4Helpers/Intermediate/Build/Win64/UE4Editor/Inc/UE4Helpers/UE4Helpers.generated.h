@@ -20,7 +20,7 @@ struct FHitResult;
 #endif
 #define UE4HELPERS_UE4Helpers_generated_h
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_102_DELEGATE \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_105_DELEGATE \
 struct _Script_UE4Helpers_eventAsyncChildClassLoadSignature_Parms \
 { \
 	const UClass* AsyncLoadedClassType; \
@@ -33,7 +33,7 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
 }
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execGetAllAssetsOfType) \
 	{ \
@@ -57,15 +57,15 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
  \
 	DECLARE_FUNCTION(execCalculateBarabolicTrajectory) \
 	{ \
+		P_GET_OBJECT(UObject,Z_Param_WorldContextObject); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_startLocation); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_velocity); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_gravity); \
-		P_GET_PROPERTY(UFloatProperty,Z_Param_samplingResolutionCoefficient); \
+		P_GET_PROPERTY(UFloatProperty,Z_Param_timeToSimulate); \
 		P_GET_PROPERTY(UIntProperty,Z_Param_numberOfTrajectoryPoints); \
-		P_GET_OBJECT(UObject,Z_Param_WorldContextObject); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<FVector>*)Z_Param__Result=UE4CodeHelpers::CalculateBarabolicTrajectory(Z_Param_Out_startLocation,Z_Param_Out_velocity,Z_Param_Out_gravity,Z_Param_samplingResolutionCoefficient,Z_Param_numberOfTrajectoryPoints,Z_Param_WorldContextObject); \
+		*(TArray<FVector>*)Z_Param__Result=UE4CodeHelpers::CalculateBarabolicTrajectory(Z_Param_WorldContextObject,Z_Param_Out_startLocation,Z_Param_Out_velocity,Z_Param_Out_gravity,Z_Param_timeToSimulate,Z_Param_numberOfTrajectoryPoints); \
 		P_NATIVE_END; \
 	} \
  \
@@ -160,7 +160,7 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
 	}
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execGetAllAssetsOfType) \
 	{ \
@@ -184,15 +184,15 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
  \
 	DECLARE_FUNCTION(execCalculateBarabolicTrajectory) \
 	{ \
+		P_GET_OBJECT(UObject,Z_Param_WorldContextObject); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_startLocation); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_velocity); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_gravity); \
-		P_GET_PROPERTY(UFloatProperty,Z_Param_samplingResolutionCoefficient); \
+		P_GET_PROPERTY(UFloatProperty,Z_Param_timeToSimulate); \
 		P_GET_PROPERTY(UIntProperty,Z_Param_numberOfTrajectoryPoints); \
-		P_GET_OBJECT(UObject,Z_Param_WorldContextObject); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<FVector>*)Z_Param__Result=UE4CodeHelpers::CalculateBarabolicTrajectory(Z_Param_Out_startLocation,Z_Param_Out_velocity,Z_Param_Out_gravity,Z_Param_samplingResolutionCoefficient,Z_Param_numberOfTrajectoryPoints,Z_Param_WorldContextObject); \
+		*(TArray<FVector>*)Z_Param__Result=UE4CodeHelpers::CalculateBarabolicTrajectory(Z_Param_WorldContextObject,Z_Param_Out_startLocation,Z_Param_Out_velocity,Z_Param_Out_gravity,Z_Param_timeToSimulate,Z_Param_numberOfTrajectoryPoints); \
 		P_NATIVE_END; \
 	} \
  \
@@ -287,7 +287,7 @@ static inline void FAsyncChildClassLoadSignature_DelegateWrapper(const FScriptDe
 	}
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_INCLASS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUE4CodeHelpers(); \
 	friend struct Z_Construct_UClass_UE4CodeHelpers_Statics; \
@@ -296,7 +296,7 @@ public: \
 	DECLARE_SERIALIZER(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_INCLASS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_INCLASS \
 private: \
 	static void StaticRegisterNativesUE4CodeHelpers(); \
 	friend struct Z_Construct_UClass_UE4CodeHelpers_Statics; \
@@ -305,7 +305,7 @@ public: \
 	DECLARE_SERIALIZER(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_STANDARD_CONSTRUCTORS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UE4CodeHelpers(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UE4CodeHelpers) \
@@ -318,7 +318,7 @@ private: \
 public:
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_ENHANCED_CONSTRUCTORS \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UE4CodeHelpers(UE4CodeHelpers&&); \
@@ -329,26 +329,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UE4CodeHelpers); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UE4CodeHelpers)
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_PRIVATE_PROPERTY_OFFSET
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_105_PROLOG
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_GENERATED_BODY_LEGACY \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_PRIVATE_PROPERTY_OFFSET
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_PROLOG
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_INCLASS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_STANDARD_CONSTRUCTORS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_RPC_WRAPPERS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_INCLASS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_GENERATED_BODY \
+#define COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_RPC_WRAPPERS_NO_PURE_DECLS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_INCLASS_NO_PURE_DECLS \
-	COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_108_ENHANCED_CONSTRUCTORS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_RPC_WRAPPERS_NO_PURE_DECLS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_INCLASS_NO_PURE_DECLS \
+	COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h_111_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -356,7 +356,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> UE4HELPERS_API UClass* StaticClass<class UE4CodeHelpers>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID COV_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h
+#define CURRENT_FILE_ID COV_4_23_Plugins_UE4Helpers_Source_UE4Helpers_Public_UE4Helpers_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

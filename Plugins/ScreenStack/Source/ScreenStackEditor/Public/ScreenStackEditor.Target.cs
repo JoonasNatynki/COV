@@ -3,12 +3,12 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class ScreenStackTarget : TargetRules
+public class ScreenStackEditorTarget : TargetRules
 {
-	public ScreenStackTarget(TargetInfo Target) : base(Target)
+	public ScreenStackTargetEditor(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "COV" } );
+		//ExtraModuleNames.AddRange( new string[] { "COV" } );
 	}
 }

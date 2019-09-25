@@ -1,7 +1,7 @@
 C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStack\Definitions.ScreenStack.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
-C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source/Public/ScreenStack.h
+C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack/Public/ScreenStack.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\UMG\Public\Blueprint\UserWidget.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\UMG\Public\Components/SlateWrapperTypes.h
 C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Inc\UMG\SlateWrapperTypes.generated.h

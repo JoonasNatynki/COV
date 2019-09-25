@@ -6,6 +6,8 @@
 #include "Modules/ModuleManager.h"
 #include <UserWidget.h>
 #include <InputCoreTypes.h>
+#include <Kismet/BlueprintFunctionLibrary.h>
+
 #include "ScreenStack.generated.h"
 
 class APlayerController;
@@ -21,10 +23,7 @@ public:
 
 DECLARE_LOG_CATEGORY_EXTERN(ScreenStack, Log, All)
 
-
-
-
-
+class UScreen;
 
 UCLASS()
 class SCREENSTACK_API UScreen : public UUserWidget
@@ -135,8 +134,8 @@ public:
 	UFUNCTION(Category = "Screen", BlueprintCallable, BlueprintPure)
 		APlayerController* GetOwnerPlayerController() const;
 
-	UFUNCTION(Category = "Screen", BlueprintCallable)
-		bool PushScreenByClass(TSubclassOf<UScreen> widgetClass);
+	UFUNCTION(Category = "Screen", BlueprintCallable, meta = (DeterminesOutputType = "screenType"))
+		UObject* PushScreenByClass(TSubclassOf<UScreen> screenType);
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool PopTopScreen();
@@ -148,13 +147,13 @@ public:
 		//	Remove a screen from the stack
 		bool PopScreen(UScreen* screen);
 
-	UFUNCTION(Category = "Screen", BlueprintCallable)
+	UFUNCTION(Category = "Screen", BlueprintCallable, meta = (DeterminesOutputType = "screenType"))
 		//	Find a screen of the type in the stack, if any.
-		UScreen* FindScreenByType(TSubclassOf<UScreen> screenType);
+		TArray<UScreen*> FindScreensOfType(TSubclassOf<UScreen> screenType);
 
-	UFUNCTION(Category = "Screen", BlueprintCallable)
+	UFUNCTION(Category = "Screen", BlueprintCallable, meta = (DeterminesOutputType = "screenType"))
 		//	Find a screen of the type in the stack, if any.
-		UScreen* GetScreenByType(TSubclassOf<UScreen> screenType);
+		TArray<UScreen*> GetScreensOfType(TSubclassOf<UScreen> screenType);
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool HasScreen(UScreen* screen);

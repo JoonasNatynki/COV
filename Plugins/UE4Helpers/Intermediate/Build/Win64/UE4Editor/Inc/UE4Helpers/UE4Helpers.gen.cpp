@@ -105,28 +105,24 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	{
 		struct E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms
 		{
+			const UObject* WorldContextObject;
 			FVector startLocation;
 			FVector velocity;
 			FVector gravity;
-			float samplingResolutionCoefficient;
+			float timeToSimulate;
 			int32 numberOfTrajectoryPoints;
-			const UObject* WorldContextObject;
 			TArray<FVector> ReturnValue;
 		};
 		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ReturnValue_Inner;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WorldContextObject_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_WorldContextObject;
-#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_numberOfTrajectoryPoints_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FIntPropertyParams NewProp_numberOfTrajectoryPoints;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_samplingResolutionCoefficient_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_timeToSimulate_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_samplingResolutionCoefficient;
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_timeToSimulate;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_gravity_MetaData[];
 #endif
@@ -139,6 +135,10 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_startLocation_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_startLocation;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WorldContextObject_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_WorldContextObject;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -148,23 +148,17 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, ReturnValue), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData[] = {
-		{ "NativeConst", "" },
-	};
-#endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData)) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_numberOfTrajectoryPoints_MetaData[] = {
 		{ "NativeConst", "" },
 	};
 #endif
 	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_numberOfTrajectoryPoints = { "numberOfTrajectoryPoints", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, numberOfTrajectoryPoints), METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_numberOfTrajectoryPoints_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_numberOfTrajectoryPoints_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_samplingResolutionCoefficient_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_timeToSimulate_MetaData[] = {
 		{ "NativeConst", "" },
 	};
 #endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_samplingResolutionCoefficient = { "samplingResolutionCoefficient", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, samplingResolutionCoefficient), METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_samplingResolutionCoefficient_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_samplingResolutionCoefficient_MetaData)) };
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_timeToSimulate = { "timeToSimulate", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, timeToSimulate), METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_timeToSimulate_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_timeToSimulate_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_gravity_MetaData[] = {
 		{ "NativeConst", "" },
@@ -183,15 +177,21 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 	};
 #endif
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_startLocation = { "startLocation", nullptr, (EPropertyFlags)0x0010000008000182, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, startLocation), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_startLocation_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_startLocation_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData[] = {
+		{ "NativeConst", "" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000082, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(E4CodeHelpers_eventCalculateBarabolicTrajectory_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_ReturnValue,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_ReturnValue_Inner,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_numberOfTrajectoryPoints,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_samplingResolutionCoefficient,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_timeToSimulate,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_gravity,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_velocity,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_startLocation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::NewProp_WorldContextObject,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory_Statics::Function_MetaDataParams[] = {
@@ -907,7 +907,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_UE4Helpers,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UE4CodeHelpers_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory, "CalculateBarabolicTrajectory" }, // 1666412081
+		{ &Z_Construct_UFunction_UE4CodeHelpers_CalculateBarabolicTrajectory, "CalculateBarabolicTrajectory" }, // 3743811070
 		{ &Z_Construct_UFunction_UE4CodeHelpers_CastCrossHairLineTrace, "CastCrossHairLineTrace" }, // 3765076241
 		{ &Z_Construct_UFunction_UE4CodeHelpers_GetAllAssetsOfType, "GetAllAssetsOfType" }, // 4197750907
 		{ &Z_Construct_UFunction_UE4CodeHelpers_GetConfigFileLine, "GetConfigFileLine" }, // 2358270040
@@ -957,7 +957,7 @@ void EmptyLinkFunctionForGeneratedCodeUE4Helpers() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UE4CodeHelpers, 3637981722);
+	IMPLEMENT_CLASS(UE4CodeHelpers, 3603899587);
 	template<> UE4HELPERS_API UClass* StaticClass<UE4CodeHelpers>()
 	{
 		return UE4CodeHelpers::StaticClass();

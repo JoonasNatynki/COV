@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "Source/Public/ScreenStack.h"
+#include "ScreenStack/Public/ScreenStack.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -30,16 +30,17 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 	SCREENSTACK_API UClass* Z_Construct_UClass_UScreenStack_NoRegister();
 	SCREENSTACK_API UClass* Z_Construct_UClass_UScreenStack();
 	ENGINE_API UClass* Z_Construct_UClass_UActorComponent();
-	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_FindScreenByType();
+	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_FindScreensOfType();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_GetOwnerPlayerController();
 	ENGINE_API UClass* Z_Construct_UClass_APlayerController_NoRegister();
-	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_GetScreenByType();
+	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_GetScreensOfType();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_GetTopMostScreen();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_HasScreen();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_PopScreen();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_PopTopScreen();
 	SCREENSTACK_API UFunction* Z_Construct_UFunction_UScreenStack_PushScreenByClass();
+	COREUOBJECT_API UClass* Z_Construct_UClass_UObject_NoRegister();
 // End Cross Module References
 	struct Z_Construct_UDelegateFunction_ScreenStack_OnScreenPushedTostack__DelegateSignature_Statics
 	{
@@ -550,9 +551,9 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 	{
 		UClass* Class = UScreenStack::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
-			{ "FindScreenByType", &UScreenStack::execFindScreenByType },
+			{ "FindScreensOfType", &UScreenStack::execFindScreensOfType },
 			{ "GetOwnerPlayerController", &UScreenStack::execGetOwnerPlayerController },
-			{ "GetScreenByType", &UScreenStack::execGetScreenByType },
+			{ "GetScreensOfType", &UScreenStack::execGetScreensOfType },
 			{ "GetTopMostScreen", &UScreenStack::execGetTopMostScreen },
 			{ "HasScreen", &UScreenStack::execHasScreen },
 			{ "PopScreen", &UScreenStack::execPopScreen },
@@ -561,17 +562,18 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, ARRAY_COUNT(Funcs));
 	}
-	struct Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics
+	struct Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics
 	{
-		struct ScreenStack_eventFindScreenByType_Parms
+		struct ScreenStack_eventFindScreensOfType_Parms
 		{
 			TSubclassOf<UScreen>  screenType;
-			UScreen* ReturnValue;
+			TArray<UScreen*> ReturnValue;
 		};
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ReturnValue_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue_Inner;
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_screenType;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
@@ -580,31 +582,34 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_ReturnValue_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue_MetaData[] = {
 		{ "EditInline", "true" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000080588, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventFindScreenByType_Parms, ReturnValue), Z_Construct_UClass_UScreen_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_ReturnValue_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_ReturnValue_MetaData)) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_screenType = { "screenType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventFindScreenByType_Parms, screenType), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_ReturnValue,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::NewProp_screenType,
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010008000000588, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventFindScreensOfType_Parms, ReturnValue), METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000080008, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UScreen_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_screenType = { "screenType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventFindScreensOfType_Parms, screenType), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_ReturnValue_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::NewProp_screenType,
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::Function_MetaDataParams[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Screen" },
 		{ "Comment", "//\x09""Find a screen of the type in the stack, if any.\n" },
+		{ "DeterminesOutputType", "screenType" },
 		{ "ModuleRelativePath", "Public/ScreenStack.h" },
 		{ "ToolTip", "Find a screen of the type in the stack, if any." },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UScreenStack, nullptr, "FindScreenByType", nullptr, nullptr, sizeof(ScreenStack_eventFindScreenByType_Parms), Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UScreenStack_FindScreenByType()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UScreenStack, nullptr, "FindScreensOfType", nullptr, nullptr, sizeof(ScreenStack_eventFindScreensOfType_Parms), Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UScreenStack_FindScreensOfType()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UScreenStack_FindScreenByType_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UScreenStack_FindScreensOfType_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -641,17 +646,18 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics
+	struct Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics
 	{
-		struct ScreenStack_eventGetScreenByType_Parms
+		struct ScreenStack_eventGetScreensOfType_Parms
 		{
 			TSubclassOf<UScreen>  screenType;
-			UScreen* ReturnValue;
+			TArray<UScreen*> ReturnValue;
 		};
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ReturnValue_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue_Inner;
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_screenType;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
@@ -660,31 +666,34 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_ReturnValue_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue_MetaData[] = {
 		{ "EditInline", "true" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000080588, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventGetScreenByType_Parms, ReturnValue), Z_Construct_UClass_UScreen_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_ReturnValue_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_ReturnValue_MetaData)) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_screenType = { "screenType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventGetScreenByType_Parms, screenType), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_ReturnValue,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::NewProp_screenType,
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010008000000588, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventGetScreensOfType_Parms, ReturnValue), METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue_Inner = { "ReturnValue", nullptr, (EPropertyFlags)0x0000000000080008, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UClass_UScreen_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_screenType = { "screenType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventGetScreensOfType_Parms, screenType), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_ReturnValue_Inner,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::NewProp_screenType,
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::Function_MetaDataParams[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Screen" },
 		{ "Comment", "//\x09""Find a screen of the type in the stack, if any.\n" },
+		{ "DeterminesOutputType", "screenType" },
 		{ "ModuleRelativePath", "Public/ScreenStack.h" },
 		{ "ToolTip", "Find a screen of the type in the stack, if any." },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UScreenStack, nullptr, "GetScreenByType", nullptr, nullptr, sizeof(ScreenStack_eventGetScreenByType_Parms), Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UScreenStack_GetScreenByType()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UScreenStack, nullptr, "GetScreensOfType", nullptr, nullptr, sizeof(ScreenStack_eventGetScreensOfType_Parms), Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UScreenStack_GetScreensOfType()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UScreenStack_GetScreenByType_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UScreenStack_GetScreensOfType_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -873,31 +882,27 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 	{
 		struct ScreenStack_eventPushScreenByClass_Parms
 		{
-			TSubclassOf<UScreen>  widgetClass;
-			bool ReturnValue;
+			TSubclassOf<UScreen>  screenType;
+			UObject* ReturnValue;
 		};
-		static void NewProp_ReturnValue_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
-		static const UE4CodeGen_Private::FClassPropertyParams NewProp_widgetClass;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FClassPropertyParams NewProp_screenType;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
-	void Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_ReturnValue_SetBit(void* Obj)
-	{
-		((ScreenStack_eventPushScreenByClass_Parms*)Obj)->ReturnValue = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ScreenStack_eventPushScreenByClass_Parms), &Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_widgetClass = { "widgetClass", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventPushScreenByClass_Parms, widgetClass), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventPushScreenByClass_Parms, ReturnValue), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_screenType = { "screenType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ScreenStack_eventPushScreenByClass_Parms, screenType), Z_Construct_UClass_UScreen_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_ReturnValue,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_widgetClass,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::NewProp_screenType,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UScreenStack_PushScreenByClass_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Screen" },
+		{ "DeterminesOutputType", "screenType" },
 		{ "ModuleRelativePath", "Public/ScreenStack.h" },
 	};
 #endif
@@ -944,14 +949,14 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_ScreenStack,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UScreenStack_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UScreenStack_FindScreenByType, "FindScreenByType" }, // 4124729413
+		{ &Z_Construct_UFunction_UScreenStack_FindScreensOfType, "FindScreensOfType" }, // 1410355025
 		{ &Z_Construct_UFunction_UScreenStack_GetOwnerPlayerController, "GetOwnerPlayerController" }, // 2371983917
-		{ &Z_Construct_UFunction_UScreenStack_GetScreenByType, "GetScreenByType" }, // 3312677021
+		{ &Z_Construct_UFunction_UScreenStack_GetScreensOfType, "GetScreensOfType" }, // 885703327
 		{ &Z_Construct_UFunction_UScreenStack_GetTopMostScreen, "GetTopMostScreen" }, // 3056870626
 		{ &Z_Construct_UFunction_UScreenStack_HasScreen, "HasScreen" }, // 4268991722
 		{ &Z_Construct_UFunction_UScreenStack_PopScreen, "PopScreen" }, // 3698343274
 		{ &Z_Construct_UFunction_UScreenStack_PopTopScreen, "PopTopScreen" }, // 2132949222
-		{ &Z_Construct_UFunction_UScreenStack_PushScreenByClass, "PushScreenByClass" }, // 864802419
+		{ &Z_Construct_UFunction_UScreenStack_PushScreenByClass, "PushScreenByClass" }, // 2189277739
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UScreenStack_Statics::Class_MetaDataParams[] = {
@@ -1018,7 +1023,7 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UScreenStack, 4267055972);
+	IMPLEMENT_CLASS(UScreenStack, 2652756089);
 	template<> SCREENSTACK_API UClass* StaticClass<UScreenStack>()
 	{
 		return UScreenStack::StaticClass();

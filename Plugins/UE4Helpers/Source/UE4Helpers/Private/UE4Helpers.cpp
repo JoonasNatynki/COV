@@ -16,6 +16,8 @@
 
 #endif
 
+#define LOCTEXT_NAMESPACE "UE4CodeHelpers"
+
 void FUE4HelpersModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
@@ -36,7 +38,6 @@ static TAutoConsoleVariable<int32> CVarShowBarabolicTrajectoryCalculationDebugLi
 	0,
 	TEXT("Show barabolic trajectory calculation debugs."));
 
-#define LOCTEXT_NAMESPACE "UE4CodeHelpers"
 
 FString UE4CodeHelpers::GetNetModePrefix(const UObject* WorldContextObject)
 {
@@ -49,31 +50,40 @@ bool UE4CodeHelpers::IsOfType(const UObject* object, TSubclassOf<UObject> type)
 	return object->IsA(type);
 }
 
-TArray<FVector> UE4CodeHelpers::CalculateBarabolicTrajectory(const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float samplingResolutionCoefficient, const int32 numberOfTrajectoryPoints, const UObject* WorldContextObject)
+TArray<FVector> UE4CodeHelpers::CalculateBarabolicTrajectory(const UObject* WorldContextObject, const FVector& startLocation, const FVector& velocity, const FVector& gravity, const float timeToSimulate, const int32 numberOfTrajectoryPoints)
 {
 	TArray<FVector> trajectoryPathPoints;
-
+	float velocityFloat = velocity.Size();
 	for (int x = 0; x < numberOfTrajectoryPoints; x++)
 	{
-		float time = x * samplingResolutionCoefficient;
-		FVector tempPoint = startLocation + FVector(velocity * time);
-		FVector offset = (gravity * time * time);
-		tempPoint = tempPoint + offset;
-		trajectoryPathPoints.Add(tempPoint);
-
+		FVector tempPoint;
+		FVector offset;
+		float time;
+		//  First point, no calculation
+		if (x == 0)
+		{
+			tempPoint = startLocation;
+			trajectoryPathPoints.Add(tempPoint);
+		}
+		else
+		{
+			time = (timeToSimulate / numberOfTrajectoryPoints) * (x);
+			tempPoint = startLocation + (velocity * time);
+			offset = (gravity * (time * time));
+			tempPoint = tempPoint + offset;
+			trajectoryPathPoints.Add(tempPoint);
+		}
 		if (CVarShowBarabolicTrajectoryCalculationDebugLine.GetValueOnGameThread() == 1)
 		{
-			//	Draw the sample points
-			UKismetSystemLibrary::DrawDebugPoint(WorldContextObject->GetWorld(), tempPoint, 10.0f, FLinearColor::Red, 10.0f);
-
-			//	Draw lines between points
+			//  Draw the sample points
+			UKismetSystemLibrary::DrawDebugPoint(WorldContextObject->GetWorld(), tempPoint, 15.0f, FLinearColor::Red, 10.0f);
+			//  Draw lines between points
 			if ((x > 0))
 			{
 				UKismetSystemLibrary::DrawDebugLine(WorldContextObject->GetWorld(), tempPoint, trajectoryPathPoints[x - 1], FLinearColor::Green, 10.0f, 5.0f);
 			}
 		}
 	}
-
 	return trajectoryPathPoints;
 }
 

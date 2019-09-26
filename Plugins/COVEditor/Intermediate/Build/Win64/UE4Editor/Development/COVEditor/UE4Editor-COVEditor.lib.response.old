@@ -1,0 +1,16 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-COVEditor.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\UnrealEd\SharedPCH.UnrealEd.h.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\BPNode_MyNode.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\BPNode_MyNode.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\COVEditor.init.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\COVEditorItemData.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\Default.rc2.res"
+/OUT:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\UE4Editor-COVEditor.lib"
+/INCLUDE:IMPLEMENT_MODULE_COVEditor

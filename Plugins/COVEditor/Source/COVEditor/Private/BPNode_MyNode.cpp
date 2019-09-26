@@ -24,14 +24,14 @@ struct FBPNode_CreateItemDataHelper
 
 FName FBPNode_CreateItemDataHelper::OwningPlayerPinName(TEXT("OwningPlayer"));
 
-UBPNode_CreateItemData::UBPNode_CreateItemData(const FObjectInitializer& ObjectInitializer)
+UBPNode_PushScreenByClass::UBPNode_PushScreenByClass(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	NodeTooltip = LOCTEXT("NodeTooltip", "Creates a new Item Data");
+	NodeTooltip = LOCTEXT("NodeTooltip", "Pushes a new screen into the screen stack");
 }
 
 //Adds default pins to node. These Pins (inputs ?) are always displayed.
-void UBPNode_CreateItemData::AllocateDefaultPins()
+void UBPNode_PushScreenByClass::AllocateDefaultPins()
 {
 	Super::AllocateDefaultPins();
 
@@ -42,42 +42,42 @@ void UBPNode_CreateItemData::AllocateDefaultPins()
 	SetPinToolTip(*OwningPlayerPin, LOCTEXT("OwningPlayerPinDescription", "The player that 'owns' the this item."));
 }
 
-FLinearColor UBPNode_CreateItemData::GetNodeTitleColor() const
+FLinearColor UBPNode_PushScreenByClass::GetNodeTitleColor() const
 {
 	return Super::GetNodeTitleColor();
 }
 
-FText UBPNode_CreateItemData::GetBaseNodeTitle() const
+FText UBPNode_PushScreenByClass::GetBaseNodeTitle() const
 {
-	return LOCTEXT("CreateItemData_BaseTitle", "Create Item Data");
+	return LOCTEXT("CreateItemData_BaseTitle", "Push screen by class");
 }
 
-FText UBPNode_CreateItemData::GetNodeTitleFormat() const
+FText UBPNode_PushScreenByClass::GetNodeTitleFormat() const
 {
-	return LOCTEXT("CreateItemData", "Create {ClassName} Item Data");
+	return LOCTEXT("CreateItemData", "Creates and pushes {ClassName} into a screen stack");
 }
 
 //which class can be used with this node to create objects. All childes of class can be used.
-UClass* UBPNode_CreateItemData::GetClassPinBaseClass() const
+UClass* UBPNode_PushScreenByClass::GetClassPinBaseClass() const
 {
 	return UUserWidget::StaticClass();
 }
 
 //Set context menu category in which our node will be present.
-FText UBPNode_CreateItemData::GetMenuCategory() const
+FText UBPNode_PushScreenByClass::GetMenuCategory() const
 {
-	return FText::FromString("Game Inventory System");
+	return FText::FromString("Screen stack");
 }
 
 //gets out predefined pin
-UEdGraphPin* UBPNode_CreateItemData::GetOwningPlayerPin() const
+UEdGraphPin* UBPNode_PushScreenByClass::GetOwningPlayerPin() const
 {
 	UEdGraphPin* Pin = FindPin(FBPNode_CreateItemDataHelper::OwningPlayerPinName);
 	check(Pin == NULL || Pin->Direction == EGPD_Input);
 	return Pin;
 }
 
-bool UBPNode_CreateItemData::IsSpawnVarPin(UEdGraphPin* Pin) const
+bool UBPNode_PushScreenByClass::IsSpawnVarPin(UEdGraphPin* Pin) const
 {
 	return(Super::IsSpawnVarPin(Pin) &&
 		Pin->PinName != FBPNode_CreateItemDataHelper::OwningPlayerPinName);
@@ -85,16 +85,16 @@ bool UBPNode_CreateItemData::IsSpawnVarPin(UEdGraphPin* Pin) const
 
 //and this is where magic really happens. This will expand node for our custom object, with properties
 //which are set as EditAwnywhere and meta=(ExposeOnSpawn), or equivalent in blueprint.
-void UBPNode_CreateItemData::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
+void UBPNode_PushScreenByClass::ExpandNode(class FKismetCompilerContext& CompilerContext, UEdGraph* SourceGraph)
 {
 	Super::ExpandNode(CompilerContext, SourceGraph);
 
-	static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(UWidgetBlueprintLibrary, Create);
+	static const FName Create_FunctionName = GET_FUNCTION_NAME_CHECKED(UCOVEditorRuntimeLibrary, Create);
 	static const FName WorldContextObject_ParamName(TEXT("WorldContextObject"));
 	static const FName WidgetType_ParamName(TEXT("WidgetType"));
 	static const FName OwningPlayer_ParamName(TEXT("OwningPlayer"));
 
-	UBPNode_CreateItemData* CreateWidgetNode = this;
+	UBPNode_PushScreenByClass* CreateWidgetNode = this;
 	UEdGraphPin* SpawnNodeExec = CreateWidgetNode->GetExecPin();
 	UEdGraphPin* SpawnWorldContextPin = CreateWidgetNode->GetWorldContextPin();
 	UEdGraphPin* SpawnOwningPlayerPin = CreateWidgetNode->GetOwningPlayerPin();
@@ -114,7 +114,7 @@ void UBPNode_CreateItemData::ExpandNode(class FKismetCompilerContext& CompilerCo
 	//////////////////////////////////////////////////////////////////////////
 	// create 'UWidgetBlueprintLibrary::Create' call node
 	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
-	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, UWidgetBlueprintLibrary::StaticClass());
+	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, UCOVEditorRuntimeLibrary::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
 	// store off the class to spawn before we mutate pin connections:

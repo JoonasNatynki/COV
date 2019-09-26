@@ -24,16 +24,6 @@ class COVEDITORRUNTIME_API UCOVEditorRuntimeLibrary : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
-
+	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta = (WorldContext = "WorldContextObject", DisplayName = "Push a screen by class to the stack", BlueprintInternalUseOnly = "true"), Category = "Widget")
+		static class UObject* Create(UObject* WorldContextObject, TSubclassOf<class UObject> WidgetType, APlayerController* OwningPlayer);
 };
-
-/*
-class COVEDITOR_API UGISBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
-{
-	GENERATED_UCLASS_BODY()
-public:
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", FriendlyName = "Create Item Data", BlueprintInternalUseOnly = "true"), Category = "Game Inventory System")
-		static class UGISItemData* Create(UObject* WorldContextObject, TSubclassOf<class UGISItemData> ItemType, APlayerController* OwningPlayer);
-	template< class T > T* CreateDataItem(APlayerController* OwningPlayer, UClass* UserWidgetClass);
-};
-*/

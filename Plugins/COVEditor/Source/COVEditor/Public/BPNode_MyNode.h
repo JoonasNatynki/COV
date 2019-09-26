@@ -4,7 +4,7 @@
 #include "BPNode_MyNode.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class COVEDITOR_API UBPNode_CreateItemData : public UK2Node_ConstructObjectFromClass
+class COVEDITOR_API UBPNode_PushScreenByClass : public UK2Node_ConstructObjectFromClass
 {
     GENERATED_UCLASS_BODY()
 

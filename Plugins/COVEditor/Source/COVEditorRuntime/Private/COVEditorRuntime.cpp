@@ -26,3 +26,10 @@ void UCOVEditorRuntime::ShutdownModule()
 	// we call this function before unloading the module.
 }
 IMPLEMENT_MODULE(UCOVEditorRuntime, COVEditorRuntime)
+
+class UObject* UCOVEditorRuntimeLibrary::Create(UObject* WorldContextObject, TSubclassOf<class UObject> WidgetType, APlayerController* OwningPlayer)
+{
+	UE_LOG(LogTemp, Warning, TEXT("MAKE THIS WORK"));
+
+	return nullptr;
+}

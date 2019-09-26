@@ -1,5 +1,13 @@
 {
 	"RemapUnityFiles": 
 	{
+		"Module.ScreenStackEditor.cpp.obj": [
+			"ScreenStackEditor.cpp.obj",
+			"ScreenStackEditorNode.cpp.obj"
+		],
+		"Module.ScreenStackEditor.gen.cpp.obj": [
+			"ScreenStackEditor.init.gen.cpp.obj",
+			"ScreenStackEditorNode.gen.cpp.obj"
+		]
 	}
 }

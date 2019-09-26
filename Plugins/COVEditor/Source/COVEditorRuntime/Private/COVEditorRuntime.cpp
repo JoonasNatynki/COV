@@ -14,6 +14,8 @@
 #include <KismetEditorUtilities.h>
 
 #endif
+#include "ScreenStack.h"
+#include <LogMacros.h>
 
 void UCOVEditorRuntime::StartupModule()
 {
@@ -25,11 +27,47 @@ void UCOVEditorRuntime::ShutdownModule()
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
 }
-IMPLEMENT_MODULE(UCOVEditorRuntime, COVEditorRuntime)
 
-class UObject* UCOVEditorRuntimeLibrary::Create(UObject* WorldContextObject, TSubclassOf<class UObject> WidgetType, APlayerController* OwningPlayer)
+#define LOCTEXT_NAMESPACE "ScreenStack"
+
+class UUserWidget* UCOVEditorRuntimeLibrary::Create(UObject* WorldContextObject, TSubclassOf<class UUserWidget> WidgetType, APlayerController* OwningPlayer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("MAKE THIS WORK"));
+	if (WidgetType == nullptr)
+	{
+		return nullptr;
+	}
+
+	//	Make sure the screen stack component exists in the player controller
+	auto screenStack = OwningPlayer->GetComponentByClass(UScreenStack::StaticClass());
+
+	if (!screenStack)
+	{
+		UE_LOG(LogTemp, Error, TEXT("The owning player controller does not have a screen stack component. Unable to create and push a screen to a stack."));
+		FMessageLog("PIE").Error(FText(LOCTEXT("ScreenStack", "The owning player controller does not have a screen stack component. Unable to create and push a screen to a stack.")))->AddToken(FUObjectToken::Create(OwningPlayer));
+
+		return nullptr;
+	}
+
+	if (GIsEditor)
+	{
+		//	WHAT DO!?
+	}
+
+	if (OwningPlayer)
+	{
+		TSubclassOf<UScreen> type = WidgetType;
+		UScreen* screen = Cast<UScreen>(Cast<UScreenStack>(screenStack)->PushScreenByClass(type));
+
+		return screen;
+	}
+	else if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		return CreateWidget(World, WidgetType);
+	}
 
 	return nullptr;
 }
+
+#undef LOCTEXT_NAMESPACE
+
+IMPLEMENT_MODULE(UCOVEditorRuntime, COVEditorRuntime)

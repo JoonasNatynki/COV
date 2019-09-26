@@ -18,9 +18,10 @@ void EmptyLinkFunctionForGeneratedCodeCOVEditorRuntime() {}
 	ENGINE_API UClass* Z_Construct_UClass_UBlueprintFunctionLibrary();
 	UPackage* Z_Construct_UPackage__Script_COVEditorRuntime();
 	COVEDITORRUNTIME_API UFunction* Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create();
-	COREUOBJECT_API UClass* Z_Construct_UClass_UObject_NoRegister();
+	UMG_API UClass* Z_Construct_UClass_UUserWidget_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_APlayerController_NoRegister();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
+	COREUOBJECT_API UClass* Z_Construct_UClass_UObject_NoRegister();
 // End Cross Module References
 	void UCOVEditorRuntimeLibrary::StaticRegisterNativesUCOVEditorRuntimeLibrary()
 	{
@@ -35,10 +36,13 @@ void EmptyLinkFunctionForGeneratedCodeCOVEditorRuntime() {}
 		struct COVEditorRuntimeLibrary_eventCreate_Parms
 		{
 			UObject* WorldContextObject;
-			TSubclassOf<UObject>  WidgetType;
+			TSubclassOf<UUserWidget>  WidgetType;
 			APlayerController* OwningPlayer;
-			UObject* ReturnValue;
+			UUserWidget* ReturnValue;
 		};
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ReturnValue_MetaData[];
+#endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ReturnValue;
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_OwningPlayer;
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_WidgetType;
@@ -49,9 +53,14 @@ void EmptyLinkFunctionForGeneratedCodeCOVEditorRuntime() {}
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, ReturnValue), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(nullptr, 0) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue_MetaData[] = {
+		{ "EditInline", "true" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000080588, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, ReturnValue), Z_Construct_UClass_UUserWidget_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue_MetaData)) };
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_OwningPlayer = { "OwningPlayer", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, OwningPlayer), Z_Construct_UClass_APlayerController_NoRegister, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_WidgetType = { "WidgetType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, WidgetType), Z_Construct_UClass_UObject_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_WidgetType = { "WidgetType", nullptr, (EPropertyFlags)0x0014000000000080, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, WidgetType), Z_Construct_UClass_UUserWidget_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_WorldContextObject = { "WorldContextObject", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(COVEditorRuntimeLibrary_eventCreate_Parms, WorldContextObject), Z_Construct_UClass_UObject_NoRegister, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create_Statics::NewProp_ReturnValue,
@@ -97,7 +106,7 @@ void EmptyLinkFunctionForGeneratedCodeCOVEditorRuntime() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_COVEditorRuntime,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UCOVEditorRuntimeLibrary_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create, "Create" }, // 453090076
+		{ &Z_Construct_UFunction_UCOVEditorRuntimeLibrary_Create, "Create" }, // 99893861
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UCOVEditorRuntimeLibrary_Statics::Class_MetaDataParams[] = {
@@ -134,7 +143,7 @@ void EmptyLinkFunctionForGeneratedCodeCOVEditorRuntime() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UCOVEditorRuntimeLibrary, 4135378883);
+	IMPLEMENT_CLASS(UCOVEditorRuntimeLibrary, 1491670418);
 	template<> COVEDITORRUNTIME_API UClass* StaticClass<UCOVEditorRuntimeLibrary>()
 	{
 		return UCOVEditorRuntimeLibrary::StaticClass();

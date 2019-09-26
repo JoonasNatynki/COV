@@ -9,6 +9,7 @@
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 class UObject;
+class UUserWidget;
 class APlayerController;
 #ifdef COVEDITORRUNTIME_COVEditorRuntime_generated_h
 #error "COVEditorRuntime.generated.h already included, missing '#pragma once' in COVEditorRuntime.h"
@@ -24,7 +25,7 @@ class APlayerController;
 		P_GET_OBJECT(APlayerController,Z_Param_OwningPlayer); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(UObject**)Z_Param__Result=UCOVEditorRuntimeLibrary::Create(Z_Param_WorldContextObject,Z_Param_WidgetType,Z_Param_OwningPlayer); \
+		*(UUserWidget**)Z_Param__Result=UCOVEditorRuntimeLibrary::Create(Z_Param_WorldContextObject,Z_Param_WidgetType,Z_Param_OwningPlayer); \
 		P_NATIVE_END; \
 	}
 
@@ -38,7 +39,7 @@ class APlayerController;
 		P_GET_OBJECT(APlayerController,Z_Param_OwningPlayer); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(UObject**)Z_Param__Result=UCOVEditorRuntimeLibrary::Create(Z_Param_WorldContextObject,Z_Param_WidgetType,Z_Param_OwningPlayer); \
+		*(UUserWidget**)Z_Param__Result=UCOVEditorRuntimeLibrary::Create(Z_Param_WorldContextObject,Z_Param_WidgetType,Z_Param_OwningPlayer); \
 		P_NATIVE_END; \
 	}
 

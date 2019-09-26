@@ -25,5 +25,5 @@ class COVEDITORRUNTIME_API UCOVEditorRuntimeLibrary : public UBlueprintFunctionL
 
 public:
 	UFUNCTION(BlueprintCallable, BlueprintCosmetic, meta = (WorldContext = "WorldContextObject", DisplayName = "Push a screen by class to the stack", BlueprintInternalUseOnly = "true"), Category = "Widget")
-		static class UObject* Create(UObject* WorldContextObject, TSubclassOf<class UObject> WidgetType, APlayerController* OwningPlayer);
+		static class UUserWidget* Create(UObject* WorldContextObject, TSubclassOf<class UUserWidget> WidgetType, APlayerController* OwningPlayer);
 };

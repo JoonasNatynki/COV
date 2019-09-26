@@ -13,7 +13,8 @@ public class COVEditorRuntime : ModuleRules
 			new string[]
 			{
 				"Core",
-				"COVEditor"
+				"COVEditor",
+                
 				// ... add other public dependencies that you statically link with here ...
 			}
 		);
@@ -41,6 +42,8 @@ public class COVEditorRuntime : ModuleRules
 				"DetailCustomizations",
 				"Settings",
 				"RenderCore",
+                "UMG",
+                "ScreenStack"
 			}
 		);
 			}

@@ -514,6 +514,10 @@
 /I Runtime\Analytics\Analytics\Public
 /I Runtime\Analytics\Analytics
 /I Runtime\Analytics\Analytics\Public\Interfaces
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack\Public"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Inc\COVEditorRuntime"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Source"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Source\COVEditorRuntime\Public"

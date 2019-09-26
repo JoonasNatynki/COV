@@ -80,6 +80,8 @@
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\DetailCustomizations\UE4Editor-DetailCustomizations.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Settings\UE4Editor-Settings.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\RenderCore\UE4Editor-RenderCore.lib"
+"C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\UMG\UE4Editor-UMG.lib"
+"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStack\UE4Editor-ScreenStack-Win64-DebugGame.lib"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\DebugGame\COVEditor\UE4Editor-COVEditor-Win64-DebugGame.lib"
 /OUT:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Binaries\Win64\UE4Editor-COVEditorRuntime-Win64-DebugGame.dll"
 /IMPLIB:"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\DebugGame\COVEditorRuntime\UE4Editor-COVEditorRuntime-Win64-DebugGame.suppressed.lib"

@@ -1,8 +1,0 @@
-{
-	"BuildId": "8386587",
-	"Modules": 
-	{
-		"COVEditor": "UE4Editor-COVEditor-Win64-DebugGame.dll",
-		"COVEditorRuntime": "UE4Editor-COVEditorRuntime-Win64-DebugGame.dll"
-	}
-}

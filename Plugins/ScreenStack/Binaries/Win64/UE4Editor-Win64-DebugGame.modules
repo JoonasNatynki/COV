@@ -3,6 +3,7 @@
 	"Modules": 
 	{
 		"ScreenStack": "UE4Editor-ScreenStack-Win64-DebugGame.dll",
-		"ScreenStackEditor": "UE4Editor-ScreenStackEditor-Win64-DebugGame.dll"
+		"ScreenStackEditor": "UE4Editor-ScreenStackEditor-Win64-DebugGame.dll",
+		"ScreenStackRuntime": "UE4Editor-ScreenStackRuntime-Win64-DebugGame.dll"
 	}
 }

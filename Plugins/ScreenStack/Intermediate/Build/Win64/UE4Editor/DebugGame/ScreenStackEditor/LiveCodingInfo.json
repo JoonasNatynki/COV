@@ -2,12 +2,12 @@
 	"RemapUnityFiles": 
 	{
 		"Module.ScreenStackEditor.cpp.obj": [
-			"ScreenStackEditor.cpp.obj",
-			"ScreenStackEditorNode.cpp.obj"
+			"BPNode_MyNode.cpp.obj",
+			"COVEditor.cpp.obj"
 		],
 		"Module.ScreenStackEditor.gen.cpp.obj": [
-			"ScreenStackEditor.init.gen.cpp.obj",
-			"ScreenStackEditorNode.gen.cpp.obj"
+			"BPNode_MyNode.gen.cpp.obj",
+			"ScreenStackEditor.init.gen.cpp.obj"
 		]
 	}
 }

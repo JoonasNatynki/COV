@@ -21,8 +21,8 @@ void EmptyLinkFunctionForGeneratedCodeScreenStackEditor_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000040,
-				0xB0E84F6F,
-				0xD0D6F102,
+				0xFE85FB04,
+				0x0053B197,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);

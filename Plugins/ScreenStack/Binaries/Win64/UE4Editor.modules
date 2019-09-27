@@ -1,8 +1,0 @@
-{
-	"BuildId": "8386587",
-	"Modules": 
-	{
-		"ScreenStack": "UE4Editor-ScreenStack.dll",
-		"ScreenStackEditor": "UE4Editor-ScreenStackEditor.dll"
-	}
-}

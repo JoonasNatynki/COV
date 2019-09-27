@@ -11,7 +11,7 @@ DEFINE_LOG_CATEGORY(COVPlayerController)
 
 ACOVPlayerController::ACOVPlayerController(const class FObjectInitializer& PCIP)
 {
-	ScreenStack = CreateDefaultSubobject<UScreenStack>(TEXT("Screen stack manager"));
+
 }
 
 void ACOVPlayerController::SetupInputComponent()

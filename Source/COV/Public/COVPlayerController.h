@@ -34,8 +34,6 @@ public:
 		//	Y axis sensitivity
 		float _YSensitivity = 1;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UScreenStack* ScreenStack;
 
 	UFUNCTION(BlueprintPure)
 		//	Get the AXYZ_Character this controller should be controlling

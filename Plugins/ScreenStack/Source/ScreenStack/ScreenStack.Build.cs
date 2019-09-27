@@ -18,8 +18,8 @@ public class ScreenStack : ModuleRules
 				"Slate",
 				"SlateCore",
                 "InputCore"
-				// ... add private dependencies that you statically link with here ...	
-			}
+                // ... add private dependencies that you statically link with here ...	
+            }
 			);
 
         DynamicallyLoadedModuleNames.AddRange(

@@ -11,6 +11,7 @@
 #endif
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeScreenStack_init() {}
+	SCREENSTACK_API UFunction* Z_Construct_UDelegateFunction_ScreenStack_OnBeginDestroy__DelegateSignature();
 	SCREENSTACK_API UFunction* Z_Construct_UDelegateFunction_ScreenStack_OnScreenRemovedFromStack__DelegateSignature();
 	SCREENSTACK_API UFunction* Z_Construct_UDelegateFunction_ScreenStack_OnScreenPushedTostack__DelegateSignature();
 	UPackage* Z_Construct_UPackage__Script_ScreenStack()
@@ -19,6 +20,7 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack_init() {}
 		if (!ReturnPackage)
 		{
 			static UObject* (*const SingletonFuncArray[])() = {
+				(UObject* (*)())Z_Construct_UDelegateFunction_ScreenStack_OnBeginDestroy__DelegateSignature,
 				(UObject* (*)())Z_Construct_UDelegateFunction_ScreenStack_OnScreenRemovedFromStack__DelegateSignature,
 				(UObject* (*)())Z_Construct_UDelegateFunction_ScreenStack_OnScreenPushedTostack__DelegateSignature,
 			};
@@ -27,8 +29,8 @@ void EmptyLinkFunctionForGeneratedCodeScreenStack_init() {}
 				SingletonFuncArray,
 				ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0xB8B9090C,
-				0xBE351865,
+				0x925AC0F8,
+				0x118560F7,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);

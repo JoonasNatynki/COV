@@ -28,7 +28,8 @@ UScreenStack::UScreenStack()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
 void UScreenStack::BeginPlay()
@@ -130,6 +131,7 @@ UObject* UScreenStack::PushScreenByClass(const TSubclassOf<UScreen> widgetClass)
 
 		screenStack.Add(screen);
 		//screen->AddToViewport(0);
+		screensWaitingToBeAddedToviewport.Add(screen);
 
 		UE_LOG(ScreenStack, Log, TEXT("Screen (%s) added to stack with the index (%d). Calling OnScreenPushed..."), *widgetClassName, screenStack.Num() - 1);
 		
@@ -263,11 +265,6 @@ bool UScreenStack::HasScreen(UScreen* screen)
 	return false;
 }
 
-void UScreenStack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
 UScreen::UScreen(const FObjectInitializer& ObjInit) : Super(ObjInit)
 {
 	bIsFocusable = true;
@@ -330,4 +327,22 @@ void UScreen::SetVisibility(ESlateVisibility visibility)
 	bShouldScreenBeShownWhenPossible = ((visibility != ESlateVisibility::Hidden) && (visibility != ESlateVisibility::Collapsed));
 
 	Super::SetVisibility(visibility);
+}
+
+void UScreenStack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	//	Process all pushed widgets into the viewport
+	if (screensWaitingToBeAddedToviewport.Num() > 0)
+	{
+		//	Process all screens
+		for (auto& screen : screensWaitingToBeAddedToviewport)
+		{
+			screen->AddToViewport(0);
+		}
+
+		//	Clear the workload
+		screensWaitingToBeAddedToviewport.Empty();
+	}
 }

@@ -158,4 +158,9 @@ public:
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool HasScreen(UScreen* screen);
+
+private:
+
+	//	Screens that wait to be added to viewport. This is done because the K2 node that calls the pushscreenbyclass function only initializes the default parameters after the screen has already run Construct if added to viewport first.
+	TArray<UScreen*> screensWaitingToBeAddedToviewport;
 };

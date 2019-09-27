@@ -103,7 +103,7 @@ APlayerController* UScreenStack::GetOwnerPlayerController() const
 	return Cast<APlayerController>(controller);
 }
 
-UObject* UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
+UObject* UScreenStack::PushScreenByClass(const TSubclassOf<UScreen> widgetClass)
 {
 	if (!ensure(widgetClass))
 	{
@@ -125,13 +125,19 @@ UObject* UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
 			UE_LOG(ScreenStack, Warning, TEXT("Screen (%s) could not be added to stack. Creation failed."), *widgetClassName);
 			FMessageLog("COVScreenManager").Error(FText::Format(NSLOCTEXT("ScreenManager", "ScreenManager", "Screen ({0}) could not be added to stack. Creation failed."), FText::FromString(widgetClassName)));
 
-			return screen;
+			return nullptr;
 		}
 
 		screenStack.Add(screen);
 		screen->AddToViewport(0);
+
 		UE_LOG(ScreenStack, Log, TEXT("Screen (%s) added to stack with the index (%d). Calling OnScreenPushed..."), *widgetClassName, screenStack.Num() - 1);
+		
+		UpdateScreenStackVisibilities_Internal();
+
 		OnScreenPushed.Broadcast(screen);
+
+		return screen;
 	}
 	else
 	{
@@ -150,6 +156,11 @@ UObject* UScreenStack::PushScreenByClass(TSubclassOf<UScreen> widgetClass)
 	UpdateScreenStackVisibilities_Internal();
 
 	return nullptr;
+}
+
+void UScreenStack::LatentAddToViewport(UScreen* screen) const
+{
+	screen->AddToViewport(0);
 }
 
 bool UScreenStack::PopTopScreen()

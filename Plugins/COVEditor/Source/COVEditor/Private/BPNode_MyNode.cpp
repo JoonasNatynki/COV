@@ -94,26 +94,26 @@ void UBPNode_PushScreenByClass::ExpandNode(class FKismetCompilerContext& Compile
 	static const FName WidgetType_ParamName(TEXT("WidgetType"));
 	static const FName OwningPlayer_ParamName(TEXT("OwningPlayer"));
 
-	UBPNode_PushScreenByClass* CreateWidgetNode = this;
-	UEdGraphPin* SpawnNodeExec = CreateWidgetNode->GetExecPin();
-	UEdGraphPin* SpawnWorldContextPin = CreateWidgetNode->GetWorldContextPin();
-	UEdGraphPin* SpawnOwningPlayerPin = CreateWidgetNode->GetOwningPlayerPin();
-	UEdGraphPin* SpawnClassPin = CreateWidgetNode->GetClassPin();
-	UEdGraphPin* SpawnNodeThen = CreateWidgetNode->GetThenPin();
-	UEdGraphPin* SpawnNodeResult = CreateWidgetNode->GetResultPin();
+	UBPNode_PushScreenByClass* PushScreenByClassNode = this;
+	UEdGraphPin* SpawnNodeExec = PushScreenByClassNode->GetExecPin();
+	UEdGraphPin* SpawnWorldContextPin = PushScreenByClassNode->GetWorldContextPin();
+	UEdGraphPin* SpawnOwningPlayerPin = PushScreenByClassNode->GetOwningPlayerPin();
+	UEdGraphPin* SpawnClassPin = PushScreenByClassNode->GetClassPin();
+	UEdGraphPin* SpawnNodeThen = PushScreenByClassNode->GetThenPin();
+	UEdGraphPin* SpawnNodeResult = PushScreenByClassNode->GetResultPin();
 
 	UClass* SpawnClass = (SpawnClassPin != NULL) ? Cast<UClass>(SpawnClassPin->DefaultObject) : NULL;
 	if (!SpawnClassPin || ((0 == SpawnClassPin->LinkedTo.Num()) && (NULL == SpawnClass)))
 	{
-		CompilerContext.MessageLog.Error(*LOCTEXT("CreateWidgetNodeMissingClass_Error", "Spawn node @@ must have a class specified.").ToString(), CreateWidgetNode);
+		CompilerContext.MessageLog.Error(*LOCTEXT("CreateWidgetNodeMissingClass_Error", "Spawn node @@ must have a class specified.").ToString(), PushScreenByClassNode);
 		// we break exec links so this is the only error we get, don't want the CreateWidget node being considered and giving 'unexpected node' type warnings
-		CreateWidgetNode->BreakAllNodeLinks();
+		PushScreenByClassNode->BreakAllNodeLinks();
 		return;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	// create 'UWidgetBlueprintLibrary::Create' call node
-	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(CreateWidgetNode, SourceGraph);
+	UK2Node_CallFunction* CallCreateNode = CompilerContext.SpawnIntermediateNode<UK2Node_CallFunction>(PushScreenByClassNode, SourceGraph);
 	CallCreateNode->FunctionReference.SetExternalMember(Create_FunctionName, UCOVEditorRuntimeLibrary::StaticClass());
 	CallCreateNode->AllocateDefaultPins();
 
@@ -157,13 +157,13 @@ void UBPNode_PushScreenByClass::ExpandNode(class FKismetCompilerContext& Compile
 	// create 'set var' nodes
 
 	// Get 'result' pin from 'begin spawn', this is the actual actor we want to set properties on
-	UEdGraphPin* LastThen = FKismetCompilerUtilities::GenerateAssignmentNodes(CompilerContext, SourceGraph, CallCreateNode, CreateWidgetNode, CallCreateResult, ClassToSpawn);
+	UEdGraphPin* LastThen = FKismetCompilerUtilities::GenerateAssignmentNodes(CompilerContext, SourceGraph, CallCreateNode, PushScreenByClassNode, CallCreateResult, ClassToSpawn);
 
 	// Move 'then' connection from create widget node to the last 'then'
 	CompilerContext.MovePinLinksToIntermediate(*SpawnNodeThen, *LastThen);
 
 	// Break any links to the expanded node
-	CreateWidgetNode->BreakAllNodeLinks();
+	PushScreenByClassNode->BreakAllNodeLinks();
 }
 
 #undef LOCTEXT_NAMESPACE

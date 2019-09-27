@@ -55,14 +55,19 @@ class UUserWidget* UCOVEditorRuntimeLibrary::Create(UObject* WorldContextObject,
 
 	if (OwningPlayer)
 	{
-		TSubclassOf<UScreen> type = WidgetType;
-		UScreen* screen = Cast<UScreen>(Cast<UScreenStack>(screenStack)->PushScreenByClass(type));
+		TSubclassOf<UScreen> screenType = WidgetType;
+		UUserWidget* screen = (UUserWidget*)(Cast<UScreenStack>(screenStack)->PushScreenByClass(screenType));
 
 		return screen;
 	}
 	else if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
 	{
-		return CreateWidget(World, WidgetType);
+		//	We should really never get here
+		//UUserWidget* screen = CreateWidget(World, WidgetType);
+		
+		check(true);
+
+		return nullptr;
 	}
 
 	return nullptr;

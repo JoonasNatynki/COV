@@ -2,8 +2,8 @@
 	"RemapUnityFiles": 
 	{
 		"Module.COVEditor.cpp.obj": [
-			"BPNode_MyNode.cpp.obj",
-			"COVEditor.cpp.obj"
+			"COVEditor.cpp.obj",
+			"BPNode_MyNode.cpp.obj"
 		],
 		"Module.COVEditor.gen.cpp.obj": [
 			"BPNode_MyNode.gen.cpp.obj",

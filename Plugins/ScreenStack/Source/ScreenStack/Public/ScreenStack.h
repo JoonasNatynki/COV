@@ -134,8 +134,9 @@ public:
 	UFUNCTION(Category = "Screen", BlueprintCallable, BlueprintPure)
 		APlayerController* GetOwnerPlayerController() const;
 
-	UFUNCTION(Category = "Screen", BlueprintCallable, meta = (DeterminesOutputType = "screenType"))
-		UObject* PushScreenByClass(TSubclassOf<UScreen> screenType);
+	//UFUNCTION(Category = "Screen", BlueprintCallable, meta = (DeterminesOutputType = "screenType"))
+		UObject* PushScreenByClass(const TSubclassOf<UScreen> screenType);
+		void LatentAddToViewport(UScreen* screen) const;
 
 	UFUNCTION(Category = "Screen", BlueprintCallable)
 		bool PopTopScreen();

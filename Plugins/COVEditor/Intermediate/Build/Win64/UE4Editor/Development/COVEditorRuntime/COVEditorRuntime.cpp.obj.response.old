@@ -517,6 +517,7 @@
 /I Runtime\Analytics\Analytics\Public
 /I Runtime\Analytics\Analytics
 /I Runtime\Analytics\Analytics\Public\Interfaces
+/I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Inc\COVEditorRuntime"
 /I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Source"
 /I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Source\COVEditorRuntime\Public"
 /I "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Source\COVEditorRuntime"

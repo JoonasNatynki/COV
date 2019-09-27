@@ -129,7 +129,7 @@ UObject* UScreenStack::PushScreenByClass(const TSubclassOf<UScreen> widgetClass)
 		}
 
 		screenStack.Add(screen);
-		screen->AddToViewport(0);
+		//screen->AddToViewport(0);
 
 		UE_LOG(ScreenStack, Log, TEXT("Screen (%s) added to stack with the index (%d). Calling OnScreenPushed..."), *widgetClassName, screenStack.Num() - 1);
 		

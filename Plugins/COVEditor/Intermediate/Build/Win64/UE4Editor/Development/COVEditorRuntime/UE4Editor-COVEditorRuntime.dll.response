@@ -80,6 +80,8 @@
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\DetailCustomizations\UE4Editor-DetailCustomizations.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\Settings\UE4Editor-Settings.lib"
 "C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\RenderCore\UE4Editor-RenderCore.lib"
+"C:\Program Files\Epic Games\UE_4.23\Engine\Intermediate\Build\Win64\UE4Editor\Development\UMG\UE4Editor-UMG.lib"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Development\ScreenStack\UE4Editor-ScreenStack.lib"
 "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditor\UE4Editor-COVEditor.lib"
 /OUT:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Binaries\Win64\UE4Editor-COVEditorRuntime.dll"
 /IMPLIB:"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditorRuntime\UE4Editor-COVEditorRuntime.suppressed.lib"

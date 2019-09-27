@@ -34,6 +34,8 @@
 /FUNCTIONPADMIN
 "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Intermediate\Build\Win64\COVEditor\Development\UnrealEd\SharedPCH.UnrealEd.h.obj"
 "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditorRuntime\COVEditorRuntime.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditorRuntime\COVEditorRuntime.gen.cpp.obj"
+"C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditorRuntime\COVEditorRuntime.init.gen.cpp.obj"
 "C:\Users\Joonas.natynki\Documents\Unreal Projects\COV\Plugins\COVEditor\Intermediate\Build\Win64\UE4Editor\Development\COVEditorRuntime\Default.rc2.res"
 "delayimp.lib"
 "wininet.lib"

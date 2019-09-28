@@ -362,9 +362,17 @@ void UScreen::SetVisibility(ESlateVisibility visibility)
 
 void UScreen::RemoveFromParent()
 {
-	OnbeginDestroy.Broadcast(this);
+	//	Screens can only be removed from the parent and the stack when screens are not locked
+	if (!bScreenIsLocked)
+	{
+		OnbeginDestroy.Broadcast(this);
 
-	Super::RemoveFromParent();
+		Super::RemoveFromParent();
+	}
+	else
+	{
+		UE_LOG(ScreenStack, Warning, TEXT("Could not remove screen (%s) from parent. The screen is locked."), *GetNameSafe(this));
+	}
 }
 
 void UScreenStack::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

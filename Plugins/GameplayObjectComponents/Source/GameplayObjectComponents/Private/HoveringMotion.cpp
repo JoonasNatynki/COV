@@ -96,12 +96,6 @@ void UHoveringMotion::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (!bIsAnimating)
-	{
-		PrimaryComponentTick.SetTickFunctionEnable(false);
-		return;
-	}
-
 	//	Update the mesh transform
 	UpdateMeshTransform(DeltaTime);
 }

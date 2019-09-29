@@ -33,6 +33,7 @@
 /NODEFAULTLIB:"LIBCPD"
 /FUNCTIONPADMIN
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h.obj"
+"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Intermediate\Build\Win64\UE4Editor\DebugGame\GameplayObjectComponents\HoveringMotion.cpp.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Intermediate\Build\Win64\UE4Editor\DebugGame\GameplayObjectComponents\Module.GameplayObjectComponents.cpp.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Intermediate\Build\Win64\UE4Editor\DebugGame\GameplayObjectComponents\Module.GameplayObjectComponents.gen.cpp.obj"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Intermediate\Build\Win64\UE4Editor\DebugGame\GameplayObjectComponents\Default.rc2.res"

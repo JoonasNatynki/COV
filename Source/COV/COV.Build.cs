@@ -8,7 +8,16 @@ public class COV : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ScreenStack", "UE4Helpers" });
+		PublicDependencyModuleNames.AddRange(new string[]
+        {
+            "Core",
+            "CoreUObject",
+            "Engine",
+            "InputCore",
+            "ScreenStack",
+            "UE4Helpers",
+            "GameplayObjectComponents"
+        });
 		
         //if (Target.Type == TargetRules.TargetType.Editor)
         //{

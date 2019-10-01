@@ -18,15 +18,15 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 	ENGINE_API UClass* Z_Construct_UClass_UActorComponent();
 	UPackage* Z_Construct_UPackage__Script_GameplayObjectComponents();
 	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_SetAnimating();
-	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh();
-	ENGINE_API UClass* Z_Construct_UClass_UMeshComponent_NoRegister();
+	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent();
+	ENGINE_API UClass* Z_Construct_UClass_USceneComponent_NoRegister();
 // End Cross Module References
 	void UHoveringMotion::StaticRegisterNativesUHoveringMotion()
 	{
 		UClass* Class = UHoveringMotion::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
 			{ "SetAnimating", &UHoveringMotion::execSetAnimating },
-			{ "SetHoveringMesh", &UHoveringMotion::execSetHoveringMesh },
+			{ "SetHoveringComponent", &UHoveringMotion::execSetHoveringComponent },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, ARRAY_COUNT(Funcs));
 	}
@@ -68,16 +68,16 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics
+	struct Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics
 	{
-		struct HoveringMotion_eventSetHoveringMesh_Parms
+		struct HoveringMotion_eventSetHoveringComponent_Parms
 		{
-			UMeshComponent* meshComponentToHover;
+			USceneComponent* _componentToHover;
 		};
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_meshComponentToHover_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp__componentToHover_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_meshComponentToHover;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp__componentToHover;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -85,27 +85,27 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::NewProp_meshComponentToHover_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::NewProp__componentToHover_MetaData[] = {
 		{ "EditInline", "true" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::NewProp_meshComponentToHover = { "meshComponentToHover", nullptr, (EPropertyFlags)0x0010000000080080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(HoveringMotion_eventSetHoveringMesh_Parms, meshComponentToHover), Z_Construct_UClass_UMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::NewProp_meshComponentToHover_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::NewProp_meshComponentToHover_MetaData)) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::NewProp_meshComponentToHover,
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::NewProp__componentToHover = { "_componentToHover", nullptr, (EPropertyFlags)0x0010000000080080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(HoveringMotion_eventSetHoveringComponent_Parms, _componentToHover), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::NewProp__componentToHover_MetaData, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::NewProp__componentToHover_MetaData)) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::NewProp__componentToHover,
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::Function_MetaDataParams[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Hovering Motion" },
 		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UHoveringMotion, nullptr, "SetHoveringMesh", nullptr, nullptr, sizeof(HoveringMotion_eventSetHoveringMesh_Parms), Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UHoveringMotion, nullptr, "SetHoveringComponent", nullptr, nullptr, sizeof(HoveringMotion_eventSetHoveringComponent_Parms), Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -120,6 +120,11 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bAnimateOnlyLocally_MetaData[];
+#endif
+		static void NewProp_bAnimateOnlyLocally_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bAnimateOnlyLocally;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_HoverRepeatFrequency_MetaData[];
 #endif
@@ -194,14 +199,9 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		static void NewProp_bRotate_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bRotate;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsAnimating_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ComponentToHover_MetaData[];
 #endif
-		static void NewProp_bIsAnimating_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsAnimating;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MeshToHover_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_MeshToHover;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ComponentToHover;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
@@ -212,7 +212,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UHoveringMotion_Statics::FuncInfo[] = {
 		{ &Z_Construct_UFunction_UHoveringMotion_SetAnimating, "SetAnimating" }, // 3645170353
-		{ &Z_Construct_UFunction_UHoveringMotion_SetHoveringMesh, "SetHoveringMesh" }, // 4114913754
+		{ &Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent, "SetHoveringComponent" }, // 1548546002
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::Class_MetaDataParams[] = {
@@ -222,6 +222,19 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally_MetaData[] = {
+		{ "Category", "Hovering Motion" },
+		{ "Comment", "//\x09Whether to only animate the object locally regardless of replication conditions. If the object has replicate movement enabled, this will cause the object transform to be different to what it is on the server.\n" },
+		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
+		{ "ToolTip", "Whether to only animate the object locally regardless of replication conditions. If the object has replicate movement enabled, this will cause the object transform to be different to what it is on the server." },
+	};
+#endif
+	void Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally_SetBit(void* Obj)
+	{
+		((UHoveringMotion*)Obj)->bAnimateOnlyLocally = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally = { "bAnimateOnlyLocally", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UHoveringMotion), &Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally_SetBit, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverRepeatFrequency_MetaData[] = {
 		{ "Category", "Hovering Motion" },
@@ -403,26 +416,16 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotate = { "bRotate", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UHoveringMotion), &Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotate_SetBit, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotate_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotate_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating_MetaData[] = {
-		{ "Category", "Hovering Motion" },
-		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
-	};
-#endif
-	void Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating_SetBit(void* Obj)
-	{
-		((UHoveringMotion*)Obj)->bIsAnimating = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating = { "bIsAnimating", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UHoveringMotion), &Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating_SetBit, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_MeshToHover_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ComponentToHover_MetaData[] = {
 		{ "Comment", "//\x09The hovering mesh of the actor\n" },
 		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
 		{ "ToolTip", "The hovering mesh of the actor" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_MeshToHover = { "MeshToHover", nullptr, (EPropertyFlags)0x0010000000080008, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UHoveringMotion, MeshToHover), Z_Construct_UClass_UMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_MeshToHover_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_MeshToHover_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ComponentToHover = { "ComponentToHover", nullptr, (EPropertyFlags)0x0010000000080008, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UHoveringMotion, ComponentToHover), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ComponentToHover_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ComponentToHover_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_UHoveringMotion_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bAnimateOnlyLocally,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverRepeatFrequency,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverZMovementDistance,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverYMovementDistance,
@@ -439,8 +442,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotateYAxis,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotateXAxis,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRotate,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bIsAnimating,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_MeshToHover,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ComponentToHover,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UHoveringMotion_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<UHoveringMotion>::IsAbstract,
@@ -469,7 +471,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UHoveringMotion, 4189454743);
+	IMPLEMENT_CLASS(UHoveringMotion, 4099157579);
 	template<> GAMEPLAYOBJECTCOMPONENTS_API UClass* StaticClass<UHoveringMotion>()
 	{
 		return UHoveringMotion::StaticClass();

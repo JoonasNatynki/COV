@@ -24,26 +24,44 @@ void UHoveringMotion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//	If not mesh set, default to hovering the root component if it is a mesh itself
-	if (!IsValid(MeshToHover))
+	//	If the animated mesh is not set, default to hovering the root component if it is a mesh itself
+	if (!IsValid(ComponentToHover))
 	{
-		if (Cast<UMeshComponent>(GetOwner()->GetRootComponent()))
-		{
-			bIsRotatingRootMesh = true;
-			UE_LOG(LogHoveringMotion, Warning, TEXT("HoverMotionComponent is set to rotate the owner's root component. This is expensive if replicated over the network ."));
-			//	The root component is a mesh component. Set that as the hovering component
-			SetHoveringMesh(Cast<UMeshComponent>(GetOwner()->GetRootComponent()));
-			SetAnimating(true);
+		UE_LOG(LogHoveringMotion, Log, TEXT("No mesh set to hover. Defaulting to hovering the root component's position."));
+
+		check(Cast<USceneComponent>(GetOwner()->GetRootComponent()));
+
+		//	The root component is a mesh component. Set that as the hovering component
+		SetHoveringComponent(GetOwner()->GetRootComponent());
+
+		bIsRotatingRootComponent = true;
+		bool bShouldAnimate = false;
+
+		UE_LOG(LogHoveringMotion, Warning, TEXT("HoverMotionComponent is set to rotate the owner's root component. reminder that this is expensive when movement is replicated over the network ."));
+
+		AActor* owner = GetOwner();
+
+		if (owner->GetIsReplicated() && owner->bReplicateMovement)
+		{		
+			//	The actor is set to replicate its movement over the network. Only authority should now animate the root motion as it then replicates its movement to the listening clients
+			bShouldAnimate = (owner->HasAuthority() && !bAnimateOnlyLocally) || (!owner->HasAuthority() && bAnimateOnlyLocally);
 		}
+		else
+		{
+			//	Just hover on both client and server independently
+			bShouldAnimate = true;
+		}
+
+		SetAnimating(bShouldAnimate);
 	}
 }
 
-void UHoveringMotion::SetHoveringMesh(UMeshComponent* meshComponentToHover)
+void UHoveringMotion::SetHoveringComponent(USceneComponent* componentToHover)
 {
-	if (IsValid(meshComponentToHover))
+	if (IsValid(componentToHover))
 	{
-		MeshToHover = meshComponentToHover;
-		UE_LOG(LogHoveringMotion, Log, TEXT("Mesh to rotate set to (%s)"), *GetNameSafe(MeshToHover));
+		ComponentToHover = componentToHover;
+		UE_LOG(LogHoveringMotion, Log, TEXT("Mesh to rotate set to (%s)"), *GetNameSafe(ComponentToHover));
 	}
 	else
 	{
@@ -60,10 +78,10 @@ void UHoveringMotion::SetAnimating(bool bShouldAnimate)
 	if (bShouldAnimate && bRandomizeInitialRotation)
 	{
 		FRotator randRot = UKismetMathLibrary::RandomRotator();
-		MeshToHover->SetRelativeRotation(randRot);
+		ComponentToHover->SetRelativeRotation(randRot);
 	}
 
-	UE_LOG(LogHoveringMotion, Log, TEXT("%s animate (%s)."), *GetNameSafe(MeshToHover), (bShouldAnimate)?(TEXT("Beginning")):(TEXT("Stopping")));
+	UE_LOG(LogHoveringMotion, Log, TEXT("%s animate (%s)."), *GetNameSafe(ComponentToHover), (bShouldAnimate)?(TEXT("Beginning")):(TEXT("Stopping")));
 }
 
 void UHoveringMotion::UpdateMeshTransform(float deltaTime)
@@ -71,7 +89,7 @@ void UHoveringMotion::UpdateMeshTransform(float deltaTime)
 	if (bRotate)
 	{
 		FRotator toRotateWith = FRotator(XAxisRotationSpeed, YAxisRotationSpeed, ZAxisRotationSpeed);
-		MeshToHover->AddLocalRotation(toRotateWith);
+		ComponentToHover->AddLocalRotation(toRotateWith);
 	}
 
 	if (bHoverMovement)
@@ -79,14 +97,14 @@ void UHoveringMotion::UpdateMeshTransform(float deltaTime)
 		float sinValue = (UKismetMathLibrary::Sin(UGameplayStatics::GetRealTimeSeconds(this)) * HoverRepeatFrequency);
 
 		//	If we are rotating the root mesh, record the offset so we can calculate the original location of the mesh if it had not hovered at all
-		if (bIsRotatingRootMesh)
+		if (bIsRotatingRootComponent)
 		{
 			FVector offset = FVector(HoverXMovementDistance, HoverYMovementDistance, HoverZMovementDistance) * deltaTime * sinValue;
 			GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + offset);
 		}
 		else
 		{
-			MeshToHover->SetRelativeLocation(FVector(HoverXMovementDistance * sinValue, HoverYMovementDistance * sinValue, HoverZMovementDistance * sinValue), false);
+			ComponentToHover->SetRelativeLocation(FVector(HoverXMovementDistance * sinValue, HoverYMovementDistance * sinValue, HoverZMovementDistance * sinValue), false);
 		}
 	}
 }

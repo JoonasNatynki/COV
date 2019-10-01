@@ -9,6 +9,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnFocusedActorChanged, AActor*, NewFocusedActor);
 
+DECLARE_LOG_CATEGORY_EXTERN(LogFocus, Log, All)
+
 //	Component that casts either a ray from the camera or a more complex area focus mechanic to determine which object in the game world is being focused on.
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable, meta=(ShortTooltip = "Component used for focusing on objects.") )
 class COV_API UCOVFocusComponent : public UActorComponent
@@ -23,20 +25,20 @@ public:
 		FOnFocusedActorChanged OnFocusedActorChanged;
 
 	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere, Transient)
-		AActor* _cachedFocusedActor;
+		AActor* CachedFocusedActor;
 
 	UPROPERTY(Category = "Focus", BlueprintReadOnly, VisibleAnywhere, Transient)
-		FVector _focusWorldLocation;
+		FVector FocusWorldLocation;
 
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
-		float _focusingMaxDistance = 700.0f;
+		float FocusingMaxDistance = 700.0f;
 
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
 		//	If TRUE, you can focus on everything and on focusable things regardless of their set distance limits.
 		bool bDeveloperMode = false;
 
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
-		float _focusingMaxArea = 80.0f;
+		float FocusingMaxArea = 50.0f;
 
 	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
 		//	Whether to ignore all other actors but the ones with the FocusableComponent
@@ -69,7 +71,7 @@ public:
 		//	Goes through the logic of how the focus actor is determined and updates the cached focused actor variable.
 		void UpdateFocusedActor();
 	UFUNCTION(Category = "Focus", BlueprintCallable)
-		void SetFocusedActor(AActor* newFocus) { _cachedFocusedActor = newFocus; };
+		void SetFocusedActor(AActor* newFocus) { CachedFocusedActor = newFocus; };
 
 	const void DrawDebugs(float deltaTime) const;
 	const TWeakObjectPtr<AActor> FindClosestFocusedActor_Internal(TArray<AActor*> overlappingActors) const;
@@ -77,5 +79,5 @@ public:
 
 FVector UCOVFocusComponent::GetFocusWorldLocation() const
 {
-	return _focusWorldLocation;
+	return FocusWorldLocation;
 }

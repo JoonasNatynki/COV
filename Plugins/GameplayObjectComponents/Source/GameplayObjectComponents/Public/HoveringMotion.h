@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "HoveringMotion.generated.h"
 
-class UMeshComponent;
-
 DECLARE_LOG_CATEGORY_EXTERN(LogHoveringMotion, Log, All)
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -21,10 +19,8 @@ public:
 
 	UPROPERTY()
 		//	The hovering mesh of the actor
-		UMeshComponent* MeshToHover;
+		USceneComponent* ComponentToHover;
 
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere)
-		bool bIsAnimating = true;
 
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere)
@@ -88,9 +84,14 @@ public:
 
 
 
+	UPROPERTY(Category = "Hovering Motion", EditAnywhere)
+		//	Whether to only animate the object locally regardless of replication conditions. If the object has replicate movement enabled, this will cause the object transform to be different to what it is on the server.
+		bool bAnimateOnlyLocally = false;
+
+
 
 	UFUNCTION(Category = "Hovering Motion", BlueprintCallable)
-		void SetHoveringMesh(UMeshComponent* meshComponentToHover);
+		void SetHoveringComponent(USceneComponent* _componentToHover);
 
 	UFUNCTION(Category = "Hovering Motion", BlueprintCallable)
 		void SetAnimating(bool bShouldAnimate);
@@ -104,8 +105,9 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	//	If the component is rotating the root mesh. This determines if its just a local hovering transformation or the actual actors world location. This is expensive if simulated over the network
-	bool bIsRotatingRootMesh = false;
+	bool bIsRotatingRootComponent = false;	//	If the component is rotating the root mesh. This determines if its just a local hovering transformation or the actual actors world location. This is expensive if simulated over the network
+	bool bIsReplicatingMovementOverNetwork = false;		//	If the component is rotating the root mesh, it's important to know if the object is replicating movement over the network so that only the authority animates the root component (as its movement is then replicated over the network to listening clients. We don't want the clients to fight the authority on this.
+	bool bIsAnimating = true;
 
 
 public:	

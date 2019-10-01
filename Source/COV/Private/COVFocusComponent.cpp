@@ -5,10 +5,13 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include "FocusableComponent.h"
 #include "UE4Helpers.h"
+#include <Engine/EngineTypes.h>
 
 static TAutoConsoleVariable<int32> CVarShowFocusDebugs(TEXT("COV.DebugFocusPoint"),
 	0,
 	TEXT("Show the point of focus in the world."));
+
+DEFINE_LOG_CATEGORY(LogFocus)
 
 // Sets default values for this component's properties
 UCOVFocusComponent::UCOVFocusComponent()
@@ -28,24 +31,51 @@ void UCOVFocusComponent::BeginPlay()
 TWeakObjectPtr<AActor> UCOVFocusComponent::UpdateFocusedActor_Internal()
 {
 	TWeakObjectPtr<AActor> focusedActor;
-	//	Just simply get the actor pointed at
-	FHitResult RV_Hit = UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance);
-	_focusWorldLocation = RV_Hit.ImpactPoint;
+	FHitResult RV_Hit = UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), FocusingMaxDistance);
+	FocusWorldLocation = RV_Hit.ImpactPoint;
+	TArray<AActor*> actorsOverlapping;
 
-	if (!_focusWorldLocation.IsZero())
+	FVector startLoc;
+	FVector endLoc;
+
+	APawn* ownerPawn = Cast<APawn>(GetOwner());
+
+	if (ownerPawn)
 	{
-		TArray<AActor*> actorsOverlapping;
-		TArray<AActor*> actorsToIgnore;
-		actorsToIgnore.Add(GetOwner());
-		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-		UKismetSystemLibrary::SphereOverlapActors(GetOwner(), _focusWorldLocation, _focusingMaxArea, ObjectTypes, nullptr, actorsToIgnore, actorsOverlapping);
-
-		//	Now go through all the overlapping actors and figure out the best candidate that the player might actually intend on focusing
-		if (actorsOverlapping.Num() > 0)
+		AActor* ownerCameraManagerActor = Cast<AActor>(UE4CodeHelpers::TryGetPawnCameraManager(ownerPawn));
+		if (ownerCameraManagerActor)
 		{
-			TWeakObjectPtr<AActor> bestCandidate = FindClosestFocusedActor_Internal(actorsOverlapping);
-			focusedActor = bestCandidate;
+			startLoc = ownerCameraManagerActor->GetActorLocation();
+			endLoc = startLoc + (ownerCameraManagerActor->GetActorForwardVector() * FocusingMaxDistance);
 		}
+	}
+
+	TArray<FHitResult> hits;
+	TArray<AActor*> actorsToIgnore;
+	actorsToIgnore.Add(GetOwner());
+
+	EDrawDebugTrace::Type debugTrace = (bShowDebug) ? (EDrawDebugTrace::ForDuration) : (EDrawDebugTrace::None);
+
+	UKismetSystemLibrary::SphereTraceMulti(this, startLoc, endLoc, FocusingMaxArea, UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel1), false, actorsToIgnore, debugTrace, hits, true, FLinearColor::Green, FLinearColor::Red, GetWorld()->GetDeltaSeconds());
+
+	if (hits.Num() > 0)
+	{
+		for (auto& hit : hits)
+		{
+			AActor* hitActor = hit.Actor.Get();
+
+			if (IsValid(hitActor))
+			{
+				actorsOverlapping.Add(hitActor);
+			}
+		}
+	}
+
+	//	Now go through all the overlapping actors and figure out the best candidate that the player might actually intend on focusing
+	if (actorsOverlapping.Num() > 0)
+	{
+		TWeakObjectPtr<AActor> bestCandidate = FindClosestFocusedActor_Internal(actorsOverlapping);
+		focusedActor = bestCandidate;
 	}
 
 	return focusedActor;
@@ -54,12 +84,12 @@ TWeakObjectPtr<AActor> UCOVFocusComponent::UpdateFocusedActor_Internal()
 AActor* UCOVFocusComponent::GetFocusedActor()
 {
 	UpdateFocusedActor();
-	return _cachedFocusedActor;
+	return CachedFocusedActor;
 }
 
 AActor* UCOVFocusComponent::GetCachedFocusedActor() const
 {
-	return _cachedFocusedActor;
+	return CachedFocusedActor;
 }
 
 void UCOVFocusComponent::UpdateFocusedActor()
@@ -67,21 +97,20 @@ void UCOVFocusComponent::UpdateFocusedActor()
 	//	If cached actor was not found, try to find a new actor to focus at
 	TWeakObjectPtr<AActor> newFocusActor = UpdateFocusedActor_Internal();
 	
-	bool bFocusActorHasChanged = _cachedFocusedActor != newFocusActor ? true : false;
+	bool bFocusActorHasChanged = (CachedFocusedActor != newFocusActor) ? (true) : (false);
 
 	if (bFocusActorHasChanged)
 	{
-		_cachedFocusedActor = newFocusActor.Get();
-		COV_LOG(LogTemp, Log, TEXT("Focus actor changed to (%s)."), *GetNameSafe(_cachedFocusedActor));
+		CachedFocusedActor = newFocusActor.Get();
+		COV_LOG(LogTemp, Log, TEXT("Focus actor changed to (%s)."), *GetNameSafe(CachedFocusedActor));
 		OnFocusedActorChanged.Broadcast(newFocusActor.Get());
 	}
 }
 
 const void UCOVFocusComponent::DrawDebugs(float deltaTime) const
 {
-	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, 5.0f, 4, FColor::Magenta, false, -1.0f, 0, 2.0f);
-
-	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), _focusingMaxDistance).ImpactPoint, _focusingMaxArea, 16, FColor::Cyan, false, -1.0f, 0, 2.0f);
+	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), FocusingMaxDistance).ImpactPoint, 5.0f, 4, FColor::Magenta, false, -1.0f, 0, 2.0f);
+	DrawDebugSphere(GetWorld(), UE4CodeHelpers::CastCrossHairLineTrace(GetOwner(), FocusingMaxDistance).ImpactPoint, FocusingMaxArea, 16, FColor::Cyan, false, -1.0f, 0, 2.0f);
 }
 
 const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Internal(TArray<AActor*> overlappingActors) const
@@ -91,7 +120,7 @@ const TWeakObjectPtr<AActor> UCOVFocusComponent::FindClosestFocusedActor_Interna
 
 	for (auto& actor : overlappingActors)
 	{
-		float distanceToFocusWorldLocation = (_focusWorldLocation - actor->GetActorLocation()).Size();
+		float distanceToFocusWorldLocation = (FocusWorldLocation - actor->GetActorLocation()).Size();
 		float distanceToActorWhoIsFocusing = (GetOwner()->GetActorLocation() - actor->GetActorLocation()).Size();
 
 		//	If using the developer mode, ignore every setting and just focus on everything.
@@ -126,9 +155,9 @@ void UCOVFocusComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 	UpdateFocusedActor();
 
-	bool bDebugShowFocusPoint = CVarShowFocusDebugs.GetValueOnGameThread() == 1 ? true:false;
+	bShowDebug = CVarShowFocusDebugs.GetValueOnGameThread() == 1 ? true:false;
 
-	if ((bDebugShowFocusPoint || bShowDebug) && !_focusWorldLocation.IsZero())
+	if ((bShowDebug) && !FocusWorldLocation.IsZero())
 	{
 		DrawDebugs(DeltaTime);
 	}

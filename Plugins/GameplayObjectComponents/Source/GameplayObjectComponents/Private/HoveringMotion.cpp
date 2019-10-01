@@ -16,7 +16,7 @@ UHoveringMotion::UHoveringMotion()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.bStartWithTickEnabled = true;
+	PrimaryComponentTick.bStartWithTickEnabled = false;
 }
 
 // Called when the game starts
@@ -27,40 +27,46 @@ void UHoveringMotion::BeginPlay()
 	//	If the animated mesh is not set, default to hovering the root component if it is a mesh itself
 	if (!IsValid(ComponentToHover))
 	{
-		UE_LOG(LogHoveringMotion, Log, TEXT("No mesh set to hover. Defaulting to hovering the root component's position."));
-
-		check(Cast<USceneComponent>(GetOwner()->GetRootComponent()));
-
-		//	The root component is a mesh component. Set that as the hovering component
-		SetHoveringComponent(GetOwner()->GetRootComponent());
-
-		bIsRotatingRootComponent = true;
-		bool bShouldAnimate = false;
-
-		UE_LOG(LogHoveringMotion, Warning, TEXT("HoverMotionComponent is set to rotate the owner's root component. reminder that this is expensive when movement is replicated over the network ."));
-
-		AActor* owner = GetOwner();
-
-		if (owner->GetIsReplicated() && owner->bReplicateMovement)
-		{		
-			//	The actor is set to replicate its movement over the network. Only authority should now animate the root motion as it then replicates its movement to the listening clients
-			bShouldAnimate = (owner->HasAuthority() && !bAnimateOnlyLocally) || (!owner->HasAuthority() && bAnimateOnlyLocally);
-		}
-		else
-		{
-			//	Just hover on both client and server independently
-			bShouldAnimate = true;
-		}
-
-		SetAnimating(bShouldAnimate);
+		DefaultToRootComponentAnimation_Internal();
 	}
 }
 
-void UHoveringMotion::SetHoveringComponent(USceneComponent* componentToHover)
+void UHoveringMotion::DefaultToRootComponentAnimation_Internal()
 {
-	if (IsValid(componentToHover))
+	UE_LOG(LogHoveringMotion, Log, TEXT("No mesh set to hover. Defaulting to hovering the root component's position."));
+
+	//	Make sure the owner has a root component
+	check(Cast<USceneComponent>(GetOwner()->GetRootComponent()));
+
+	//	The root component as the hovering component
+	SetHoveringComponent(GetOwner()->GetRootComponent());
+
+	bool bShouldAnimate = false;
+
+	UE_LOG(LogHoveringMotion, Warning, TEXT("HoverMotionComponent is set to rotate the owner's root component. reminder that this is expensive when movement is replicated over the network ."));
+
+	AActor* owner = GetOwner();
+
+	if (owner->GetIsReplicated() && owner->bReplicateMovement)
 	{
-		ComponentToHover = componentToHover;
+		//	The actor is set to replicate its movement over the network. Only authority should now animate the root motion as it then replicates its movement to the listening clients
+		bShouldAnimate = (owner->HasAuthority() && !bAnimateOnlyLocally) || (!owner->HasAuthority() && bAnimateOnlyLocally);
+	}
+	else
+	{
+		//	Just hover on both client and server independently
+		bShouldAnimate = true;
+	}
+
+	SetAnimating(bShouldAnimate);
+}
+
+void UHoveringMotion::SetHoveringComponent(USceneComponent* _componentToHover)
+{
+	if (IsValid(_componentToHover))
+	{
+		ComponentToHover = _componentToHover;
+		bIsRotatingRootComponent = IsHoverComponentRootComponent();
 		UE_LOG(LogHoveringMotion, Log, TEXT("Mesh to rotate set to (%s)"), *GetNameSafe(ComponentToHover));
 	}
 	else
@@ -75,7 +81,7 @@ void UHoveringMotion::SetAnimating(bool bShouldAnimate)
 	bIsAnimating = bShouldAnimate;
 	PrimaryComponentTick.SetTickFunctionEnable(bShouldAnimate);
 
-	if (bShouldAnimate && bRandomizeInitialRotation)
+	if (bShouldAnimate && bRandomizeInitialRotation && !IsHoverComponentRootComponent())
 	{
 		FRotator randRot = UKismetMathLibrary::RandomRotator();
 		ComponentToHover->SetRelativeRotation(randRot);

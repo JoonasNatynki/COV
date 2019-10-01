@@ -14,7 +14,15 @@ class USceneComponent;
 #endif
 #define GAMEPLAYOBJECTCOMPONENTS_HoveringMotion_generated_h
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS \
+ \
+	DECLARE_FUNCTION(execIsHoverComponentRootComponent) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(bool*)Z_Param__Result=P_THIS->IsHoverComponentRootComponent(); \
+		P_NATIVE_END; \
+	} \
  \
 	DECLARE_FUNCTION(execSetAnimating) \
 	{ \
@@ -35,7 +43,15 @@ class USceneComponent;
 	}
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
+ \
+	DECLARE_FUNCTION(execIsHoverComponentRootComponent) \
+	{ \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		*(bool*)Z_Param__Result=P_THIS->IsHoverComponentRootComponent(); \
+		P_NATIVE_END; \
+	} \
  \
 	DECLARE_FUNCTION(execSetAnimating) \
 	{ \
@@ -56,7 +72,7 @@ class USceneComponent;
 	}
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS_NO_PURE_DECLS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUHoveringMotion(); \
 	friend struct Z_Construct_UClass_UHoveringMotion_Statics; \
@@ -65,7 +81,7 @@ public: \
 	DECLARE_SERIALIZER(UHoveringMotion)
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS \
 private: \
 	static void StaticRegisterNativesUHoveringMotion(); \
 	friend struct Z_Construct_UClass_UHoveringMotion_Statics; \
@@ -74,7 +90,7 @@ public: \
 	DECLARE_SERIALIZER(UHoveringMotion)
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_STANDARD_CONSTRUCTORS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UHoveringMotion(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UHoveringMotion) \
@@ -87,7 +103,7 @@ private: \
 public:
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_ENHANCED_CONSTRUCTORS \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API UHoveringMotion(UHoveringMotion&&); \
@@ -98,26 +114,26 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UHoveringMotion); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(UHoveringMotion)
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_11_PROLOG
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_GENERATED_BODY_LEGACY \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_11_PROLOG
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_STANDARD_CONSTRUCTORS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_GENERATED_BODY \
+#define COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS_NO_PURE_DECLS \
-	COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_ENHANCED_CONSTRUCTORS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_PRIVATE_PROPERTY_OFFSET \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_INCLASS_NO_PURE_DECLS \
+	COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h_14_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -125,7 +141,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> GAMEPLAYOBJECTCOMPONENTS_API UClass* StaticClass<class UHoveringMotion>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID COV_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h
+#define CURRENT_FILE_ID COV_4_23_Plugins_GameplayObjectComponents_Source_GameplayObjectComponents_Public_HoveringMotion_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

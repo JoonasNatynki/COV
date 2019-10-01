@@ -17,6 +17,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 	GAMEPLAYOBJECTCOMPONENTS_API UClass* Z_Construct_UClass_UHoveringMotion();
 	ENGINE_API UClass* Z_Construct_UClass_UActorComponent();
 	UPackage* Z_Construct_UPackage__Script_GameplayObjectComponents();
+	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent();
 	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_SetAnimating();
 	GAMEPLAYOBJECTCOMPONENTS_API UFunction* Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent();
 	ENGINE_API UClass* Z_Construct_UClass_USceneComponent_NoRegister();
@@ -25,10 +26,49 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 	{
 		UClass* Class = UHoveringMotion::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
+			{ "IsHoverComponentRootComponent", &UHoveringMotion::execIsHoverComponentRootComponent },
 			{ "SetAnimating", &UHoveringMotion::execSetAnimating },
 			{ "SetHoveringComponent", &UHoveringMotion::execSetHoveringComponent },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, ARRAY_COUNT(Funcs));
+	}
+	struct Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics
+	{
+		struct HoveringMotion_eventIsHoverComponentRootComponent_Parms
+		{
+			bool ReturnValue;
+		};
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	void Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((HoveringMotion_eventIsHoverComponentRootComponent_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(HoveringMotion_eventIsHoverComponentRootComponent_Parms), &Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::NewProp_ReturnValue,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Hovering Motion" },
+		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UHoveringMotion, nullptr, "IsHoverComponentRootComponent", nullptr, nullptr, sizeof(HoveringMotion_eventIsHoverComponentRootComponent_Parms), Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::PropPointers, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x54020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::Function_MetaDataParams, ARRAY_COUNT(Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent_Statics::FuncParams);
+		}
+		return ReturnFunction;
 	}
 	struct Z_Construct_UFunction_UHoveringMotion_SetAnimating_Statics
 	{
@@ -211,6 +251,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_GameplayObjectComponents,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UHoveringMotion_Statics::FuncInfo[] = {
+		{ &Z_Construct_UFunction_UHoveringMotion_IsHoverComponentRootComponent, "IsHoverComponentRootComponent" }, // 3008148898
 		{ &Z_Construct_UFunction_UHoveringMotion_SetAnimating, "SetAnimating" }, // 3645170353
 		{ &Z_Construct_UFunction_UHoveringMotion_SetHoveringComponent, "SetHoveringComponent" }, // 1548546002
 	};
@@ -471,7 +512,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UHoveringMotion, 4099157579);
+	IMPLEMENT_CLASS(UHoveringMotion, 492737226);
 	template<> GAMEPLAYOBJECTCOMPONENTS_API UClass* StaticClass<UHoveringMotion>()
 	{
 		return UHoveringMotion::StaticClass();

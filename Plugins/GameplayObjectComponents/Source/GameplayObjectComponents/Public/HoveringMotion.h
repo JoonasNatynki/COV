@@ -96,7 +96,8 @@ public:
 	UFUNCTION(Category = "Hovering Motion", BlueprintCallable)
 		void SetAnimating(bool bShouldAnimate);
 
-
+	UFUNCTION(Category = "Hovering Motion", BlueprintCallable, BlueprintPure)
+		FORCEINLINE bool IsHoverComponentRootComponent() const;
 
 
 	void UpdateMeshTransform(float deltaTime);
@@ -109,6 +110,10 @@ protected:
 	bool bIsReplicatingMovementOverNetwork = false;		//	If the component is rotating the root mesh, it's important to know if the object is replicating movement over the network so that only the authority animates the root component (as its movement is then replicated over the network to listening clients. We don't want the clients to fight the authority on this.
 	bool bIsAnimating = true;
 
+private:
+
+	//	Sets component to hover to be the root component of this component's owner and sets it to animate instead.
+	void DefaultToRootComponentAnimation_Internal();
 
 public:	
 	// Called every frame
@@ -116,3 +121,8 @@ public:
 
 		
 };
+
+FORCEINLINE bool UHoveringMotion::IsHoverComponentRootComponent() const
+{
+	return GetOwner()->GetRootComponent() == ComponentToHover;
+}

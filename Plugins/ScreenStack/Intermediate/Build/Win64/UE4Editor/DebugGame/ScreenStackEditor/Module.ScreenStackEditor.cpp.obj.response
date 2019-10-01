@@ -26,7 +26,17 @@
 /we4668
 /I .
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor\Private"
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
 /I Runtime
+/I Runtime\CoreUObject\Public
+/I Runtime\CoreUObject
+/I Runtime\CoreUObject\Public\Blueprint
+/I Runtime\CoreUObject\Public\Internationalization
+/I Runtime\CoreUObject\Public\Misc
+/I Runtime\CoreUObject\Public\Serialization
+/I Runtime\CoreUObject\Public\Serialization\Formatters
+/I Runtime\CoreUObject\Public\Templates
+/I Runtime\CoreUObject\Public\UObject
 /I Runtime\Core\Public
 /I Runtime\Core
 /I Runtime\Core\Public\Algo
@@ -62,23 +72,6 @@
 /I Runtime\TraceLog
 /I Runtime\TraceLog\Public\Trace
 /I Runtime\TraceLog\Public\Trace\Private
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
-/I Runtime\CoreUObject\Public
-/I Runtime\CoreUObject
-/I Runtime\CoreUObject\Public\Blueprint
-/I Runtime\CoreUObject\Public\Internationalization
-/I Runtime\CoreUObject\Public\Misc
-/I Runtime\CoreUObject\Public\Serialization
-/I Runtime\CoreUObject\Public\Serialization\Formatters
-/I Runtime\CoreUObject\Public\Templates
-/I Runtime\CoreUObject\Public\UObject
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\InputCore
-/I Runtime\InputCore\Classes
-/I Runtime\InputCore\Public
-/I Runtime\InputCore
-/I Runtime\InputCore\Public\GenericPlatform
-/I Runtime\InputCore\Public\HAL
-/I Runtime\InputCore\Public\Windows
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\Slate
 /I Runtime\Slate\Public
 /I Runtime\Slate
@@ -113,6 +106,13 @@
 /I Runtime\ApplicationCore\Public\Windows\Accessibility
 /I Runtime\RHI\Public
 /I Runtime\RHI
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\InputCore
+/I Runtime\InputCore\Classes
+/I Runtime\InputCore\Public
+/I Runtime\InputCore
+/I Runtime\InputCore\Public\GenericPlatform
+/I Runtime\InputCore\Public\HAL
+/I Runtime\InputCore\Public\Windows
 /I Runtime\Json\Public
 /I Runtime\Json
 /I Runtime\Json\Public\Dom
@@ -496,31 +496,13 @@
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ClothingSystemRuntimeInterface
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I Runtime\ClothingSystemRuntimeInterface
-/I Editor\KismetWidgets\Public
-/I Editor\KismetWidgets
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\Sequencer
-/I Editor\Sequencer\Public
-/I Editor\Sequencer
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\SceneOutliner
-/I Editor\SceneOutliner\Public
-/I Editor\SceneOutliner
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CurveEditor
-/I Editor\CurveEditor\Public
-/I Editor\CurveEditor
-/I Editor\CurveEditor\Public\Filters
-/I Editor\CurveEditor\Public\Tree
-/I Editor\CurveEditor\Public\Views
-/I Runtime\Analytics
-/I Runtime\Analytics\Analytics\Public
-/I Runtime\Analytics\Analytics
-/I Runtime\Analytics\Analytics\Public\Interfaces
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackEditor"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor\Public"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackRuntime"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackRuntime\Public"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackRuntime"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackEditor"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor\Public"
+/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor"
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
 /I ThirdParty\PhysX3\PxShared\include\filebuf

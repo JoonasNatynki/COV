@@ -10,6 +10,11 @@
 
 DEFINE_LOG_CATEGORY(LogHoveringMotion)
 
+#define IS_DEDICATED_SERVER GetNetMode() == ENetMode::NM_DedicatedServer
+#define IS_LISTEN_SERVER GetNetMode() == ENetMode::NM_ListenServer
+#define IS_CLIENT GetNetMode() == ENetMode::NM_Client
+#define IS_STANDALONE GetNetMode() == ENetMode::NM_Standalone
+
 // Sets default values for this component's properties
 UHoveringMotion::UHoveringMotion()
 {
@@ -50,7 +55,9 @@ void UHoveringMotion::DefaultToRootComponentAnimation_Internal()
 	if (owner->GetIsReplicated() && owner->bReplicateMovement)
 	{
 		//	The actor is set to replicate its movement over the network. Only authority should now animate the root motion as it then replicates its movement to the listening clients
-		bShouldAnimate = (owner->HasAuthority() && !bAnimateOnlyLocally) || (!owner->HasAuthority() && bAnimateOnlyLocally);
+		bool bAnimationAllowedOnDedicatedServers = (IS_DEDICATED_SERVER && !bAnimateOnlyLocally);
+		bool bIsLocalOrListenServer = (IS_LISTEN_SERVER || IS_STANDALONE || IS_CLIENT);
+		bShouldAnimate = (bAnimationAllowedOnDedicatedServers) || (bIsLocalOrListenServer);
 	}
 	else
 	{

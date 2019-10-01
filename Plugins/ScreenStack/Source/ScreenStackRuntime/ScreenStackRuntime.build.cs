@@ -12,9 +12,7 @@ public class ScreenStackRuntime : ModuleRules
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"Core",
-				"ScreenStackEditor",
-                
+				"Core",                
 				// ... add other public dependencies that you statically link with here ...
 			}
 		);
@@ -22,26 +20,8 @@ public class ScreenStackRuntime : ModuleRules
 			new string[]
 			{
 				// ... add private dependencies that you statically link with here ...
-				"Core",
 				"CoreUObject",
-				"InputCore",
-				"Slate",
 				"Engine",
-				"AssetTools",
-				"UnrealEd", // for FAssetEditorManager
-				"KismetWidgets",
-				"KismetCompiler",
-				"BlueprintGraph",
-				"GraphEditor",
-				"Kismet",  // for FWorkflowCentricApplication
-				"PropertyEditor",
-				"EditorStyle",
-				"Slate",
-				"SlateCore",
-				"Sequencer",
-				"DetailCustomizations",
-				"Settings",
-				"RenderCore",
                 "UMG",
                 "ScreenStack"
 			}

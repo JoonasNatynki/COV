@@ -26,7 +26,17 @@
 /we4668
 /I .
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackRuntime\Private"
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
 /I Runtime
+/I Runtime\CoreUObject\Public
+/I Runtime\CoreUObject
+/I Runtime\CoreUObject\Public\Blueprint
+/I Runtime\CoreUObject\Public\Internationalization
+/I Runtime\CoreUObject\Public\Misc
+/I Runtime\CoreUObject\Public\Serialization
+/I Runtime\CoreUObject\Public\Serialization\Formatters
+/I Runtime\CoreUObject\Public\Templates
+/I Runtime\CoreUObject\Public\UObject
 /I Runtime\Core\Public
 /I Runtime\Core
 /I Runtime\Core\Public\Algo
@@ -62,16 +72,63 @@
 /I Runtime\TraceLog
 /I Runtime\TraceLog\Public\Trace
 /I Runtime\TraceLog\Public\Trace\Private
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CoreUObject
-/I Runtime\CoreUObject\Public
-/I Runtime\CoreUObject
-/I Runtime\CoreUObject\Public\Blueprint
-/I Runtime\CoreUObject\Public\Internationalization
-/I Runtime\CoreUObject\Public\Misc
-/I Runtime\CoreUObject\Public\Serialization
-/I Runtime\CoreUObject\Public\Serialization\Formatters
-/I Runtime\CoreUObject\Public\Templates
-/I Runtime\CoreUObject\Public\UObject
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\Engine
+/I Runtime\Engine\Classes
+/I Runtime\Engine\Public
+/I Runtime\Engine
+/I Runtime\Engine\Public\AI
+/I Runtime\Engine\Public\AI\Navigation
+/I Runtime\Engine\Public\Analytics
+/I Runtime\Engine\Public\Animation
+/I Runtime\Engine\Public\Audio
+/I Runtime\Engine\Public\Curves
+/I Runtime\Engine\Public\EdGraph
+/I Runtime\Engine\Public\Internationalization
+/I Runtime\Engine\Public\Net
+/I Runtime\Engine\Public\Net\Util
+/I Runtime\Engine\Public\PacketHandlers
+/I Runtime\Engine\Public\Performance
+/I Runtime\Engine\Public\Physics
+/I Runtime\Engine\Public\Physics\Experimental
+/I Runtime\Engine\Public\Physics\ImmediatePhysics
+/I Runtime\Engine\Public\ProfilingDebugging
+/I Runtime\Engine\Public\Rendering
+/I Runtime\Engine\Public\Slate
+/I Runtime\Engine\Public\Subsystems
+/I Runtime\Engine\Public\Tests
+/I Runtime\Engine\Public\VisualLogger
+/I Runtime\Engine\Public\VT
+/I Runtime\ApplicationCore\Public
+/I Runtime\ApplicationCore
+/I Runtime\ApplicationCore\Public\GenericPlatform
+/I Runtime\ApplicationCore\Public\HAL
+/I Runtime\ApplicationCore\Public\Windows
+/I Runtime\ApplicationCore\Public\Windows\Accessibility
+/I Runtime\RHI\Public
+/I Runtime\RHI
+/I Runtime\Json\Public
+/I Runtime\Json
+/I Runtime\Json\Public\Dom
+/I Runtime\Json\Public\Policies
+/I Runtime\Json\Public\Serialization
+/I ..\Intermediate\Build\Win64\UE4Editor\Inc\SlateCore
+/I Runtime\SlateCore\Public
+/I Runtime\SlateCore
+/I Runtime\SlateCore\Public\Animation
+/I Runtime\SlateCore\Public\Application
+/I Runtime\SlateCore\Public\Brushes
+/I Runtime\SlateCore\Public\Debugging
+/I Runtime\SlateCore\Public\Fonts
+/I Runtime\SlateCore\Public\Input
+/I Runtime\SlateCore\Public\Layout
+/I Runtime\SlateCore\Public\Rendering
+/I Runtime\SlateCore\Public\Sound
+/I Runtime\SlateCore\Public\Styling
+/I Runtime\SlateCore\Public\Textures
+/I Runtime\SlateCore\Public\Types
+/I Runtime\SlateCore\Public\Widgets
+/I Runtime\SlateCore\Public\Widgets\Accessibility
+/I Runtime\SlateCore\Public\Widgets\Images
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\InputCore
 /I Runtime\InputCore\Classes
 /I Runtime\InputCore\Public
@@ -105,66 +162,9 @@
 /I Runtime\Slate\Public\Widgets\Notifications
 /I Runtime\Slate\Public\Widgets\Text
 /I Runtime\Slate\Public\Widgets\Views
-/I Runtime\ApplicationCore\Public
-/I Runtime\ApplicationCore
-/I Runtime\ApplicationCore\Public\GenericPlatform
-/I Runtime\ApplicationCore\Public\HAL
-/I Runtime\ApplicationCore\Public\Windows
-/I Runtime\ApplicationCore\Public\Windows\Accessibility
-/I Runtime\RHI\Public
-/I Runtime\RHI
-/I Runtime\Json\Public
-/I Runtime\Json
-/I Runtime\Json\Public\Dom
-/I Runtime\Json\Public\Policies
-/I Runtime\Json\Public\Serialization
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\SlateCore
-/I Runtime\SlateCore\Public
-/I Runtime\SlateCore
-/I Runtime\SlateCore\Public\Animation
-/I Runtime\SlateCore\Public\Application
-/I Runtime\SlateCore\Public\Brushes
-/I Runtime\SlateCore\Public\Debugging
-/I Runtime\SlateCore\Public\Fonts
-/I Runtime\SlateCore\Public\Input
-/I Runtime\SlateCore\Public\Layout
-/I Runtime\SlateCore\Public\Rendering
-/I Runtime\SlateCore\Public\Sound
-/I Runtime\SlateCore\Public\Styling
-/I Runtime\SlateCore\Public\Textures
-/I Runtime\SlateCore\Public\Types
-/I Runtime\SlateCore\Public\Widgets
-/I Runtime\SlateCore\Public\Widgets\Accessibility
-/I Runtime\SlateCore\Public\Widgets\Images
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ImageWrapper
 /I Runtime\ImageWrapper\Public
 /I Runtime\ImageWrapper
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\Engine
-/I Runtime\Engine\Classes
-/I Runtime\Engine\Public
-/I Runtime\Engine
-/I Runtime\Engine\Public\AI
-/I Runtime\Engine\Public\AI\Navigation
-/I Runtime\Engine\Public\Analytics
-/I Runtime\Engine\Public\Animation
-/I Runtime\Engine\Public\Audio
-/I Runtime\Engine\Public\Curves
-/I Runtime\Engine\Public\EdGraph
-/I Runtime\Engine\Public\Internationalization
-/I Runtime\Engine\Public\Net
-/I Runtime\Engine\Public\Net\Util
-/I Runtime\Engine\Public\PacketHandlers
-/I Runtime\Engine\Public\Performance
-/I Runtime\Engine\Public\Physics
-/I Runtime\Engine\Public\Physics\Experimental
-/I Runtime\Engine\Public\Physics\ImmediatePhysics
-/I Runtime\Engine\Public\ProfilingDebugging
-/I Runtime\Engine\Public\Rendering
-/I Runtime\Engine\Public\Slate
-/I Runtime\Engine\Public\Subsystems
-/I Runtime\Engine\Public\Tests
-/I Runtime\Engine\Public\VisualLogger
-/I Runtime\Engine\Public\VT
 /I Runtime\Messaging\Public
 /I Runtime\Messaging
 /I Runtime\MessagingCommon\Public
@@ -496,24 +496,6 @@
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\ClothingSystemRuntimeInterface
 /I Runtime\ClothingSystemRuntimeInterface\Public
 /I Runtime\ClothingSystemRuntimeInterface
-/I Editor\KismetWidgets\Public
-/I Editor\KismetWidgets
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\Sequencer
-/I Editor\Sequencer\Public
-/I Editor\Sequencer
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\SceneOutliner
-/I Editor\SceneOutliner\Public
-/I Editor\SceneOutliner
-/I ..\Intermediate\Build\Win64\UE4Editor\Inc\CurveEditor
-/I Editor\CurveEditor\Public
-/I Editor\CurveEditor
-/I Editor\CurveEditor\Public\Filters
-/I Editor\CurveEditor\Public\Tree
-/I Editor\CurveEditor\Public\Views
-/I Runtime\Analytics
-/I Runtime\Analytics\Analytics\Public
-/I Runtime\Analytics\Analytics
-/I Runtime\Analytics\Analytics\Public\Interfaces
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStack"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStack\Public"
@@ -521,9 +503,6 @@
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackRuntime"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackRuntime\Public"
 /I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackRuntime"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackEditor"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor\Public"
-/I "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Source\ScreenStackEditor"
 /I ThirdParty\PhysX3\PxShared\include
 /I ThirdParty\PhysX3\PxShared\include\cudamanager
 /I ThirdParty\PhysX3\PxShared\include\filebuf
@@ -553,9 +532,9 @@
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"
-/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h"
-/Yu"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h"
-/Fp"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\UnrealEd\SharedPCH.UnrealEd.NonOptimized.h.pch"
+/FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h"
+/Yu"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h"
+/Fp"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Intermediate\Build\Win64\COVEditor\DebugGame\Engine\SharedPCH.Engine.NonOptimized.h.pch"
 "C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\Inc\ScreenStackRuntime\COVEditorRuntime.gen.cpp"
 /FI"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStackRuntime\Definitions.ScreenStackRuntime.h"
 /Fo"C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\ScreenStack\Intermediate\Build\Win64\UE4Editor\DebugGame\ScreenStackRuntime\COVEditorRuntime.gen.cpp.obj"

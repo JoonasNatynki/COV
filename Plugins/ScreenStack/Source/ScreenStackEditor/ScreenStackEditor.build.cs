@@ -13,36 +13,24 @@ public class ScreenStackEditor : ModuleRules
 			new string[]
 			{
 				"Core",
-				"ScreenStackRuntime",
-                "UMG"
-				// ... add other public dependencies that you statically link with here ...
+                // ... add other public dependencies that you statically link with here ...
 			}
 		);
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
 				// ... add private dependencies that you statically link with here ...
-				"Core",
 				"CoreUObject",
-				"InputCore",
 				"Slate",
 				"Engine",
-				"AssetTools",
 				"UnrealEd", // for FAssetEditorManager
-				"KismetWidgets",
 				"KismetCompiler",
 				"BlueprintGraph",
-				"GraphEditor",
-				"Kismet",  // for FWorkflowCentricApplication
-				"PropertyEditor",
-				"EditorStyle",
 				"Slate",
 				"SlateCore",
-				"Sequencer",
-				"DetailCustomizations",
-				"Settings",
-				"RenderCore"
-			}
-		);
+                "UMG",
+                "ScreenStackRuntime"
+            }
+        );
 			}
 }

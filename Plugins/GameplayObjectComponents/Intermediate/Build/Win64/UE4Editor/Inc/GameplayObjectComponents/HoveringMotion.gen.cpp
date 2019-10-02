@@ -192,6 +192,11 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		static void NewProp_bHoverMovement_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHoverMovement;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bRandomizeRotationDirections_MetaData[];
+#endif
+		static void NewProp_bRandomizeRotationDirections_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bRandomizeRotationDirections;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bRandomizeInitialRotation_MetaData[];
 #endif
 		static void NewProp_bRandomizeInitialRotation_SetBit(void* Obj);
@@ -254,10 +259,10 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeHoverFrequencyInitialStartPhase_MetaData[] = {
 		{ "Category", "Hovering Motion" },
-		{ "Comment", "//\x09If TRUE, different objects that hover with the same frequency will not hover in sync\n" },
+		{ "Comment", "//\x09If TRUE: different objects that hover with the same frequency will not hover in sync\n" },
 		{ "EditCondition", "bHoverMovement" },
 		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
-		{ "ToolTip", "If TRUE, different objects that hover with the same frequency will not hover in sync" },
+		{ "ToolTip", "If TRUE: different objects that hover with the same frequency will not hover in sync" },
 	};
 #endif
 	void Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeHoverFrequencyInitialStartPhase_SetBit(void* Obj)
@@ -310,6 +315,20 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		((UHoveringMotion*)Obj)->bHoverMovement = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bHoverMovement = { "bHoverMovement", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UHoveringMotion), &Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bHoverMovement_SetBit, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bHoverMovement_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bHoverMovement_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections_MetaData[] = {
+		{ "Category", "Hovering Motion" },
+		{ "Comment", "//\x09If TRUE: will randomize the directions of the rotations but not the speeds\n" },
+		{ "EditCondition", "bRotate" },
+		{ "ModuleRelativePath", "Public/HoveringMotion.h" },
+		{ "ToolTip", "If TRUE: will randomize the directions of the rotations but not the speeds" },
+	};
+#endif
+	void Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections_SetBit(void* Obj)
+	{
+		((UHoveringMotion*)Obj)->bRandomizeRotationDirections = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections = { "bRandomizeRotationDirections", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UHoveringMotion), &Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections_SetBit, METADATA_PARAMS(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections_MetaData, ARRAY_COUNT(Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeInitialRotation_MetaData[] = {
 		{ "Category", "Hovering Motion" },
@@ -378,6 +397,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverYMovementDistance,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_HoverXMovementDistance,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bHoverMovement,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeRotationDirections,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_bRandomizeInitialRotation,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_ZAxisRotationSpeed,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UHoveringMotion_Statics::NewProp_YAxisRotationSpeed,
@@ -412,7 +432,7 @@ void EmptyLinkFunctionForGeneratedCodeHoveringMotion() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UHoveringMotion, 3636173147);
+	IMPLEMENT_CLASS(UHoveringMotion, 1660648562);
 	template<> GAMEPLAYOBJECTCOMPONENTS_API UClass* StaticClass<UHoveringMotion>()
 	{
 		return UHoveringMotion::StaticClass();

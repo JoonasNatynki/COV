@@ -28,6 +28,11 @@ UHoveringMotion::UHoveringMotion()
 void UHoveringMotion::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (bRandomizeRotationDirections)
+	{
+		RandomizeInitialRotationDirections_Internal();
+	}
 }
 
 void UHoveringMotion::DefaultToRootComponentAnimation_Internal()
@@ -68,6 +73,16 @@ void UHoveringMotion::RandomizeInitialRotation_Internal()
 	ComponentToHover->SetRelativeRotation(randRot);
 }
 
+void UHoveringMotion::RandomizeInitialRotationDirections_Internal()
+{
+	bool bBigIfTrue = FMath::RandRange(0.0f, 1.0f) < 0.5f;
+	XAxisRotationSpeed = XAxisRotationSpeed * ((bBigIfTrue) ? (1.0f) : (-1.0f));
+	bBigIfTrue = FMath::RandRange(0.0f, 1.0f) < 0.5f;
+	YAxisRotationSpeed = YAxisRotationSpeed * ((bBigIfTrue) ? (1.0f) : (-1.0f));
+	bBigIfTrue = FMath::RandRange(0.0f, 1.0f) < 0.5f;
+	ZAxisRotationSpeed = ZAxisRotationSpeed * ((bBigIfTrue) ? (1.0f) : (-1.0f));
+}
+
 void UHoveringMotion::DefaultToDefaultInitialization_Internal()
 {
 	ensure(!bInitialized);
@@ -85,12 +100,22 @@ void UHoveringMotion::SetHoveringComponent(USceneComponent* _componentToHover)
 	{
 		ComponentToHover = _componentToHover;
 		bIsRotatingRootComponent = IsHoverComponentRootComponent();
+		bool bOwnerIsPawn = Cast<APawn>(GetOwner());
+
 		UE_LOG(LogHoveringMotion, Log, TEXT("Mesh to rotate set to (%s)"), *GetNameSafe(ComponentToHover));
 
-		//	If enabled and possible, randomize initial rotation
-		if (!bIsRotatingRootComponent && bRandomizeInitialRotation)
+		//	Notify user that the randomize initial and rotation motion is disabled on pawn root motion animations
+		if (((bRandomizeInitialRotation || bRandomizeInitialRotation) && bOwnerIsPawn) && bIsRotatingRootComponent)
 		{
-			RandomizeInitialRotation_Internal();
+			UE_LOG(LogHoveringMotion, Warning, TEXT("Could not set component to rotate or randomize its initial rotation. Rotation is not supported on pawn (%s) root components."), *GetNameSafe(GetOwner()));
+			FMessageLog("PIE").Warning(FText::FromString("Could not set component to rotate or randomize its initial rotation. Rotation is not supported on pawn root components."))->AddToken(FUObjectToken::Create(GetOwner()));
+		}
+		else
+		{
+			if (bRandomizeInitialRotation)
+			{
+				RandomizeInitialRotation_Internal();
+			}
 		}
 
 		if (bRandomizeHoverFrequencyInitialStartPhase && bHoverMovement)

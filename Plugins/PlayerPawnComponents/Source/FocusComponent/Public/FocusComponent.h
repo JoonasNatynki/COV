@@ -91,16 +91,17 @@ public:
 	UFUNCTION(Category = "Focus", BlueprintCallable)
 		void SetFocusedActor(AActor* newFocus) { CachedFocusedActor = newFocus; };
 
-	const void DrawDebugs(float deltaTime) const;
-	const TArray<AActor*> GetOverlappingActorsInFocusArea_Internal();
-	const TWeakObjectPtr<AActor> FindBestFocusCandidate_Internal(TArray<AActor*> overlappingActors) const;
+	const void DrawDebugs(float deltaTime);
+	const TArray<FHitResult> GetOverlappingActorsInFocusArea_Internal();
+	const TWeakObjectPtr<AActor> FindBestFocusCandidate_Internal(TArray<FHitResult> overlappingActors);
 	void UpdateFocusWorldLocation_Internal();
 
-	FHitResult CastCrossHairLineTrace(const AActor* character, float rayDistance) const;
-	APlayerCameraManager* TryGetPawnCameraManager(const APawn* pawn) const;
-	FVector GetFocusRayCastStartLocation_Internal() const;
-	FVector GetFocusRayCastEndLocation_Internal(const FVector& startLoc) const;
+	FHitResult CastCrossHairLineTrace(const AActor* character, float rayDistance);
+	APlayerCameraManager* TryGetPawnCameraManager(const APawn* pawn);
+	FVector GetFocusRayCastStartLocation_Internal();
+	FVector GetFocusRayCastEndLocation_Internal(const FVector& startLoc);
 	FHitResult SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag) const;
+	AActor* GetOwnerCameraManagerActor_Internal();
 };
 
 FVector UFocusComponent::GetFocusWorldLocation() const
@@ -131,7 +132,7 @@ FORCEINLINE FHitResult UFocusComponent::SimpleTraceByChannel(const UObject* inOb
 	return RV_Hit;
 }
 
-FORCEINLINE FHitResult UFocusComponent::CastCrossHairLineTrace(const AActor* character, float rayDistance) const
+FORCEINLINE FHitResult UFocusComponent::CastCrossHairLineTrace(const AActor* character, float rayDistance)
 {
 	FHitResult RV_Hit(ForceInit);
 	const APawn* pawn = Cast<APawn>(character);

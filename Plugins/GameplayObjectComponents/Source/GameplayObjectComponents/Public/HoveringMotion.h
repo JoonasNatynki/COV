@@ -40,6 +40,9 @@ public:
 		//	If the mesh will rotate around z axis
 		bool bRandomizeInitialRotation = true;
 
+	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
+		//	If TRUE: will randomize the directions of the rotations but not the speeds
+		bool bRandomizeRotationDirections = true;
 
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere)
@@ -59,7 +62,7 @@ public:
 		float HoverRepeatFrequency = 1.0f;
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
-		//	If TRUE, different objects that hover with the same frequency will not hover in sync
+		//	If TRUE: different objects that hover with the same frequency will not hover in sync
 		bool bRandomizeHoverFrequencyInitialStartPhase = true;
 
 
@@ -98,6 +101,7 @@ private:
 	//	Sets component to hover to be the root component of this component's owner and sets it to animate instead.
 	void DefaultToRootComponentAnimation_Internal();
 	void RandomizeInitialRotation_Internal();
+	void RandomizeInitialRotationDirections_Internal();
 
 	//	Checks if necessary things are initialized elsewhere, if not, just default to default initialization and start hovering.
 	void DefaultToDefaultInitialization_Internal();

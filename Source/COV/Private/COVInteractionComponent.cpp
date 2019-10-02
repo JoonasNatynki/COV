@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "COVInteractionComponent.h"
-#include "COVFocusComponent.h"
+#include "FocusComponent.h"
 #include <GameFramework/Actor.h>
 #include <MessageLog.h>
 #include <UObjectToken.h>
@@ -27,14 +27,14 @@ void UCOVInteractionComponent::BeginPlay()
 	OwnerFocusComponent = TryGetOwnerFocusComponent();
 }
 
-UCOVFocusComponent* UCOVInteractionComponent::TryGetOwnerFocusComponent() const
+UFocusComponent* UCOVInteractionComponent::TryGetOwnerFocusComponent() const
 {
 	//	In order to find an actor to interact with, we want to use the focus manager component if it is present
 	AActor* owner = GetOwner();
 
 	if (IsValid(owner))
 	{
-		UCOVFocusComponent* focusComponent = Cast<UCOVFocusComponent>(owner->GetComponentByClass(UCOVFocusComponent::StaticClass()));
+		UFocusComponent* focusComponent = Cast<UFocusComponent>(owner->GetComponentByClass(UFocusComponent::StaticClass()));
 		return focusComponent;
 	}
 

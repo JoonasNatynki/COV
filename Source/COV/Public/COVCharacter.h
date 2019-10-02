@@ -12,7 +12,7 @@ class UCameraComponent;
 class ACOVPlayerController;
 class UCOVSmoothAnimationComponent;
 class UCOVInteractionComponent;
-class UCOVFocusComponent;
+class UFocusComponent;
 class UCOVInventory;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVCharacter, Log, All)
@@ -27,7 +27,7 @@ public:
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
 		UCOVInteractionComponent* InteractionComponent;
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
-		UCOVFocusComponent* FocusComponent;
+		UFocusComponent* FocusComponent;
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
 		UCOVInventory* Inventory;
 

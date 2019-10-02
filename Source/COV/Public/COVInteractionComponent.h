@@ -11,7 +11,7 @@ DECLARE_LOG_CATEGORY_EXTERN(COVInteractionComponent, Log, All)
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteractableFocused, AActor*, interactableActor);
 
-class UCOVFocusComponent;
+class UFocusComponent;
 
 UCLASS( ClassGroup=(COV), meta=(BlueprintSpawnableComponent), Blueprintable )
 class COV_API UCOVInteractionComponent : public UActorComponent
@@ -24,7 +24,7 @@ public:
 
 private:
 	//	The focus component reference of the owner, if present. This will be primarily used in determining which actor to interact with at any given time
-	TWeakObjectPtr<UCOVFocusComponent> OwnerFocusComponent;
+	TWeakObjectPtr<UFocusComponent> OwnerFocusComponent;
 
 	UPROPERTY(BlueprintAssignable)
 		FOnInteractableFocused OnInteractableFocused;
@@ -38,7 +38,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(Category = "Interaction", BlueprintCallable)
-		UCOVFocusComponent* TryGetOwnerFocusComponent() const;
+		UFocusComponent* TryGetOwnerFocusComponent() const;
 	UFUNCTION(Category = "Interaction", BlueprintCallable)
 		AActor* TryGetInteractedActor() const;
 };

@@ -7,7 +7,7 @@
 #include <Kismet/KismetMathLibrary.h>
 #include "COVSmoothAnimationComponent.h"
 #include "COVInteractionComponent.h"
-#include "COVFocusComponent.h"
+#include "FocusComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include "COVInventory.h"
 #include "UE4Helpers.h"
@@ -35,7 +35,7 @@ void ACOVCharacter::BeginPlay()
 	//	Interaction component
 	GET_AND_CACHE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
 	//	Focus component
-	GET_AND_CACHE_COMPONENT(UCOVFocusComponent, FocusComponent)
+	GET_AND_CACHE_COMPONENT(UFocusComponent, FocusComponent)
 	//	Inventory component
 	GET_AND_CACHE_COMPONENT(UCOVInventory, Inventory)
 }

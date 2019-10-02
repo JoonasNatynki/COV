@@ -16,9 +16,12 @@ public class COV : ModuleRules
             "InputCore",
             "ScreenStack",
             "UE4Helpers",
-            "GameplayObjectComponents"
+            "GameplayObjectComponents",
+            "PlayerPawnComponents"
         });
-		
+
+        PrivateDependencyModuleNames.Add("FocusComponent");
+
         //if (Target.Type == TargetRules.TargetType.Editor)
         //{
         //   PrivateDependencyModuleNames.AddRange(new string[] { "ScreenStack", "UE4Helpers" });

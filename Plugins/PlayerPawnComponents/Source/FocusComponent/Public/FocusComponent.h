@@ -55,7 +55,8 @@ public:
 		bool bDeveloperMode = false;
 
 	UPROPERTY(Category = "Focus", EditDefaultsOnly, BlueprintReadWrite)
-		float FocusingMaxArea = 50.0f;
+		//	How far away from the focusing center line can actors be focused at. Used in focusing on objects that are not directly being focused at
+		float FocusingRadiusExtent = 50.0f;
 
 	UPROPERTY(Category = "Debug", EditDefaultsOnly, BlueprintReadWrite)
 		//	Whether to ignore all other actors but the ones with the FocusableComponent
@@ -91,10 +92,14 @@ public:
 		void SetFocusedActor(AActor* newFocus) { CachedFocusedActor = newFocus; };
 
 	const void DrawDebugs(float deltaTime) const;
-	const TWeakObjectPtr<AActor> FindClosestFocusedActor_Internal(TArray<AActor*> overlappingActors) const;
+	const TArray<AActor*> GetOverlappingActorsInFocusArea_Internal();
+	const TWeakObjectPtr<AActor> FindBestFocusCandidate_Internal(TArray<AActor*> overlappingActors) const;
+	void UpdateFocusWorldLocation_Internal();
 
 	FHitResult CastCrossHairLineTrace(const AActor* character, float rayDistance) const;
 	APlayerCameraManager* TryGetPawnCameraManager(const APawn* pawn) const;
+	FVector GetFocusRayCastStartLocation_Internal() const;
+	FVector GetFocusRayCastEndLocation_Internal(const FVector& startLoc) const;
 	FHitResult SimpleTraceByChannel(const UObject* inObj, const FVector& startPos, const FVector& endPos, ECollisionChannel channel, const FName& TraceTag) const;
 };
 

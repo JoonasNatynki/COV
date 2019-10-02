@@ -21,19 +21,13 @@ UHoveringMotion::UHoveringMotion()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	PrimaryComponentTick.bStartWithTickEnabled = false;
+	PrimaryComponentTick.bStartWithTickEnabled = true;
 }
 
 // Called when the game starts
 void UHoveringMotion::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//	If the animated mesh is not set, default to hovering the root component if it is a mesh itself
-	if (!IsValid(ComponentToHover))
-	{
-		DefaultToRootComponentAnimation_Internal();
-	}
 }
 
 void UHoveringMotion::DefaultToRootComponentAnimation_Internal()
@@ -68,6 +62,23 @@ void UHoveringMotion::DefaultToRootComponentAnimation_Internal()
 	SetAnimating(bShouldAnimate);
 }
 
+void UHoveringMotion::RandomizeInitialRotation_Internal()
+{
+	FRotator randRot = UKismetMathLibrary::RandomRotator();
+	ComponentToHover->SetRelativeRotation(randRot);
+}
+
+void UHoveringMotion::DefaultToDefaultInitialization_Internal()
+{
+	ensure(!bInitialized);
+
+	//	If the animated mesh is not set, default to hovering the root component if it is a mesh itself
+	if (!IsValid(ComponentToHover))
+	{
+		DefaultToRootComponentAnimation_Internal();
+	}
+}
+
 void UHoveringMotion::SetHoveringComponent(USceneComponent* _componentToHover)
 {
 	if (IsValid(_componentToHover))
@@ -75,6 +86,17 @@ void UHoveringMotion::SetHoveringComponent(USceneComponent* _componentToHover)
 		ComponentToHover = _componentToHover;
 		bIsRotatingRootComponent = IsHoverComponentRootComponent();
 		UE_LOG(LogHoveringMotion, Log, TEXT("Mesh to rotate set to (%s)"), *GetNameSafe(ComponentToHover));
+
+		//	If enabled and possible, randomize initial rotation
+		if (!bIsRotatingRootComponent && bRandomizeInitialRotation)
+		{
+			RandomizeInitialRotation_Internal();
+		}
+
+		if (bRandomizeHoverFrequencyInitialStartPhase && bHoverMovement)
+		{
+			InitialHoverOffset = (FMath::FRandRange(0.0f, (6.2831852f)) / HoverRepeatFrequency);
+		}
 	}
 	else
 	{
@@ -87,12 +109,6 @@ void UHoveringMotion::SetAnimating(bool bShouldAnimate)
 {
 	bIsAnimating = bShouldAnimate;
 	PrimaryComponentTick.SetTickFunctionEnable(bShouldAnimate);
-
-	if (bShouldAnimate && bRandomizeInitialRotation && !IsHoverComponentRootComponent())
-	{
-		FRotator randRot = UKismetMathLibrary::RandomRotator();
-		ComponentToHover->SetRelativeRotation(randRot);
-	}
 
 	UE_LOG(LogHoveringMotion, Log, TEXT("%s animate (%s)."), *GetNameSafe(ComponentToHover), (bShouldAnimate)?(TEXT("Beginning")):(TEXT("Stopping")));
 }
@@ -107,7 +123,9 @@ void UHoveringMotion::UpdateMeshTransform(float deltaTime)
 
 	if (bHoverMovement)
 	{
-		float sinValue = (UKismetMathLibrary::Sin(UGameplayStatics::GetRealTimeSeconds(this)) * HoverRepeatFrequency);
+		float time = UGameplayStatics::GetRealTimeSeconds(this) * (6.2831852f) * (HoverRepeatFrequency);
+		time = time + InitialHoverOffset;
+		float sinValue = (UKismetMathLibrary::Sin(time));
 
 		//	If we are rotating the root mesh, record the offset so we can calculate the original location of the mesh if it had not hovered at all
 		if (bIsRotatingRootComponent)
@@ -126,6 +144,13 @@ void UHoveringMotion::UpdateMeshTransform(float deltaTime)
 void UHoveringMotion::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	//	We initialize the component on first tick. BeginPlay is reserved for BP initialization if the user wants to do something there.
+	if (!bInitialized)
+	{
+		//	Initialize using default configurations
+		DefaultToDefaultInitialization_Internal();
+	}
 
 	//	Update the mesh transform
 	UpdateMeshTransform(DeltaTime);

@@ -28,18 +28,6 @@ public:
 		bool bRotate = true;
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
-		//	If the mesh will rotate around x axis
-		bool bRotateXAxis = true;
-
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
-		//	If the mesh will rotate around y axis
-		bool bRotateYAxis = true;
-
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
-		//	If the mesh will rotate around z axis
-		bool bRotateZAxis = true;
-
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
 		float XAxisRotationSpeed = 0.26f;
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bRotate"))
@@ -59,18 +47,6 @@ public:
 		bool bHoverMovement = true;
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
-		//	If the mesh will rotate around z axis
-		bool bHoverXAxis = false;
-	
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
-		//	If the mesh will rotate around z axis
-		bool bHoverYAxis = false;
-
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
-		//	If the mesh will rotate around z axis
-		bool bHoverZAxis = true;
-
-	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
 		float HoverXMovementDistance = 0.0f;
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
@@ -81,6 +57,10 @@ public:
 
 	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
 		float HoverRepeatFrequency = 1.0f;
+
+	UPROPERTY(Category = "Hovering Motion", EditAnywhere, meta = (EditCondition = "bHoverMovement"))
+		//	If TRUE, different objects that hover with the same frequency will not hover in sync
+		bool bRandomizeHoverFrequencyInitialStartPhase = true;
 
 
 
@@ -110,10 +90,18 @@ protected:
 	bool bIsReplicatingMovementOverNetwork = false;		//	If the component is rotating the root mesh, it's important to know if the object is replicating movement over the network so that only the authority animates the root component (as its movement is then replicated over the network to listening clients. We don't want the clients to fight the authority on this.
 	bool bIsAnimating = true;
 
+	//	Used for bRandomizeHoverFrequencyInitialStartPhase
+	float InitialHoverOffset = 0.0f;
+
 private:
 
 	//	Sets component to hover to be the root component of this component's owner and sets it to animate instead.
 	void DefaultToRootComponentAnimation_Internal();
+	void RandomizeInitialRotation_Internal();
+
+	//	Checks if necessary things are initialized elsewhere, if not, just default to default initialization and start hovering.
+	void DefaultToDefaultInitialization_Internal();
+	bool bInitialized = false;
 
 public:	
 	// Called every frame

@@ -69,8 +69,6 @@ public:
 	UFUNCTION(Category = "Inventory", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
 		void RemoveItem(UCOVInventoryItem* item);
 
-	UFUNCTION(Category = "Inventory", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
-		void PackItem(UCOVInventoryItem* item);
 
 protected:
 	// Called when the game starts

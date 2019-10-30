@@ -59,12 +59,6 @@ public:
 		//	Set the inventory that this item is in currently, if in any
 		void SetOwningInventory(UCOVInventory* inventory);
 
-	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, NetMulticast, Reliable, BlueprintAuthorityOnly, WithValidation)
-		//	Packs the item to be ready for be inserted into an inventory
-		void PackItem();
-	UFUNCTION(Category = "COV Inventory Item", BlueprintCallable, NetMulticast, Reliable, BlueprintAuthorityOnly, WithValidation)
-		//	Packs the item to be ready for be inserted into an inventory
-		void UnpackItem();
 
 protected:
 	// Called when the game starts

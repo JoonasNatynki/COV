@@ -123,29 +123,6 @@ void UCOVInventory::RemoveItem_Implementation(UCOVInventoryItem* item)
 	OnRep_Inventory(Inventory);
 }
 
-bool UCOVInventory::PackItem_Validate(UCOVInventoryItem* item)
-{
-	return true;
-}
-
-void UCOVInventory::PackItem_Implementation(UCOVInventoryItem* item)
-{
-	AActor* ownerActor = GetOwner();
-	AActor* itemActor = item->GetOwner();
-
-	Cast<UPrimitiveComponent>(itemActor->GetRootComponent())->SetSimulatePhysics(false);
-
-	COV_LOG(COVInventory, Log, TEXT("Item (%s) packed into inventory and the component simulation data has been generated."), *GetNameSafe(itemActor));
-
-	//	Disables collisions
-	itemActor->SetActorEnableCollision(false);
-	//	Hides actor
-	itemActor->SetActorHiddenInGame(true);
-	FAttachmentTransformRules rules(FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-	itemActor->AttachToActor(ownerActor, rules);
-	itemActor->SetActorLocation(ownerActor->GetActorLocation());
-}
-
 // Called every frame
 void UCOVInventory::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

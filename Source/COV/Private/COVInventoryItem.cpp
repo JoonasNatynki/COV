@@ -79,45 +79,6 @@ void UCOVInventoryItem::SetOwningInventory(UCOVInventory* inventory)
 	}
 }
 
-bool UCOVInventoryItem::PackItem_Validate()
-{
-	return true;
-}
-
-void UCOVInventoryItem::PackItem_Implementation()
-{
-	COV_LOG(COVInventoryItem, Log, TEXT("Packing item (%s)"), *DisplayName);
-	AActor* itemActor = GetOwner();
-	itemActor->SetActorHiddenInGame(true);
-	
-	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
-	
-	if (IsValid(tempcomp))
-	{
-		tempcomp->SetSimulatePhysics(false);
-		tempcomp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
-	else
-	{
-		COV_LOG(COVInventoryItem, Warning, TEXT("Could not pack item (%s), root component was not valid or did not inherit from UPrimitiveComponent."), *DisplayName);
-	}
-}
-
-bool UCOVInventoryItem::UnpackItem_Validate()
-{
-	return true;
-}
-
-void UCOVInventoryItem::UnpackItem_Implementation()
-{
-	COV_LOG(COVInventoryItem, Log, TEXT("Unpacking item (%s)"), *GetNameSafe(GetOwner()));
-	AActor* itemActor = GetOwner();
-	//itemActor->SetActorHiddenInGame(false);
-	UPrimitiveComponent* tempcomp = Cast<UPrimitiveComponent>(itemActor->GetRootComponent());
-	tempcomp->SetSimulatePhysics(true);
-	tempcomp->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-}
-
 // Called every frame
 void UCOVInventoryItem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {

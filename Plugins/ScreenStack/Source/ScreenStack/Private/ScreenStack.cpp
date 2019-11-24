@@ -362,6 +362,12 @@ void UScreen::SetVisibility(ESlateVisibility visibility)
 
 void UScreen::RemoveFromParent()
 {
+	//	Apparently this can happen...
+	if(GetNameSafe(this) == TEXT("None"))
+	{
+		return;
+	}
+
 	//	Screens can only be removed from the parent and the stack when screens are not locked
 	if (!bScreenIsLocked)
 	{

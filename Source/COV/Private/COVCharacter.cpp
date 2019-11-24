@@ -11,6 +11,7 @@
 #include <Kismet/KismetSystemLibrary.h>
 #include "COVInventory.h"
 #include "UE4Helpers.h"
+#include "Inventory.h"
 
 DEFINE_LOG_CATEGORY(COVCharacter)
 
@@ -37,7 +38,7 @@ void ACOVCharacter::BeginPlay()
 	//	Focus component
 	GET_AND_CACHE_COMPONENT(UFocusComponent, FocusComponent)
 	//	Inventory component
-	GET_AND_CACHE_COMPONENT(UCOVInventory, Inventory)
+	GET_AND_CACHE_COMPONENT(UInventoryComponent, Inventory)
 }
 
 void ACOVCharacter::PostInitializeComponents()

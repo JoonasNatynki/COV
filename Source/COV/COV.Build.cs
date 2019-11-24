@@ -17,7 +17,8 @@ public class COV : ModuleRules
             "ScreenStack",
             "UE4Helpers",
             "GameplayObjectComponents",
-            "PlayerPawnComponents"
+            "PlayerPawnComponents",
+            "InventoryAndItems"
         });
 
         PrivateDependencyModuleNames.Add("FocusComponent");

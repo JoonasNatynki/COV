@@ -1,2 +1,0 @@
-C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Intermediate\Build\Win64\UE4Editor\DebugGame\GameplayObjectComponents\Definitions.GameplayObjectComponents.h
-C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\GameplayObjectComponents\Source\GameplayObjectComponents\Public\GameplayObjectComponents.h

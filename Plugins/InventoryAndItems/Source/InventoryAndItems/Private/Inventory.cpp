@@ -1,7 +1,22 @@
 #include "Inventory.h"
 #include "InventoryItem.h"
+#include <UnrealNetwork.h>
 
 DEFINE_LOG_CATEGORY(LogInventory)
+
+void UInventoryComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	SetIsReplicated(true);
+}
+
+void UInventoryComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UInventoryComponent, Inventory);
+}
 
 void UInventoryComponent::TransferInventoryDataToObject(UObject* fromObject, UObject* toObject) const
 {
@@ -48,16 +63,34 @@ bool UInventoryComponent::AddItem(UObject* item)
 
 			if (IsValid(inventoryItemComp))
 			{
-				ensure(inventoryItemComp->CorrespondingActorClassToSpawn);
+				if (!ensure(inventoryItemComp->CorrespondingActorClassToSpawn))
+				{
+					return false;
+				}
+
 				AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(inventoryItemComp->CorrespondingActorClassToSpawn);
 
-				ensure(IsValid(spawnedActor));
+				check(IsValid(spawnedActor));
 
-				UE_LOG(LogInventory, Log, TEXT("Corresponding actor (%s) spawned for item (%s). Transferring inventory data to the spawned object..."), *GetNameSafe(spawnedActor), *GetNameSafe(item));
+				//	Corresponding spawned actor must also have the inventory item component
+				UInventoryItemComponent* spawnedActorInventoryItemComp = spawnedActor->FindComponentByClass<UInventoryItemComponent>();
+
+				check(IsValid(spawnedActorInventoryItemComp));
+
+				//	Set the corresponding class to be who spawned it
+				spawnedActorInventoryItemComp->CorrespondingActorClassToSpawn = GetClass();
+
+				//	Update the spawned item guid to match the original
+				spawnedActorInventoryItemComp->SetItemGUID(inventoryItemComp->GetItemGUID());
+
+				UE_LOG(LogInventory, Verbose, TEXT("Corresponding actor (%s) spawned for item (%s). Transferring inventory data to the spawned object..."), *GetNameSafe(spawnedActor), *GetNameSafe(item));
 
 				TransferInventoryDataToObject(item, spawnedActor);
 
-				UE_LOG(LogInventory, Log, TEXT("Inventory data transferred to actor (%s)."), *GetNameSafe(spawnedActor));
+				UE_LOG(LogInventory, Verbose, TEXT("Inventory data transferred to actor (%s)."), *GetNameSafe(spawnedActor));
+
+				Inventory.Add(spawnedActor);
+				OnRep_Inventory();
 
 				//	Maybe destroy the original item now?
 				itemActor->Destroy();
@@ -68,4 +101,12 @@ bool UInventoryComponent::AddItem(UObject* item)
 	}
 
 	return false;
+}
+
+void UInventoryComponent::OnRep_Inventory()
+{
+	AActor* item = Inventory.Top();
+	UE_LOG(LogInventory, Log, TEXT("OnRep_Inventory = (%s)"), *GetNameSafe(item));
+	UInventoryItemComponent* inventoryItemComp = item->FindComponentByClass<UInventoryItemComponent>();
+	OnItemAdded.Broadcast(inventoryItemComp);
 }

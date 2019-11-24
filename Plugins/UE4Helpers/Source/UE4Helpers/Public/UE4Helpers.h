@@ -41,20 +41,24 @@ UE_LOG(_namespace, _logcategory, TEXT("%s%s%s"), *netModePrefix, PRINT_FUNCTION,
 }
 
 
-#define GET_AND_CACHE_COMPONENT(_componentclass, _containervariablename) {\
-_componentclass* tempComp = nullptr;\
-TSet<UActorComponent*> comps = GetComponents();\
-for (auto & comp : comps)\
+#define GET_AND_CACHE_COMPONENT(_componentclass, _containervariablename)\
 {\
-	tempComp = Cast<_componentclass>(comp);\
-	if (tempComp)\
+	_componentclass* tempComp = nullptr;\
+	TSet<UActorComponent*> comps = GetComponents();\
+	for (auto & comp : comps)\
 	{\
-		_containervariablename = tempComp;\
-		break;\
+		tempComp = Cast<_componentclass>(comp);\
+		if (tempComp)\
+		{\
+			_containervariablename = tempComp;\
+			break;\
+		}\
 	}\
-}\
-UE_LOG(LogTemp, Warning, TEXT("%s Component was not found."), *FString(#_componentclass));\
-FMessageLog("Blueprint").Warning(FText::Format(NSLOCTEXT("UE4CodeHelpers", "Help", "No {0} found in "), FText::FromString(FString(#_componentclass))))->AddToken(FUObjectToken::Create(this));\
+	if(!tempComp)\
+	{\
+	UE_LOG(LogTemp, Warning, TEXT("%s Component was not found."), *FString(#_componentclass));\
+	FMessageLog("Blueprint").Warning(FText::Format(NSLOCTEXT("UE4CodeHelpers", "Help", "No {0} found in "), FText::FromString(FString(#_componentclass))))->AddToken(FUObjectToken::Create(this));\
+	}\
 }\
 
 #define GET_AND_STORE_COMPONENT_FROM_COMPONENT(_componentclass, _containervariablename) {\

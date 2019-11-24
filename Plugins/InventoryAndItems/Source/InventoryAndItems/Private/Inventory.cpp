@@ -63,34 +63,32 @@ bool UInventoryComponent::AddItem(UObject* item)
 
 			if (IsValid(inventoryItemComp))
 			{
-				if (!ensure(inventoryItemComp->CorrespondingActorClassToSpawn))
+				if (ensureMsgf(inventoryItemComp->CorrespondingActorClassToSpawn, TEXT("No corresponding item class defined for the inventory item. Is this intended?")))
 				{
-					return false;
+					AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(inventoryItemComp->CorrespondingActorClassToSpawn);
+
+					check(IsValid(spawnedActor));
+
+					//	Corresponding spawned actor must also have the inventory item component
+					UInventoryItemComponent* spawnedActorInventoryItemComp = spawnedActor->FindComponentByClass<UInventoryItemComponent>();
+
+					check(IsValid(spawnedActorInventoryItemComp));
+
+					//	Set the corresponding class to be who spawned it
+					spawnedActorInventoryItemComp->CorrespondingActorClassToSpawn = GetClass();
+
+					//	Update the spawned item guid to match the original
+					spawnedActorInventoryItemComp->SetItemGUID(inventoryItemComp->GetItemGUID());
+
+					UE_LOG(LogInventory, Verbose, TEXT("Corresponding actor (%s) spawned for item (%s). Transferring inventory data to the spawned object..."), *GetNameSafe(spawnedActor), *GetNameSafe(item));
+
+					TransferInventoryDataToObject(item, spawnedActor);
+
+					UE_LOG(LogInventory, Verbose, TEXT("Inventory data transferred to actor (%s)."), *GetNameSafe(spawnedActor));
+
+					Inventory.Add(spawnedActor);
+					OnRep_Inventory();
 				}
-
-				AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(inventoryItemComp->CorrespondingActorClassToSpawn);
-
-				check(IsValid(spawnedActor));
-
-				//	Corresponding spawned actor must also have the inventory item component
-				UInventoryItemComponent* spawnedActorInventoryItemComp = spawnedActor->FindComponentByClass<UInventoryItemComponent>();
-
-				check(IsValid(spawnedActorInventoryItemComp));
-
-				//	Set the corresponding class to be who spawned it
-				spawnedActorInventoryItemComp->CorrespondingActorClassToSpawn = GetClass();
-
-				//	Update the spawned item guid to match the original
-				spawnedActorInventoryItemComp->SetItemGUID(inventoryItemComp->GetItemGUID());
-
-				UE_LOG(LogInventory, Verbose, TEXT("Corresponding actor (%s) spawned for item (%s). Transferring inventory data to the spawned object..."), *GetNameSafe(spawnedActor), *GetNameSafe(item));
-
-				TransferInventoryDataToObject(item, spawnedActor);
-
-				UE_LOG(LogInventory, Verbose, TEXT("Inventory data transferred to actor (%s)."), *GetNameSafe(spawnedActor));
-
-				Inventory.Add(spawnedActor);
-				OnRep_Inventory();
 
 				//	Maybe destroy the original item now?
 				itemActor->Destroy();
@@ -106,7 +104,12 @@ bool UInventoryComponent::AddItem(UObject* item)
 void UInventoryComponent::OnRep_Inventory()
 {
 	AActor* item = Inventory.Top();
-	UE_LOG(LogInventory, Log, TEXT("OnRep_Inventory = (%s)"), *GetNameSafe(item));
-	UInventoryItemComponent* inventoryItemComp = item->FindComponentByClass<UInventoryItemComponent>();
-	OnItemAdded.Broadcast(inventoryItemComp);
+
+	if (IsValid(item))
+	{
+
+		UE_LOG(LogInventory, Log, TEXT("OnRep_Inventory = (%s)"), *GetNameSafe(item));
+		UInventoryItemComponent* inventoryItemComp = item->FindComponentByClass<UInventoryItemComponent>();
+		OnItemAdded.Broadcast(inventoryItemComp);
+	}
 }

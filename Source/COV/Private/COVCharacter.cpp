@@ -9,7 +9,6 @@
 #include "COVInteractionComponent.h"
 #include "FocusComponent.h"
 #include <Kismet/KismetSystemLibrary.h>
-#include "COVInventory.h"
 #include "UE4Helpers.h"
 #include "Inventory.h"
 

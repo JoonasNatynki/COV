@@ -31,7 +31,7 @@ void UInventoryItemComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GetOwner()->HasAuthority())
+	if (!ItemGUID.IsValid() && GetOwner()->HasAuthority())
 	{
 		ItemGUID = FGuid::NewGuid();
 	}

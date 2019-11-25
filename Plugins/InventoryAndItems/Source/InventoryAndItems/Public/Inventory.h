@@ -23,7 +23,10 @@ public:
 		void TransferInventoryDataToObject(UObject* fromObject, UObject* toObject) const;
 
 	UFUNCTION(Category = "Inventory", BlueprintCallable, BlueprintAuthorityOnly)
-		bool AddItem(UObject* item);
+		bool AddItem(AActor* item);
+
+	UFUNCTION(Category = "Inventory", BlueprintCallable, BlueprintAuthorityOnly)
+		bool RemoveItem(AActor* item);
 
 	UFUNCTION()
 		void OnRep_Inventory();

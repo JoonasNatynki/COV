@@ -1,3 +1,0 @@
-C:\Users\Katulobotomia\Documents\Unreal Projects\COV 4.23\Plugins\UE4Helpers\Intermediate\Build\Win64\UE4\DebugGame\UE4Helpers\Definitions.UE4Helpers.h
-C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
-C:\Program Files\Epic Games\UE_4.23\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h

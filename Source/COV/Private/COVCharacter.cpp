@@ -30,12 +30,6 @@ void ACOVCharacter::BeginPlay()
 
 	//	Here we see if the character blueprint is configured properly with the proper components that it needs to function properly. If one component is missing, we ensure that it is added to the blueprint. The reason why we add the components in the blueprint instead of code is: it's much easier and designer friendly. No reason to hardcode it here since there is no performance gain in doing so and we can access the component just as well if it is initialized through the blueprint scripting language. Although there is nothing wrong in initializing the components in the constructor here in code either. It is just a personal preference. A good rule of thumb is that you write implementation and the functionality in C++ and you do the higher level logic and execution of those implementations in Blueprints. In other words: "Write the functions in C++, use the functions in Blueprints.".
 
-	//	Smooth animation component
-	GET_AND_CACHE_COMPONENT(UCOVSmoothAnimationComponent, SmoothMotionComponent)
-	//	Interaction component
-	GET_AND_CACHE_COMPONENT(UCOVInteractionComponent, InteractionComponent)
-	//	Focus component
-	GET_AND_CACHE_COMPONENT(UFocusComponent, FocusComponent)
 	//	Inventory component
 	GET_AND_CACHE_COMPONENT(UInventoryComponent, Inventory)
 }
@@ -71,11 +65,11 @@ void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor
 {
 	if (ICOVInteractable::Execute_Interact(interactedActor, this))
 	{
-		COV_LOG(LogTemp, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+		COV_LOG(COVCharacter, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
 	}
 	else
 	{
-		COV_LOG(LogTemp, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interacted actor does not implement interface 'Interactable'"), *GetNameSafe(this), *GetNameSafe(interactedActor));
+		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interacted actor does not implement interface 'Interactable'"), *GetNameSafe(this), *GetNameSafe(interactedActor));
 	}
 }
 
@@ -178,6 +172,13 @@ void ACOVCharacter::Input_LeftControl_Released_Implementation()
 
 void ACOVCharacter::Input_Interact_Implementation()
 {
+	//	We need the focus component for this
+	if(!IsValid(FocusComponent))
+	{
+		COV_LOG(COVCharacter, Warning, TEXT("No FocusComponent found on character. Can't focus to interact with anything."));
+		return;
+	}
+
 	//	Find out the actor that the player is focusing on
 	AActor* focusedActor = FocusComponent->GetFocusedActor();
 	if (IsValid(focusedActor))
@@ -189,25 +190,25 @@ void ACOVCharacter::Input_Interact_Implementation()
 			if (ICOVInteractable::Execute_GetIsInteractable(focusedActor))
 			{
 				//	Interaction will be successful
-				COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 				Input_Interact_Server(focusedActor);
 
 			}
 			else
 			{
-				COV_LOG(LogTemp, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 				return;
 			}
 		}
 		else
 		{
-			COV_LOG(LogTemp, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+			COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 			return;
 		}
 	}
 	else
 	{
-		COV_LOG(LogTemp, Log, TEXT("Character (%s) has nothing to interact with."), *GetNameSafe(this));
+		COV_LOG(COVCharacter, Log, TEXT("Character (%s) has nothing to interact with."), *GetNameSafe(this));
 	}
 }
 

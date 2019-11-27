@@ -18,7 +18,8 @@ public class COV : ModuleRules
             "UE4Helpers",
             "GameplayObjectComponents",
             "PlayerPawnComponents",
-            "InventoryAndItems"
+            "InventoryAndItems",
+            "IcoSphereVertexComponent"
         });
 
         PrivateDependencyModuleNames.Add("FocusComponent");

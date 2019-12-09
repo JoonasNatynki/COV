@@ -427,8 +427,5 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 		//	Creates cached variable values and sends them to the server
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
-
-	//DrawDebugSphere(GetWorld(), GetAimingLocation(), 5.0f, 4, FColor(255, 0, 255, 1), false, 0.0f, 1, 1.0f);
-	//DrawDebugLine(GetWorld(), CalculateHeadLocation(), GetAimingLocation(), FColor(255, 0, 255, 1), false, 0.0f, 1, 0.5f);
 }
 

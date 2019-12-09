@@ -19,7 +19,7 @@ ACOVCharacter::ACOVCharacter(const class FObjectInitializer& PCIP)/* : Super(PCI
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	SetActorTickEnabled(true);
+	SetActorTickEnabled(false);
 	bUseControllerRotationYaw = false;
 }
 
@@ -281,6 +281,7 @@ ACOVPlayerController* ACOVCharacter::GetCOVPlayerController() const
 void ACOVCharacter::COV_ShowCharacterAimingVectors(bool bOn)
 {
 	_bDebugModeIsOn = bOn;
+	SetActorTickEnabled(bOn);
 	COV_LOG(COVCharacter, Warning, TEXT("TODO"));
 }
 

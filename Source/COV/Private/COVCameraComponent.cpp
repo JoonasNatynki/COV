@@ -11,7 +11,11 @@ DEFINE_LOG_CATEGORY(LogCamera)
 UCOVCameraComponent::UCOVCameraComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	SetComponentTickEnabled(true);
+
+	if (IsValid(GetOwner()) && !GetOwner()->HasAuthority())
+	{
+		SetComponentTickEnabled(true);
+	}
 }
 
 class APawn* UCOVCameraComponent::GetOwnerPawn() const
@@ -21,30 +25,57 @@ class APawn* UCOVCameraComponent::GetOwnerPawn() const
 	return ownerPawn;
 }
 
-void UCOVCameraComponent::UpdateCameraTransform(const float deltaTime)
+FORCEINLINE const FVector UCOVCameraComponent::GetCameraDefaultLocation() const
 {
-	//	Position
-	FVector playerLocation = GetOwner()->GetActorLocation();
-	FVector cameraLocationAfterOffset = playerLocation + CameraPlayerDefaultOffset;
-	//	Now add in the rotation location offset
-	cameraLocationAfterOffset = UE4CodeHelpers::RotateVectorAroundPoint(cameraLocationAfterOffset, playerLocation, RotationOffset);
+	const FVector playerLocation = GetOwner()->GetActorLocation();
+	const FVector cameraDefaultLocation = playerLocation + CameraPlayerDefaultOffset;
 
-	FVector currentCameraLocation = GetComponentLocation();
-	FVector finalCameraLocationResult = UKismetMathLibrary::VLerp(currentCameraLocation, cameraLocationAfterOffset, CameraTransformLerpSpeed);
+	return cameraDefaultLocation;
+}
+
+FORCEINLINE const FVector UCOVCameraComponent::GetCameraDesiredLocation() const
+{
+	const FVector playerLocation = GetOwner()->GetActorLocation();
+	const FVector cameraDefaultLocation = GetCameraDefaultLocation();
+	const FVector cameraTargetLocation = UE4CodeHelpers::RotateVectorAroundPoint(cameraDefaultLocation, playerLocation, CameraDesiredRotationSetting);
+
+	return cameraTargetLocation;
+}
+
+FORCEINLINE const FVector UCOVCameraComponent::GetCameraCurrentLocation() const
+{
+	return GetComponentLocation();
+}
+
+FORCEINLINE const FRotator UCOVCameraComponent::GetCameraCurrentRotation() const
+{
+	return GetComponentRotation();
+}
+
+FORCEINLINE const FVector UCOVCameraComponent::GetPlayerLocation() const
+{
+	return GetOwner()->GetActorLocation();
+}
+
+FORCEINLINE void UCOVCameraComponent::UpdateCameraTransform(const float deltaTime)
+{
+	//	Location
+	const FVector currentCameraLocation = GetCameraCurrentLocation();
+	const FVector desiredCameraLocation = GetCameraDesiredLocation();
+	const FVector finalCameraLocationResult = UKismetMathLibrary::VLerp(currentCameraLocation, desiredCameraLocation, CameraTransformLerpSpeed);
 	SetWorldLocation(finalCameraLocationResult);
 
 	//	Rotation
-	FRotator playerRotation = GetOwner()->GetActorRotation();
-	FRotator cameraCurrentRotation = GetComponentRotation();
-	FRotator cameraEndRotation = UKismetMathLibrary::FindLookAtRotation(finalCameraLocationResult, playerLocation);
-
-	SetWorldRotation(cameraEndRotation);
+	const FRotator currentCameraRotation = GetCameraCurrentRotation();
+	const FVector playerLocation = GetPlayerLocation();
+	const FRotator desiredCameraRotation = UKismetMathLibrary::FindLookAtRotation(finalCameraLocationResult, playerLocation);
+	SetWorldRotation(desiredCameraRotation);
 }
 
-void UCOVCameraComponent::RotateCamera(const ECameraRotation direction)
+void UCOVCameraComponent::ApplyCameraRotationInput(const ECameraRotation direction)
 {
-	FRotator rot = direction == (ECameraRotation::Clockwise) ? (FRotator(0.0f, DegreesPerRotation, 0.0f)) : (FRotator(0.0f, -DegreesPerRotation, 0.0f));
-	RotationOffset = RotationOffset + rot;
+	const FRotator newAddedRotation = direction == (ECameraRotation::Clockwise) ? (FRotator(0.0f, RotationSettingAdjustmentStep, 0.0f)) : (FRotator(0.0f, -RotationSettingAdjustmentStep, 0.0f));
+	CameraDesiredRotationSetting = CameraDesiredRotationSetting + newAddedRotation;
 }
 
 void UCOVCameraComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

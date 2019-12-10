@@ -19,7 +19,9 @@ public class COV : ModuleRules
             "GameplayObjectComponents",
             "PlayerPawnComponents",
             "InventoryAndItems",
-            "IcoSphereVertexComponent"
+            "IcoSphereVertexComponent",
+            "MetadataModifier",
+            "CinematicCamera"
         });
 
         PrivateDependencyModuleNames.Add("FocusComponent");

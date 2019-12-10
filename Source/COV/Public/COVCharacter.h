@@ -73,7 +73,7 @@ public:
 
 
 	//	INPUTS	#############################################################################################
-	UFUNCTION(Category = "Movement", BLueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(Category = "Movement", BlueprintCallable, BlueprintNativeEvent)
 		//	Move character forward/back
 		void Input_MoveForward(float amount);
 	UFUNCTION(Category = "Movement", BlueprintNativeEvent)

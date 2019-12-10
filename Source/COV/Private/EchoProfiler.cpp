@@ -7,8 +7,10 @@
 #include <CollisionQueryParams.h>
 #include "UE4Helpers.h"
 
+DEFINE_LOG_CATEGORY(LogEchoProfile)
+
 static TAutoConsoleVariable<int32> CVarShowEchoProfilerDebugSphere(TEXT("COV.ShowEchoProfilerDebugSphere"),
-	0,
+	1,
 	TEXT("Show the aproximate size of the echo profile as volume."));
 
 // Sets default values for this component's properties
@@ -26,6 +28,12 @@ void UCOVEchoProfiler::BeginPlay()
 {
 	Super::BeginPlay();
 	IcoSphereMeshComponent->GenerateIcoSphere(IcoSphereSubdivisions);
+}
+
+void UCOVEchoProfiler::SetEchoProfileDebugsEnabled(bool bOn)
+{
+	SetComponentTickEnabled(bOn);
+	UE_LOG(LogEchoProfile, Log, TEXT("EchoProfile tick is set to (%s)"), (bOn)?(TEXT("TRUE")):(TEXT("FALSE")));
 }
 
 void UCOVEchoProfiler::GenerateEchoProfile(FVector sourceLocation)
@@ -96,6 +104,5 @@ void UCOVEchoProfiler::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	DrawDebugs();
-	// ...
 }
 

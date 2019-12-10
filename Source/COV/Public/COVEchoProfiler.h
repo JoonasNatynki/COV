@@ -9,6 +9,8 @@
 #include "IcoSphereComponent.h"
 #include "COVEchoProfiler.generated.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(LogEchoProfile, All, Log)
+
 class UIcoSphereComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable)
@@ -40,6 +42,9 @@ public:
 		float GetEchoFloatProfile() const { return EchoSpaceSizeProfile; };
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 		float GetEchoCoverageProfile() const { return EchoCoverageProfile; };
+
+	UFUNCTION(Category = "EchoProfile", Exec)
+		void SetEchoProfileDebugsEnabled(bool bOn);
 
 	FIndex GetVertexForEdge(Lookup& lookup, VertexList& vertices, FIndex first, FIndex second);
 	TriangleList SubdivideIcoSphereMesh(VertexList& vertices, TriangleList triangles);

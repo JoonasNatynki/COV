@@ -66,9 +66,6 @@ private:
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		TEnumAsByte<EAimOffsetCalculationMode> AimOffsetMode = EAimOffsetCalculationMode::ControlRotation;
 
-	UPROPERTY(Category = "Movement", VisibleAnywhere, ReplicatedUsing = OnRep_currentMaximumMovementSpeed, Transient)
-		//	The default maximum speed the character will be running at without sprinting
-		float _currentMovementSpeed = 0.0f;
 	UPROPERTY(Category = "Movement", EditDefaultsOnly, Config)
 		//	The default maximum speed the character will be running at without sprinting
 		float _defaultMaximumRunningSpeed = 600.0f;
@@ -91,17 +88,10 @@ private:
 		//	Server version of the UpdateYawAndPitch function
 		void Server_SetActorRotation(FRotator actorRotation);
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintAuthorityOnly)
-		//	Server version of the current walking speed setter
-		void Server_SetCurrentWalkingSpeed(float currentWalkingSpeed);
-	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the location of special interest setter
 		void Server_SetLocationOfSpecialInterest(FVector location);
 	//	####################################################################################################
 
-	//	REPPERS ############################################################################################
-	UFUNCTION()
-		void OnRep_currentMaximumMovementSpeed();
-	//	REPPERS ############################################################################################
 
 public:
 	//	GETTERS ############################################################################################
@@ -137,8 +127,6 @@ public:
 	//	GETTERS ############################################################################################
 
 	//	SETTERS ############################################################################################
-	UFUNCTION(Category = "Movement", BlueprintCallable)
-		void SetCurrentMovementSpeed(float currentWalkingSpeed);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
 		void SetYaw(float yaw);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)

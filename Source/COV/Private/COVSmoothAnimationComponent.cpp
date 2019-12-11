@@ -33,11 +33,6 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 void UCOVSmoothAnimationComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (IS_LOCALLY_CONTROLLED)
-	{
-		SetCurrentMovementSpeed(_defaultMaximumWalkingSpeed);
-	}
 }
 
 void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const
@@ -49,7 +44,6 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedPitch, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedAimingLocation, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedHipRotation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _currentMovementSpeed, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _specialInterestLocation, COND_SkipOwner);
 }
@@ -94,17 +88,6 @@ void UCOVSmoothAnimationComponent::Server_SetYaw_Implementation(float yaw)
 	_cachedYaw = yaw;
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Validate(float currentWalkingSpeed)
-{
-	return true;
-}
-
-void UCOVSmoothAnimationComponent::Server_SetCurrentWalkingSpeed_Implementation(float currentWalkingSpeed)
-{
-	_currentMovementSpeed = currentWalkingSpeed;
-	OnRep_currentMaximumMovementSpeed();
-}
-
 bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(FVector loc)
 {
 	return true;
@@ -113,16 +96,6 @@ bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(
 void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implementation(FVector location)
 {
 	_specialInterestLocation = location;
-}
-
-void UCOVSmoothAnimationComponent::OnRep_currentMaximumMovementSpeed()
-{
-	auto charMove = Cast<ACharacter>(GetOwner())->GetCharacterMovement();
-
-	if (IsValid(charMove))
-	{
-		Cast<ACharacter>(GetOwner())->GetCharacterMovement()->MaxWalkSpeed = _currentMovementSpeed;
-	}
 }
 
 float UCOVSmoothAnimationComponent::GetYaw() const
@@ -209,16 +182,6 @@ void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
 void UCOVSmoothAnimationComponent::SetShouldRotateHips(float inputAmount)
 {
 	_bShouldBeRotatingHips = inputAmount != 0.0f;
-}
-
-void UCOVSmoothAnimationComponent::SetCurrentMovementSpeed(float newSpeed)
-{
-	if (IS_LOCALLY_CONTROLLED)
-	{
-		_currentMovementSpeed = newSpeed;
-		OnRep_currentMaximumMovementSpeed();
-		Server_SetCurrentWalkingSpeed(_currentMovementSpeed);
-	}
 }
 
 void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)

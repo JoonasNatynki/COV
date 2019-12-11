@@ -105,19 +105,12 @@ void ACOVCharacter::Input_Spacebar_Released_Implementation()
 
 void ACOVCharacter::Input_LeftShift_Pressed_Implementation()
 {
-	//	If using smooth motion component, use it to set the current movement speed. Otherwise just use the character movement component
-	if (SmoothMotionComponent)
-	{
-		SmoothMotionComponent->SetCurrentMovementSpeed(SmoothMotionComponent->GetDefaultRunningSpeed());
-	}
+
 }
 
 void ACOVCharacter::Input_LeftShift_Released_Implementation()
 {
-	if (SmoothMotionComponent)
-	{
-		SmoothMotionComponent->SetCurrentMovementSpeed(SmoothMotionComponent->GetDefaultWalkingSpeed());
-	}
+
 }
 
 void ACOVCharacter::Input_LeftMouseButton_Pressed_Implementation()

@@ -5,6 +5,7 @@
 #include <GameFramework/Pawn.h>
 #include <Kismet/KismetMathLibrary.h>
 #include "UE4Helpers.h"
+#include <DrawDebugHelpers.h>
 
 DEFINE_LOG_CATEGORY(LogCamera)
 
@@ -27,17 +28,19 @@ class APawn* UCOVCameraComponent::GetOwnerPawn() const
 
 FORCEINLINE const FVector UCOVCameraComponent::GetCameraDefaultLocation() const
 {
-	const FVector playerLocation = GetOwner()->GetActorLocation();
-	const FVector cameraDefaultLocation = playerLocation + CameraPlayerDefaultOffset;
+	const FVector cameraDefaultLocation = CameraInterestLocation + CameraDefaultOffset;
 
 	return cameraDefaultLocation;
 }
 
-FORCEINLINE const FVector UCOVCameraComponent::GetCameraDesiredLocation() const
+FORCEINLINE const FVector UCOVCameraComponent::GetCameraDesiredLocation()
 {
-	const FVector playerLocation = GetOwner()->GetActorLocation();
 	const FVector cameraDefaultLocation = GetCameraDefaultLocation();
-	const FVector cameraTargetLocation = UE4CodeHelpers::RotateVectorAroundPoint(cameraDefaultLocation, playerLocation, CameraDesiredRotationSetting);
+	//	Lerps between camera rotation setting and the current rotation setting
+	CameraCurrentRotationSetting = CameraCurrentRotationSetting + (CameraRotationLerpSpeed*(CameraDesiredRotationSetting - CameraCurrentRotationSetting));
+
+	//	Now find out the actual desired camera location
+	const FVector cameraTargetLocation = UE4CodeHelpers::RotateVectorAroundPoint(cameraDefaultLocation, CameraInterestLocation, CameraCurrentRotationSetting);
 
 	return cameraTargetLocation;
 }
@@ -62,14 +65,24 @@ FORCEINLINE void UCOVCameraComponent::UpdateCameraTransform(const float deltaTim
 	//	Location
 	const FVector currentCameraLocation = GetCameraCurrentLocation();
 	const FVector desiredCameraLocation = GetCameraDesiredLocation();
-	const FVector finalCameraLocationResult = UKismetMathLibrary::VLerp(currentCameraLocation, desiredCameraLocation, CameraTransformLerpSpeed);
-	SetWorldLocation(finalCameraLocationResult);
 
 	//	Rotation
 	const FRotator currentCameraRotation = GetCameraCurrentRotation();
-	const FVector playerLocation = GetPlayerLocation();
-	const FRotator desiredCameraRotation = UKismetMathLibrary::FindLookAtRotation(finalCameraLocationResult, playerLocation);
+	const FRotator desiredCameraRotation = UKismetMathLibrary::FindLookAtRotation(desiredCameraLocation, CameraInterestLocation);
+
+	SetWorldLocation(desiredCameraLocation);
 	SetWorldRotation(desiredCameraRotation);
+}
+
+FORCEINLINE void UCOVCameraComponent::UpdateCameraInterestLocation()
+{
+	const FVector playerCurrentLocation = GetPlayerLocation();
+	CameraInterestLocation = UKismetMathLibrary::VLerp(CameraInterestLocation, playerCurrentLocation, CameraTransformLerpSpeed);
+}
+
+FORCEINLINE void UCOVCameraComponent::UpdateDebugs(float deltaTime)
+{
+	DrawDebugSphere(GetWorld(), CameraInterestLocation, 20.0f, 12, FColor::Emerald, false, deltaTime, 0, 1.0f);
 }
 
 void UCOVCameraComponent::ApplyCameraRotationInput(const ECameraRotation direction)
@@ -82,7 +95,8 @@ void UCOVCameraComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	UpdateCameraInterestLocation();
 	UpdateCameraTransform(DeltaTime);
 
-	UE_LOG(LogCamera, Log, TEXT("%s"), (bIsAnimating)?(TEXT("TRUE")):(TEXT("FALSE")));
+	//UpdateDebugs(DeltaTime);
 }

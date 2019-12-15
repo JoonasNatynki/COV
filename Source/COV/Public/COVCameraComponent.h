@@ -46,8 +46,9 @@ private:
 
 	//	How fast the camera should move to new desired locations
 	float CameraTransformLerpSpeed = 0.08f;
-	//	The default offset from the player camera
-	const FVector CameraDefaultOffset = FVector(0, 1000.0f, 1000.0f);
+	UPROPERTY(Category = "3rd Person Camera", EditDefaultsOnly)
+		//	The default offset from the player camera
+		FVector CameraDefaultOffset = FVector(0, 1000.0f, 1000.0f);
 	//	Do we rotate the camera in steps when changing rotation settings?
 	bool bStepRotation = true;
 	//	How many degrees is one camera rotation setting operation exactly? (Player pressing "Rotate camera clockwise" button)

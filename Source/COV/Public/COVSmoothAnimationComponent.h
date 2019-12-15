@@ -53,6 +53,9 @@ private:
 	UPROPERTY(Category = "Animation", EditDefaultsOnly)
 		//	Angle at which the character will start rotating towards aiming location
 		float _angleToStartRotatingHips = 90;
+	UPROPERTY(Category = "Animation", EditDefaultsOnly)
+		//	Angle at which the character will start rotating towards aiming location
+		float _upperTorsoMaxRotation = 140.0f;
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	How fast the player rotates to movement vector when receiving movement input?
 		float _movementInputRotationSpeed = 5.0f;
@@ -72,24 +75,24 @@ private:
 	UPROPERTY(Category = "Movement", EditDefaultsOnly)
 		//	The default maximum speed the character will be running at without sprinting
 		float _defaultMaximumWalkingSpeed = 200.0f;
-	//	VARIABLES ###########################################################################################
+	//	/VARIABLES ###########################################################################################
 
 	//	SERVER ONLY FUNCTIONS	#############################################################################
 	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
-		void Server_SetAimingLocation(FVector aimingLocation);
+		void Server_SetAimingLocation(const FVector& aimingLocation);
 	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
-		void Server_SetPitch(float pitch);
+		void Server_SetPitch(const float pitch);
 	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
-		void Server_SetYaw(float yaw);
+		void Server_SetYaw(const float yaw);
 	UFUNCTION(Category = "Server", Server, Unreliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the UpdateYawAndPitch function
-		void Server_SetActorRotation(FRotator actorRotation);
+		void Server_SetActorRotation(const FRotator& actorRotation);
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintAuthorityOnly)
 		//	Server version of the location of special interest setter
-		void Server_SetLocationOfSpecialInterest(FVector location);
+		void Server_SetLocationOfSpecialInterest(const FVector& location);
 	//	####################################################################################################
 
 
@@ -103,7 +106,7 @@ public:
 		float GetPitch() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Get the amount that the hips should be rotated at
-		FRotator GetHipRotation(float deltaTime) const;
+		FRotator GetHipRotation(const float deltaTime) const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	Get if the hips should be rotating this frame
 		bool GetShouldBeRotatingHips() const;
@@ -124,22 +127,22 @@ public:
 		FVector GetLocationOfSpecialInterest() const;
 		//	Gets the target rotation that the yaw and pitch try to aim at.
 		FRotator GetRotationToTargetDirection() const;
-	//	GETTERS ############################################################################################
+	//	/GETTERS ############################################################################################
 
 	//	SETTERS ############################################################################################
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetYaw(float yaw);
+		void SetYaw(const float yaw);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetPitch(float pitch);
+		void SetPitch(const float pitch);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetHipRotation(FRotator rot);
+		void SetHipRotation(const FRotator& rot);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetShouldRotateHips(float inputAmount);
+		void SetShouldRotateHips(const float inputAmount);
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable)
-		void SetAimingLocation(FVector loc);
+		void SetAimingLocation(const FVector& loc);
 	UFUNCTION(Category = "Movement", BlueprintCallable)
-		void SetLocationOfSpecialInterest(FVector location);
-		//	SETTERS ############################################################################################
+		void SetLocationOfSpecialInterest(const FVector& location);
+	//	/SETTERS ############################################################################################
 	
 	//	CALCULATORS ########################################################################################
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
@@ -156,16 +159,21 @@ public:
 		FVector CalculateHeadLocation() const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	Calculates a new hip rotation at this frame
-		FRotator CalculateHipRotation(float deltaTime) const;
+		FRotator CalculateHipRotation(const float deltaTime) const;
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	Calculates a new head rotation at this frame. The head is looking at either the aiming location or another one specifiec independently by SetInterestLocation()
 		FRotator CalculateHeadRotation() const;
 	UFUNCTION(Category = "Smooth Animation", BlueprintCallable, BlueprintPure)
 		//	This is the location that is used to determine where the head is looking at
 		FVector CalculateHeadLookAtLocation() const;
-	//	CALCULATORS ########################################################################################
+	//	/CALCULATORS ########################################################################################
+
+	void UpdateHipRotation(float deltaTime);
+	void UpdateAimingLocation();
+	void UpdateAimOffset();
 
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	This function updates all of the necessary variables needed to animate the character. Put this in your character's tick and make sure it only runs on a local client.
-		void Update_AllAnimationVariables_TICK(float deltaTime);
+		void Update_AllAnimationVariables_TICK(const float deltaTime);
+
 };

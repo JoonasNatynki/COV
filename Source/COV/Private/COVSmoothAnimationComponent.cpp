@@ -48,52 +48,52 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _specialInterestLocation, COND_SkipOwner);
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(FVector aimingVector)
+bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(const FVector& aimingVector)
 {
 	return true;
 }
 
-void UCOVSmoothAnimationComponent::Server_SetAimingLocation_Implementation(FVector aimLoc)
+void UCOVSmoothAnimationComponent::Server_SetAimingLocation_Implementation(const FVector& aimLoc)
 {
 	_cachedAimingLocation = aimLoc;
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(FRotator actorRotation)
+bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(const FRotator& actorRotation)
 {
 	return true;
 }
 
-void UCOVSmoothAnimationComponent::Server_SetActorRotation_Implementation(FRotator actorRotation)
+void UCOVSmoothAnimationComponent::Server_SetActorRotation_Implementation(const FRotator& actorRotation)
 {
 	_cachedHipRotation = actorRotation;
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(float pitch)
+bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(const float pitch)
 {
 	return true;
 }
 
-void UCOVSmoothAnimationComponent::Server_SetPitch_Implementation(float pitch)
+void UCOVSmoothAnimationComponent::Server_SetPitch_Implementation(const float pitch)
 {
 	_cachedPitch = pitch;
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(float yaw)
+bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(const float yaw)
 {
 	return true;
 }
 
-void UCOVSmoothAnimationComponent::Server_SetYaw_Implementation(float yaw)
+void UCOVSmoothAnimationComponent::Server_SetYaw_Implementation(const float yaw)
 {
 	_cachedYaw = yaw;
 }
 
-bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(FVector loc)
+bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(const FVector& loc)
 {
 	return true;
 }
 
-void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implementation(FVector location)
+void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implementation(const FVector& location)
 {
 	_specialInterestLocation = location;
 }
@@ -116,7 +116,7 @@ float UCOVSmoothAnimationComponent::GetPitch() const
 	return _cachedPitch;
 }
 
-FRotator UCOVSmoothAnimationComponent::GetHipRotation(float deltaTime) const
+FRotator UCOVSmoothAnimationComponent::GetHipRotation(const float deltaTime) const
 {
 	if(IS_LOCALLY_CONTROLLED)
 	{
@@ -141,56 +141,57 @@ FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
 
 FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
 {
-	TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
+	const TWeakObjectPtr<USkeletalMeshComponent> ownerSkeletalMeshComp = Cast<USkeletalMeshComponent>(GetOwner()->GetComponentByClass(USkeletalMeshComponent::StaticClass()));
 
-	ensureMsgf(ownerSkeletalMeshComp.IsValid(), TEXT("Owner (%s) did not have a SkeletalMeshComponent."), *GetNameSafe(GetOwner()));
-
-	if (ownerSkeletalMeshComp.IsValid())
+	if (!ensureMsgf(ownerSkeletalMeshComp.IsValid(), TEXT("Owner (%s) did not have a SkeletalMeshComponent."), *GetNameSafe(GetOwner())))
 	{
-		bool socketDoesExist = ownerSkeletalMeshComp->DoesSocketExist("Head");
-		if (!socketDoesExist)
-		{
-			ensureMsgf(socketDoesExist, TEXT("Owner (%s) did not have a socket named 'head'."), *GetNameSafe(GetOwner()));
-			return FVector(0, 0, 0);
-		}
-
-		FVector headLoc = ownerSkeletalMeshComp->GetSocketLocation("Head");
-		return headLoc;
+		return FVector(0, 0, 0);
 	}
+
+	const bool socketDoesExist = ownerSkeletalMeshComp->DoesSocketExist("Head");
+		
+	if (!ensureMsgf(socketDoesExist, TEXT("Owner (%s) did not have a socket named 'Head'."), *GetNameSafe(GetOwner())))
+	{
+		return FVector(0, 0, 0);
+	}
+
+	const FVector headLoc = ownerSkeletalMeshComp->GetSocketLocation("Head");
+
+		return headLoc;
 
 	return FVector(0, 0, 0);
 }
 
-void UCOVSmoothAnimationComponent::SetYaw(float yaw)
+void UCOVSmoothAnimationComponent::SetYaw(const float yaw)
 {
 	_cachedYaw = yaw;
 	Server_SetYaw(yaw);
 }
 
-void UCOVSmoothAnimationComponent::SetPitch(float pitch)
+void UCOVSmoothAnimationComponent::SetPitch(const float pitch)
 {
 	_cachedPitch = pitch;
 	Server_SetPitch(pitch);
 }
 
-void UCOVSmoothAnimationComponent::SetHipRotation(FRotator rot)
+void UCOVSmoothAnimationComponent::SetHipRotation(const FRotator& rot)
 {
 	_cachedHipRotation = rot;
 	Server_SetActorRotation(rot);
 }
 
-void UCOVSmoothAnimationComponent::SetShouldRotateHips(float inputAmount)
+void UCOVSmoothAnimationComponent::SetShouldRotateHips(const float inputAmount)
 {
 	_bShouldBeRotatingHips = inputAmount != 0.0f;
 }
 
-void UCOVSmoothAnimationComponent::SetAimingLocation(FVector loc)
+void UCOVSmoothAnimationComponent::SetAimingLocation(const FVector& loc)
 {
 	_cachedAimingLocation = loc;
 	Server_SetAimingLocation(loc);
 }
 
-void UCOVSmoothAnimationComponent::SetLocationOfSpecialInterest(FVector location)
+void UCOVSmoothAnimationComponent::SetLocationOfSpecialInterest(const FVector& location)
 {
 	if (IS_LOCALLY_CONTROLLED)
 	{
@@ -237,7 +238,9 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 	AController* playerController = Cast<APawn>(GetOwner())->GetController();
 
 	if (!IsValid(playerController))
+	{
 		return FVector(0, 0, 0);
+	}
 
 	FVector controllerForwardVector = Cast<AActor>(playerController)->GetActorForwardVector();
 	
@@ -285,25 +288,21 @@ FRotator UCOVSmoothAnimationComponent::GetRotationToTargetDirection() const
 
 float UCOVSmoothAnimationComponent::CalculateYaw() const
 {
-	float angleToStartRotatingHips = 125.0f;
-	float angleToStopRotatingHips = 20.0f;
-	float torsoMaxRotation = 140.0f;
-
-	FRotator targetRot = GetRotationToTargetDirection();
-	FRotator playerRot = Cast<ACharacter>(GetOwner())->GetActorRotation();
-	FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(playerRot, targetRot);
+	const FRotator targetRot = GetRotationToTargetDirection();
+	const FRotator playerRot = Cast<ACharacter>(GetOwner())->GetActorRotation();
+	const FRotator deltaRot = UKismetMathLibrary::NormalizedDeltaRotator(playerRot, targetRot);
 
 	//	If hips turn over too much...
-	if (FMath::Abs(deltaRot.Yaw) > angleToStartRotatingHips)
+	if (FMath::Abs(deltaRot.Yaw) > _angleToStartRotatingHips)
 	{
 		//	Clamp the yaw to torso max rotations
-		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -torsoMaxRotation, torsoMaxRotation);
+		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw - 360.0f, -_upperTorsoMaxRotation, _upperTorsoMaxRotation);
 		return -clampedYaw;
 	}
 	else   //	Need to rotate character towards _aimingVector
 	{
 		//	Clamp the yaw to torso max rotations
-		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -torsoMaxRotation, torsoMaxRotation);
+		float clampedYaw = UKismetMathLibrary::ClampAngle(deltaRot.Yaw, -_upperTorsoMaxRotation, _upperTorsoMaxRotation);
 		return -clampedYaw;
 	}
 }
@@ -322,7 +321,7 @@ float UCOVSmoothAnimationComponent::CalculatePitch() const
 	}
 }
 
-FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(float deltaTime) const
+FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(const float deltaTime) const
 {
 	FRotator goalRotation = GetRotationToTargetDirection();
 	FRotator startRotation = _cachedHipRotation;
@@ -361,6 +360,22 @@ FVector UCOVSmoothAnimationComponent::CalculateHeadLookAtLocation() const
 	}
 }
 
+void UCOVSmoothAnimationComponent::UpdateHipRotation(float deltaTime)
+{
+	SetHipRotation(CalculateHipRotation(deltaTime));
+}
+
+void UCOVSmoothAnimationComponent::UpdateAimingLocation()
+{
+	SetAimingLocation(CalculateAimingLocation());
+}
+
+void UCOVSmoothAnimationComponent::UpdateAimOffset()
+{
+	SetYaw(CalculateYaw());
+	SetPitch(CalculatePitch());
+}
+
 FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 {
 	FVector headLoc = CalculateHeadLocation();
@@ -372,12 +387,11 @@ FRotator UCOVSmoothAnimationComponent::CalculateHeadRotation() const
 	return headRot;
 }
 
-void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(float deltaTime)
+void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(const float deltaTime)
 {
-	SetHipRotation(CalculateHipRotation(deltaTime));
-	SetAimingLocation(CalculateAimingLocation());
-	SetYaw(CalculateYaw());
-	SetPitch(CalculatePitch());
+	UpdateAimingLocation();
+	UpdateHipRotation(deltaTime);
+	UpdateAimOffset();
 }
 
 // Called every frame
@@ -385,6 +399,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	//	Only client should be updating these values
 	if (Cast<APawn>(GetOwner())->IsLocallyControlled())
 	{
 		//	Creates cached variable values and sends them to the server

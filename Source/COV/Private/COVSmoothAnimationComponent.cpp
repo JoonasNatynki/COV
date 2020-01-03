@@ -40,12 +40,8 @@ void UCOVSmoothAnimationComponent::GetLifetimeReplicatedProps(TArray<FLifetimePr
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	//	Add replicated variables to list using this macro
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedYaw, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedPitch, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedAimingLocation, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _cachedHipRotation, COND_SkipOwner);
+	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, AnimationCache, COND_SkipOwner);
 	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _bShouldBeRotatingHips, COND_SkipOwner);
-	DOREPLIFETIME_CONDITION(UCOVSmoothAnimationComponent, _specialInterestLocation, COND_SkipOwner);
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(const FVector& aimingVector)
@@ -55,7 +51,7 @@ bool UCOVSmoothAnimationComponent::Server_SetAimingLocation_Validate(const FVect
 
 void UCOVSmoothAnimationComponent::Server_SetAimingLocation_Implementation(const FVector& aimLoc)
 {
-	_cachedAimingLocation = aimLoc;
+	AnimationCache.CachedAimingLocation = aimLoc;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(const FRotator& actorRotation)
@@ -65,7 +61,7 @@ bool UCOVSmoothAnimationComponent::Server_SetActorRotation_Validate(const FRotat
 
 void UCOVSmoothAnimationComponent::Server_SetActorRotation_Implementation(const FRotator& actorRotation)
 {
-	_cachedHipRotation = actorRotation;
+	AnimationCache.CachedHipRotation = actorRotation;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(const float pitch)
@@ -75,7 +71,7 @@ bool UCOVSmoothAnimationComponent::Server_SetPitch_Validate(const float pitch)
 
 void UCOVSmoothAnimationComponent::Server_SetPitch_Implementation(const float pitch)
 {
-	_cachedPitch = pitch;
+	AnimationCache.CachedPitch = pitch;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(const float yaw)
@@ -85,7 +81,7 @@ bool UCOVSmoothAnimationComponent::Server_SetYaw_Validate(const float yaw)
 
 void UCOVSmoothAnimationComponent::Server_SetYaw_Implementation(const float yaw)
 {
-	_cachedYaw = yaw;
+	AnimationCache.CachedYaw = yaw;
 }
 
 bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(const FVector& loc)
@@ -95,7 +91,7 @@ bool UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Validate(
 
 void UCOVSmoothAnimationComponent::Server_SetLocationOfSpecialInterest_Implementation(const FVector& location)
 {
-	_specialInterestLocation = location;
+	AnimationCache.CachedInterestLocation = location;
 }
 
 float UCOVSmoothAnimationComponent::GetYaw() const
@@ -104,7 +100,8 @@ float UCOVSmoothAnimationComponent::GetYaw() const
 	{
 		return CalculateYaw();
 	}
-	return _cachedYaw;
+
+	return AnimationCache.CachedYaw;
 }
 
 float UCOVSmoothAnimationComponent::GetPitch() const
@@ -113,7 +110,8 @@ float UCOVSmoothAnimationComponent::GetPitch() const
 	{
 		return CalculatePitch();
 	}
-	return _cachedPitch;
+
+	return AnimationCache.CachedPitch;
 }
 
 FRotator UCOVSmoothAnimationComponent::GetHipRotation(const float deltaTime) const
@@ -122,7 +120,8 @@ FRotator UCOVSmoothAnimationComponent::GetHipRotation(const float deltaTime) con
 	{
 		return CalculateHipRotation(deltaTime);
 	}
-	return _cachedHipRotation;
+
+	return AnimationCache.CachedHipRotation;
 }
 
 bool UCOVSmoothAnimationComponent::GetShouldBeRotatingHips() const
@@ -136,7 +135,8 @@ FVector UCOVSmoothAnimationComponent::GetAimingLocation() const
 	{
 		return CalculateAimingLocation();
 	}
-	return _cachedAimingLocation;
+
+	return AnimationCache.CachedAimingLocation;
 }
 
 FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
@@ -164,19 +164,19 @@ FVector UCOVSmoothAnimationComponent::CalculateHeadLocation() const
 
 void UCOVSmoothAnimationComponent::SetYaw(const float yaw)
 {
-	_cachedYaw = yaw;
+	AnimationCache.CachedYaw = yaw;
 	Server_SetYaw(yaw);
 }
 
 void UCOVSmoothAnimationComponent::SetPitch(const float pitch)
 {
-	_cachedPitch = pitch;
+	AnimationCache.CachedPitch = pitch;
 	Server_SetPitch(pitch);
 }
 
 void UCOVSmoothAnimationComponent::SetHipRotation(const FRotator& rot)
 {
-	_cachedHipRotation = rot;
+	AnimationCache.CachedHipRotation = rot;
 	Server_SetActorRotation(rot);
 }
 
@@ -187,7 +187,7 @@ void UCOVSmoothAnimationComponent::SetShouldRotateHips(const float inputAmount)
 
 void UCOVSmoothAnimationComponent::SetAimingLocation(const FVector& loc)
 {
-	_cachedAimingLocation = loc;
+	AnimationCache.CachedAimingLocation = loc;
 	Server_SetAimingLocation(loc);
 }
 
@@ -195,7 +195,7 @@ void UCOVSmoothAnimationComponent::SetLocationOfSpecialInterest(const FVector& l
 {
 	if (IS_LOCALLY_CONTROLLED)
 	{
-		_specialInterestLocation = location;
+		AnimationCache.CachedInterestLocation = location;
 		Server_SetLocationOfSpecialInterest(location);
 	}
 }
@@ -207,7 +207,9 @@ FVector UCOVSmoothAnimationComponent::GetCameraViewLocation() const
 	APlayerController* playerController = Cast<APlayerController>(controller);
 	
 	if (!IsValid(playerController))
+	{
 		return FVector(0, 0, 0);
+	}
 	
 	AActor* playerCameraManagerActor = Cast<AActor>(playerController->PlayerCameraManager);
 
@@ -228,9 +230,6 @@ float UCOVSmoothAnimationComponent::GetDefaultWalkingSpeed() const
 FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 {
 	FHitResult RV_Hit(ForceInit);
-
-	//	THIS FINALLY FIXED THE WHOLE CODE!!!! EVERYTHING IS WORKING PERFECTLY NOW AND IS FRAME ACCURATE AND NO LAG WHATSOEVER!!
-	//	TRAIN CRASH! CHOOO CHOOO!
 
 	//	Ray starting point
 	FVector playerViewWorldLocation = GetCameraViewLocation();
@@ -269,21 +268,30 @@ FVector UCOVSmoothAnimationComponent::CalculateAimingLocation() const
 
 FRotator UCOVSmoothAnimationComponent::GetRotationToTargetDirection() const
 {
-	if (AimOffsetMode == EAimOffsetCalculationMode::ControlRotation)
+	switch (AimOffsetMode)
 	{
-		//	We return the rotation of the controller of the character
-		FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
-		return targetRot;
-	}
+		case EAimOffsetCalculationMode::Nothing:
+		{
+			break;
+		}
+		case EAimOffsetCalculationMode::ControlRotation:
+		{	
+			//	We return the rotation of the controller of the character
+			FRotator targetRot = Cast<ACharacter>(GetOwner())->GetControlRotation();
+			return targetRot;
+			break;
+		}
+		case EAimOffsetCalculationMode::AimLocation:
+		{
+			//	We return the rotation to the aiming location from the character's head
+			FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(CalculateHeadLocation(), CalculateAimingLocation());
+			return targetRot;
+			break;
+		}
+	};
 
-	if (AimOffsetMode == EAimOffsetCalculationMode::AimLocation)
-	{
-		//	We return the rotation to the aiming location from the character's head
-		FRotator targetRot = UKismetMathLibrary::FindLookAtRotation(CalculateHeadLocation(), CalculateAimingLocation());
-		return targetRot;
-	}
-
-	return FRotator(0, 0, 0);
+	//	Fail
+	return FRotator::ZeroRotator;
 }
 
 float UCOVSmoothAnimationComponent::CalculateYaw() const
@@ -324,9 +332,9 @@ float UCOVSmoothAnimationComponent::CalculatePitch() const
 FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(const float deltaTime) const
 {
 	FRotator goalRotation = GetRotationToTargetDirection();
-	FRotator startRotation = _cachedHipRotation;
+	FRotator startRotation = AnimationCache.CachedHipRotation;
 
-	float absAngle = FMath::Abs(_cachedYaw);
+	float absAngle = FMath::Abs(AnimationCache.CachedYaw);
 
 	if (absAngle > _angleToStartRotatingHips || _bShouldBeRotatingHips)
 	{
@@ -345,7 +353,7 @@ FRotator UCOVSmoothAnimationComponent::CalculateHipRotation(const float deltaTim
 
 FVector UCOVSmoothAnimationComponent::GetLocationOfSpecialInterest() const
 {
-	return _specialInterestLocation;
+	return AnimationCache.CachedInterestLocation;
 }
 
 FVector UCOVSmoothAnimationComponent::CalculateHeadLookAtLocation() const
@@ -394,6 +402,14 @@ void UCOVSmoothAnimationComponent::Update_AllAnimationVariables_TICK(const float
 	UpdateAimOffset();
 }
 
+void UCOVSmoothAnimationComponent::DrawDebugs()
+{
+	if (bDrawDebugs)
+	{
+		DrawDebugSphere(GetWorld(), AnimationCache.CachedAimingLocation, 8.0f, 6, FColor::Red, false, -1.0f, 0, 2.0f);
+	}
+}
+
 // Called every frame
 void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -405,5 +421,7 @@ void UCOVSmoothAnimationComponent::TickComponent(float DeltaTime, ELevelTick Tic
 		//	Creates cached variable values and sends them to the server
 		Update_AllAnimationVariables_TICK(DeltaTime);
 	}
+
+	DrawDebugs();
 }
 

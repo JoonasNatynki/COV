@@ -8,10 +8,32 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(COVSmoothAnimation, Log, All)
 
+USTRUCT(BlueprintType) struct FAnimationCache
+{
+	GENERATED_BODY()
+public:
+	UPROPERTY()
+		float CachedYaw;
+
+	UPROPERTY()
+		float CachedPitch;
+
+	UPROPERTY()
+		FVector CachedAimingLocation;
+
+	UPROPERTY()
+		FRotator CachedHipRotation;
+
+	UPROPERTY()
+		FVector CachedInterestLocation;
+};
+
 UENUM(BlueprintType) enum EAimOffsetCalculationMode
 {
-	ControlRotation	UMETA(DisplayName = "Control rotation"),
-	AimLocation		UMETA(DisplayName = "Aim location")
+	Nothing				UMETA(DisplayName = "Nothing"),
+	ControlRotation		UMETA(DisplayName = "Control rotation"),
+	AimLocation			UMETA(DisplayName = "Aim location"),
+	InterestLocation	UMETA(DisplayName = "Interest location")
 };
 
 
@@ -29,23 +51,11 @@ class COV_API UCOVSmoothAnimationComponent : public UActorComponent
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty, FDefaultAllocator>& OutLifetimeProps) const override;
 
+	UPROPERTY(Replicated)
+		FAnimationCache AnimationCache;
+
 private:
 	//	VARIABLES ###########################################################################################
-	UPROPERTY(Replicated, VisibleAnywhere, Transient)
-		//	The yaw of this characters upper torso value. To be used in the animation blueprint
-		float _cachedYaw;
-	UPROPERTY(Replicated, VisibleAnywhere, Transient)
-		//	The pitch of this characters upper torso value. To be used in the animation blueprint
-		float _cachedPitch;
-	UPROPERTY(Replicated, VisibleAnywhere, Transient)
-		//	The location and direction the player is aiming at
-		FVector _cachedAimingLocation;
-	UPROPERTY(Replicated, VisibleAnywhere, Transient)
-		//	The location and direction the player is aiming at
-		FVector _specialInterestLocation;
-	UPROPERTY(Replicated, VisibleAnywhere, Transient)
-		//	The hip rotation of the actor
-		FRotator _cachedHipRotation;
 	UPROPERTY(Replicated, VisibleAnywhere, Transient)
 		//	Tells if the character is receiving player movement input to rotate hips towards aiming location
 		bool _bShouldBeRotatingHips;
@@ -175,5 +185,10 @@ public:
 	UFUNCTION(Category = "COVCharacterAnimationVariables", BlueprintCallable)
 		//	This function updates all of the necessary variables needed to animate the character. Put this in your character's tick and make sure it only runs on a local client.
 		void Update_AllAnimationVariables_TICK(const float deltaTime);
+
+	UFUNCTION(Exec)
+		void EnableSmoothAnimationDebugs(bool bEnabled) { bDrawDebugs = bEnabled; };
+	bool bDrawDebugs = false;
+	void DrawDebugs();
 
 };

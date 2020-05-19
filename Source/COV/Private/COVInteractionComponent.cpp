@@ -30,11 +30,11 @@ void UCOVInteractionComponent::BeginPlay()
 UFocusComponent* UCOVInteractionComponent::TryGetOwnerFocusComponent() const
 {
 	//	In order to find an actor to interact with, we want to use the focus manager component if it is present
-	AActor* owner = GetOwner();
+	const AActor* Owner = GetOwner();
 
-	if (IsValid(owner))
+	if (IsValid(Owner))
 	{
-		UFocusComponent* focusComponent = Cast<UFocusComponent>(owner->GetComponentByClass(UFocusComponent::StaticClass()));
+		UFocusComponent* focusComponent = Owner->FindComponentByClass<UFocusComponent>();
 		return focusComponent;
 	}
 
@@ -59,4 +59,3 @@ void UCOVInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
-

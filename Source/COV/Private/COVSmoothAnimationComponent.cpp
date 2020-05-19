@@ -26,7 +26,7 @@ UCOVSmoothAnimationComponent::UCOVSmoothAnimationComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	//PrimaryComponentTick.TickGroup = ETickingGroup::TG_PostUpdateWork;	//	IMPORTANT FOR TICK TO NOT LAG BEHIND IF DRAWING DEBUG THINGS
 	AddTickPrerequisiteActor(GetOwner());
-	bReplicates = true;
+	SetIsReplicatedByDefault(true);
 }
 
 // Called when the game starts

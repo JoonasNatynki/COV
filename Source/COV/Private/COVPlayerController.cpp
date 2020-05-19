@@ -39,8 +39,8 @@ void ACOVPlayerController::SetupInputComponent()
 	InputComponent->BindAxis("W", this, &ACOVPlayerController::Input_Key_W);
 	InputComponent->BindAxis("D", this, &ACOVPlayerController::Input_Key_D);
 	InputComponent->BindAxis("MovementInput", this, &ACOVPlayerController::Input_MovementInput);
-	InputComponent->BindAxis("MouseMovementY", this, &ACOVPlayerController::Input_MouseMovementY);
-	InputComponent->BindAxis("MouseMovementX", this, &ACOVPlayerController::Input_MouseMovementX);
+	//InputComponent->BindAxis("MouseMovementY", this, &ACOVPlayerController::Input_MouseMovementY);
+	//InputComponent->BindAxis("MouseMovementX", this, &ACOVPlayerController::Input_MouseMovementX);
 }
 
 ACOVCharacter* ACOVPlayerController::GetControlledCOVCharacter()
@@ -82,7 +82,7 @@ void ACOVPlayerController::Input_Spacebar_Pressed_Implementation()
 void ACOVPlayerController::Input_Spacebar_Released_Implementation()
 {
 	//UE_LOG(COVPlayerController, Log, TEXT("Spacebar released."))
-		USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
+	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_Spacebar_Released)
 }
 
 void ACOVPlayerController::Input_LeftShift_Pressed_Implementation()
@@ -134,7 +134,7 @@ void ACOVPlayerController::Input_RightMouseButton_Released_Implementation()
 void ACOVPlayerController::Input_MouseMovementX_Implementation(float amount)
 {
 	USE_INTERFACE(GetPawn(), COVPlayerInput, Input_MouseMovementX, amount)
-		AddYawInput(amount * _XSensitivity);
+	AddYawInput(amount * _XSensitivity);
 }
 
 void ACOVPlayerController::Input_MouseMovementY_Implementation(float amount)

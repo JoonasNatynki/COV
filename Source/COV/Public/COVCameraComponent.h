@@ -31,11 +31,14 @@ public:
 	UFUNCTION(Category = "COVCamera", BlueprintCallable)
 		void ApplyCameraRotationInput(const ECameraRotation direction);
 
+	UPROPERTY(Category = "COVCamera", BlueprintReadWrite, EditAnywhere)
+	float CameraBoomLength = 0.0f;
+
 private:
 
 	FORCEINLINE const FVector GetCameraCurrentLocation() const;
 	FORCEINLINE const FRotator GetCameraCurrentRotation() const;
-	FORCEINLINE const FVector GetPlayerLocation() const;
+	FORCEINLINE const FVector GetCameraLookAtLocation() const;
 	FORCEINLINE void UpdateCameraTransform(const float deltaTime);
 	FORCEINLINE void UpdateDebugs(float deltaTime);
 
@@ -56,7 +59,7 @@ private:
 	FRotator CameraCurrentRotationSetting = FRotator(0.0f, 0.0f, 0.0f);
 	float CameraRotationLerpSpeed = 0.05f;
 
-	//	The location where the camera is pointing at or trying to focus at
-	FVector CameraInterestLocation;
+	//	The location that is basically the camera's anchor/root
+	FVector UpToDateCameraRootLocation;
 
 };

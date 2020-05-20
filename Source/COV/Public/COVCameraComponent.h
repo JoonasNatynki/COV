@@ -33,15 +33,10 @@ public:
 
 private:
 
-	//	This is the default fixed relative position of the camera to the player to view the game from
-	FORCEINLINE const FVector GetCameraDefaultLocation() const;
-	//	This is where the camera wants to move now to view the game from
-	FORCEINLINE const FVector GetCameraDesiredLocation();
 	FORCEINLINE const FVector GetCameraCurrentLocation() const;
 	FORCEINLINE const FRotator GetCameraCurrentRotation() const;
 	FORCEINLINE const FVector GetPlayerLocation() const;
 	FORCEINLINE void UpdateCameraTransform(const float deltaTime);
-	FORCEINLINE void UpdateCameraInterestLocation();
 	FORCEINLINE void UpdateDebugs(float deltaTime);
 
 	UPROPERTY(Category = "3rd Person Camera", EditDefaultsOnly)

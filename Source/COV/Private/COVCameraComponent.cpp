@@ -26,25 +26,6 @@ class APawn* UCOVCameraComponent::GetOwnerPawn() const
 	return ownerPawn;
 }
 
-FORCEINLINE const FVector UCOVCameraComponent::GetCameraDefaultLocation() const
-{
-	const FVector cameraDefaultLocation = CameraInterestLocation + CameraDefaultOffset;
-
-	return cameraDefaultLocation;
-}
-
-FORCEINLINE const FVector UCOVCameraComponent::GetCameraDesiredLocation()
-{
-	const FVector cameraDefaultLocation = GetCameraDefaultLocation();
-	//	Lerps between camera rotation setting and the current rotation setting
-	CameraCurrentRotationSetting = CameraCurrentRotationSetting + (CameraRotationLerpSpeed*(CameraDesiredRotationSetting - CameraCurrentRotationSetting));
-
-	//	Now find out the actual desired camera location
-	const FVector cameraTargetLocation = UE4CodeHelpers::RotateVectorAroundPoint(cameraDefaultLocation, CameraInterestLocation, CameraCurrentRotationSetting);
-
-	return cameraTargetLocation;
-}
-
 FORCEINLINE const FVector UCOVCameraComponent::GetCameraCurrentLocation() const
 {
 	return GetComponentLocation();
@@ -62,9 +43,18 @@ FORCEINLINE const FVector UCOVCameraComponent::GetPlayerLocation() const
 
 FORCEINLINE void UCOVCameraComponent::UpdateCameraTransform(const float deltaTime)
 {
+	const FVector playerCurrentLocation = GetPlayerLocation();
+	CameraInterestLocation = UKismetMathLibrary::VLerp(CameraInterestLocation, playerCurrentLocation, CameraTransformLerpSpeed);
+
 	//	Location
 	const FVector currentCameraLocation = GetCameraCurrentLocation();
-	const FVector desiredCameraLocation = GetCameraDesiredLocation();
+	const FVector cameraDefaultLocation = CameraInterestLocation + CameraDefaultOffset;
+	//	Lerps between camera rotation setting and the current rotation setting
+	CameraCurrentRotationSetting = CameraCurrentRotationSetting + (CameraRotationLerpSpeed * (CameraDesiredRotationSetting - CameraCurrentRotationSetting));
+
+	//	Now find out the actual desired camera location
+	const FVector cameraTargetLocation = UE4CodeHelpers::RotateVectorAroundPoint(cameraDefaultLocation, CameraInterestLocation, CameraCurrentRotationSetting);
+	const FVector desiredCameraLocation = cameraTargetLocation;
 
 	//	Rotation
 	const FRotator currentCameraRotation = GetCameraCurrentRotation();
@@ -72,12 +62,6 @@ FORCEINLINE void UCOVCameraComponent::UpdateCameraTransform(const float deltaTim
 
 	SetWorldLocation(desiredCameraLocation);
 	SetWorldRotation(desiredCameraRotation);
-}
-
-FORCEINLINE void UCOVCameraComponent::UpdateCameraInterestLocation()
-{
-	const FVector playerCurrentLocation = GetPlayerLocation();
-	CameraInterestLocation = UKismetMathLibrary::VLerp(CameraInterestLocation, playerCurrentLocation, CameraTransformLerpSpeed);
 }
 
 FORCEINLINE void UCOVCameraComponent::UpdateDebugs(float deltaTime)
@@ -95,7 +79,6 @@ void UCOVCameraComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	UpdateCameraInterestLocation();
 	UpdateCameraTransform(DeltaTime);
 
 	//UpdateDebugs(DeltaTime);

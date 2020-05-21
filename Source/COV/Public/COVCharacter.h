@@ -27,8 +27,6 @@ public:
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
 		UCOVInteractionComponent* InteractionComponent;
 	UPROPERTY(Category = "Interaction", VisibleAnywhere)
-		UFocusComponent* FocusComponent;
-	UPROPERTY(Category = "Interaction", VisibleAnywhere)
 		UInventoryComponent* Inventory;
 
 public:
@@ -80,7 +78,7 @@ public:
 		//	Move character left/right
 		void Input_MoveRight(float amount);
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
-		void Input_Interact_Server(AActor* interactedActor);
+		void Input_Interact_Server(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption);
 	UFUNCTION(Category = "Interaction", BlueprintNativeEvent)
 		void Input_Interact();
 	//	#####################################################################################################

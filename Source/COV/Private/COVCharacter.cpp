@@ -32,7 +32,6 @@ void ACOVCharacter::BeginPlay()
 
 	//	Inventory component
 	GET_AND_CACHE_COMPONENT(UInventoryComponent, Inventory);
-	GET_AND_CACHE_COMPONENT(UFocusComponent, FocusComponent);
 }
 
 void ACOVCharacter::PostInitializeComponents()
@@ -57,14 +56,15 @@ void ACOVCharacter::Input_E_Released_Implementation()
 
 }
 
-bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor)
+bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption)
 {
 	return true;
 }
 
-void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor)
+void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption)
 {
-	if (ICOVInteractable::Execute_Interact(interactedActor, this))
+	//	Execute interaction on the interacted actor
+	if (ICOVInteractable::Execute_Interact(interactedActor, this, InteractOption))
 	{
 		COV_LOG(COVCharacter, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
 	}
@@ -167,42 +167,44 @@ void ACOVCharacter::Input_LeftControl_Released_Implementation()
 void ACOVCharacter::Input_Interact_Implementation()
 {
 	//	We need the focus component for this
-	if(!IsValid(FocusComponent))
+	UFocusComponent* FocusComponent = GetController()->FindComponentByClass<UFocusComponent>();
+	if (ensure(IsValid(FocusComponent)))
 	{
-		COV_LOG(COVCharacter, Warning, TEXT("No FocusComponent found on character. Can't focus to interact with anything."));
-		return;
-	}
-
-	//	Find out the actor that the player is focusing on
-	AActor* focusedActor = FocusComponent->GetFocusedActor();
-	if (IsValid(focusedActor))
-	{
-		//	Make sure the focused actor is interactable
-		if (focusedActor->Implements<UCOVInteractable>())
+		//	Find out the actor that the player is focusing on
+		AActor* focusedActor = FocusComponent->GetFocusedActor();
+		if (IsValid(focusedActor))
 		{
-			//	Can the focused actor be interacted with right now?
-			if (ICOVInteractable::Execute_GetIsInteractable(focusedActor))
+			//	Make sure the focused actor is interactable
+			if (focusedActor->Implements<UCOVInteractable>())
 			{
-				//	Interaction will be successful
-				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
-				Input_Interact_Server(focusedActor);
+				//	Can the focused actor be interacted with right now?
+				if (ICOVInteractable::Execute_GetIsInteractable(focusedActor))
+				{
+					//	Interaction will be successful
+					//	By default get the first interaction option
+					ensure(ICOVInteractable::Execute_GetInteractionOptions(focusedActor).Num() > 0);
+					TSubclassOf<UInteractionOption> DefaultInteractionOption = ICOVInteractable::Execute_GetInteractionOptions(focusedActor)[0];
 
+					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+					Input_Interact_Server(focusedActor, DefaultInteractionOption);
+
+				}
+				else
+				{
+					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+					return;
+				}
 			}
 			else
 			{
-				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 				return;
 			}
 		}
 		else
 		{
-			COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
-			return;
+			COV_LOG(COVCharacter, Log, TEXT("Character (%s) has nothing to interact with."), *GetNameSafe(this));
 		}
-	}
-	else
-	{
-		COV_LOG(COVCharacter, Log, TEXT("Character (%s) has nothing to interact with."), *GetNameSafe(this));
 	}
 }
 

@@ -64,13 +64,24 @@ bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor, TSub
 void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption)
 {
 	//	Execute interaction on the interacted actor
+	const bool bDoesImplementInterface = interactedActor->GetClass()->ImplementsInterface(UCOVInteractable::StaticClass());
+
+	if (!bDoesImplementInterface)
+	{
+		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interacted actor does not implement the interface."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+		
+		return;
+	}
+
 	if (ICOVInteractable::Execute_Interact(interactedActor, this, InteractOption))
 	{
 		COV_LOG(COVCharacter, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
 	}
 	else
 	{
-		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interacted actor does not implement interface 'Interactable'"), *GetNameSafe(this), *GetNameSafe(interactedActor));
+		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interact function returned false."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+
+		return;
 	}
 }
 

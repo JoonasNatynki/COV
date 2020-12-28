@@ -2,9 +2,6 @@
 
 #include "COVInteractionComponent.h"
 #include "FocusComponent.h"
-#include <GameFramework/Actor.h>
-#include <MessageLog.h>
-#include <UObjectToken.h>
 #include "UE4Helpers.h"
 
 DEFINE_LOG_CATEGORY(COVInteractionComponent)

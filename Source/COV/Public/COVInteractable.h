@@ -17,6 +17,9 @@ public:
 		FText ShortDescription;
 
 	UPROPERTY(Category = "InteractionOption", BlueprintReadOnly, EditDefaultsOnly)
+		UTexture2D* Icon;
+
+	UPROPERTY(Category = "InteractionOption", BlueprintReadOnly, EditDefaultsOnly)
 		TArray<TSubclassOf<UInteractionOption>> NestedInteractions;
 };
 

@@ -22,7 +22,7 @@ void ACollectibleBase::BeginPlay()
 	
 }
 
-// Called every frame
+// Called every frame 
 void ACollectibleBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

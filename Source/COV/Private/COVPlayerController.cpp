@@ -20,8 +20,8 @@ void ACOVPlayerController::SetupInputComponent()
 
 	InputComponent->BindAction("E", IE_Pressed, this, &ACOVPlayerController::Input_E_Pressed);
 	InputComponent->BindAction("E", IE_Released, this, &ACOVPlayerController::Input_E_Released);
-	InputComponent->BindAction("F", IE_Pressed, this, &ACOVPlayerController::Input_F_Pressed);
-	InputComponent->BindAction("F", IE_Released, this, &ACOVPlayerController::Input_F_Released);
+	InputComponent->BindAction("Use/Interact", IE_Pressed, this, &ACOVPlayerController::Input_F_Pressed);
+	InputComponent->BindAction("Use/Interact", IE_Released, this, &ACOVPlayerController::Input_F_Released);
 	InputComponent->BindAction("Spacebar", IE_Pressed, this, &ACOVPlayerController::Input_Spacebar_Pressed);
 	InputComponent->BindAction("Spacebar", IE_Released, this, &ACOVPlayerController::Input_Spacebar_Released);
 	InputComponent->BindAction("LeftShift", IE_Pressed, this, &ACOVPlayerController::Input_LeftShift_Pressed);

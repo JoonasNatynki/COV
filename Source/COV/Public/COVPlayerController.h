@@ -15,6 +15,9 @@ class UScreenStack;
 
 DECLARE_LOG_CATEGORY_EXTERN(COVPlayerController, All, Log)
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPawnPossessed, APawn*, OldPawn, APawn*, NewPawn);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPawnUnPossessed, APawn*, OldPawn);
+
 UCLASS()
 class COV_API ACOVPlayerController : public APlayerController
 {
@@ -23,23 +26,32 @@ class COV_API ACOVPlayerController : public APlayerController
 		ACOVPlayerController(const class FObjectInitializer& PCIP);
 
 		//	Virtual function from APlayerController that allows custom input bindings
-		void SetupInputComponent() override;
+		virtual void SetupInputComponent() override;
 
 public:
 
 	UPROPERTY(EditAnywhere)
-		//	X axis sensitivity
-		float _XSensitivity = 1;
+	//	X axis sensitivity
+	float _XSensitivity = 1;
+
 	UPROPERTY(EditAnywhere)
-		//	Y axis sensitivity
-		float _YSensitivity = 1;
+	//	Y axis sensitivity
+	float _YSensitivity = 1;
 
 
 	UFUNCTION(BlueprintPure)
-		//	Get the AXYZ_Character this controller should be controlling
-		ACOVCharacter* GetControlledCOVCharacter();
+	//	Get the AXYZ_Character this controller should be controlling
+	ACOVCharacter* GetControlledCOVCharacter();
 
-
+	UPROPERTY(BlueprintAssignable)
+	FOnPawnPossessed OnPawnPossessed;
+	UPROPERTY(BlueprintAssignable)
+	FOnPawnUnPossessed OnPawnUnPossessed;
+	
+	virtual void OnPossess(APawn* InPawn) override;
+	virtual void OnUnPossess() override;
+	
+	//	These are used to pipe the key events to the pawn itself. The pawn is supposed to implement the interface COVPlayerInput
 	UFUNCTION(BlueprintNativeEvent)
 		void Input_E_Pressed();
 	UFUNCTION(BlueprintNativeEvent)

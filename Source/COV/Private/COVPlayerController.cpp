@@ -49,6 +49,23 @@ ACOVCharacter* ACOVPlayerController::GetControlledCOVCharacter()
 	return xyzchar;
 }
 
+void ACOVPlayerController::OnPossess(APawn* InPawn)
+{
+	APawn* _OldPawn = GetPawn();
+	Super::OnPossess(InPawn);
+	APawn* NewPawn = GetPawn();
+
+	OnPawnPossessed.Broadcast(_OldPawn, NewPawn);
+}
+
+void ACOVPlayerController::OnUnPossess()
+{
+	APawn* _OldPawn = GetPawn();
+	Super::OnUnPossess();
+
+	OnPawnUnPossessed.Broadcast(_OldPawn);
+}
+
 void ACOVPlayerController::Input_E_Pressed_Implementation()
 {
 	//UE_LOG(COVPlayerController, Log, TEXT("E pressed."));

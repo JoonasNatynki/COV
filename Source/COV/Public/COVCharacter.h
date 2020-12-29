@@ -78,7 +78,7 @@ public:
 		//	Move character left/right
 		void Input_MoveRight(float amount);
 	UFUNCTION(Category = "Server", Server, Reliable, WithValidation, BlueprintCallable, BlueprintAuthorityOnly)
-		void Input_Interact_Server(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption);
+		void Input_Interact_Server(AActor* interactedActor, TSubclassOf<UInteractionOptionDetails> InteractOption);
 	UFUNCTION(Category = "Interaction", BlueprintNativeEvent)
 		void Input_Interact();
 	//	#####################################################################################################

@@ -56,12 +56,12 @@ void ACOVCharacter::Input_E_Released_Implementation()
 
 }
 
-bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption)
+bool ACOVCharacter::Input_Interact_Server_Validate(AActor* interactedActor, TSubclassOf<UInteractionOptionDetails> InteractOption)
 {
 	return true;
 }
 
-void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor, TSubclassOf<UInteractionOption> InteractOption)
+void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor, TSubclassOf<UInteractionOptionDetails> InteractOption)
 {
 	//	Execute interaction on the interacted actor
 	const bool bDoesImplementInterface = interactedActor->GetClass()->ImplementsInterface(UCOVInteractable::StaticClass());
@@ -73,15 +73,17 @@ void ACOVCharacter::Input_Interact_Server_Implementation(AActor* interactedActor
 		return;
 	}
 
-	if (ICOVInteractable::Execute_Interact(interactedActor, this, InteractOption))
+	UInteractionOptionDetails* InteractOptionDetails = Cast<UInteractionOptionDetails>(InteractOption->GetDefaultObject());
+	check(IsValid(InteractOptionDetails))
+	const FString& InteractionTypeString = EnumToString("EInteractionType", InteractOptionDetails->Type);
+	
+	if (ICOVInteractable::Execute_Interact(interactedActor, this, InteractOptionDetails))
 	{
-		COV_LOG(COVCharacter, Log, TEXT("Character (%s) interaction with actor (%s) was successful."), *GetNameSafe(this), *GetNameSafe(interactedActor));
+		COV_LOG(COVCharacter, Log, TEXT("Character (%s) interaction (%s) with actor (%s) was successful."), *GetNameSafe(this), *InteractionTypeString, *GetNameSafe(interactedActor));
 	}
 	else
 	{
-		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction with actor (%s) was NOT successful. The interact function returned false."), *GetNameSafe(this), *GetNameSafe(interactedActor));
-
-		return;
+		COV_LOG(COVCharacter, Warning, TEXT("Character (%s) interaction (%s) with actor (%s) was NOT successful. The interact function returned false."), *GetNameSafe(this), *InteractionTypeString, *GetNameSafe(interactedActor));
 	}
 }
 
@@ -178,7 +180,7 @@ void ACOVCharacter::Input_LeftControl_Released_Implementation()
 void ACOVCharacter::Input_Interact_Implementation()
 {
 	//	We need the focus component for this
-	UFocusComponent* FocusComponent = GetController()->FindComponentByClass<UFocusComponent>();
+	UFocusComponent* FocusComponent = FindComponentByClass<UFocusComponent>();
 	if (ensure(IsValid(FocusComponent)))
 	{
 		//	Find out the actor that the player is focusing on
@@ -194,7 +196,7 @@ void ACOVCharacter::Input_Interact_Implementation()
 					//	Interaction will be successful
 					//	By default get the first interaction option
 					ensure(ICOVInteractable::Execute_GetInteractionOptions(focusedActor).Num() > 0);
-					TSubclassOf<UInteractionOption> DefaultInteractionOption = ICOVInteractable::Execute_GetInteractionOptions(focusedActor)[0];
+					TSubclassOf<UInteractionOptionDetails> DefaultInteractionOption = ICOVInteractable::Execute_GetInteractionOptions(focusedActor)[0];
 
 					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
 					Input_Interact_Server(focusedActor, DefaultInteractionOption);

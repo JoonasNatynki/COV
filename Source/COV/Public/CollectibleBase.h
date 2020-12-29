@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include "CollectibleItemBase.h"
 #include "GameFramework/Actor.h"
 #include "CollectibleBase.generated.h"
 
 UCLASS()
-class COV_API ACollectibleBase : public AActor
+class COV_API ACollectibleBase : public ACollectibleItemBase
 {
 	GENERATED_BODY()
 	

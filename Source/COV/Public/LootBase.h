@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "ALootBase.generated.h"
+#include "CollectibleItemBase.h"
+#include "LootBase.generated.h"
 
 UCLASS()
-class COV_API ALootBase : public AActor
+class COV_API ALootBase : public ACollectibleItemBase
 {
 	GENERATED_BODY()
 	

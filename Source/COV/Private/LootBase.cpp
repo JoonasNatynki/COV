@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ALootBase.h"
+#include "LootBase.h"
 
 // Sets default values
 ALootBase::ALootBase()

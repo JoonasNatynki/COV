@@ -55,17 +55,17 @@ bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 	do
 	{
 		//	See which loot will spawn next...
-		int32 TotalWeightOfAllLoot = 0;
+		float TotalWeightOfAllLoot = 0.0f;
 		for(const FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
 		{
 			TotalWeightOfAllLoot += LootDefinition.SpawnProbabilityWeight;
 		}
 
 		//	Throw dart...
-		const int32 Dart = UKismetMathLibrary::RandomIntegerInRange(0, TotalWeightOfAllLoot);
+		const float Dart = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalWeightOfAllLoot);
 
 		//	See where dart landed
-		int32 LandingLocation = 0;
+		float LandingLocation = 0.0f;
 		int32 Index = 0;
 		for(FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
 		{

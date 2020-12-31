@@ -21,8 +21,8 @@ public:
 	TSubclassOf<ACollectibleItemBase> LootType;
 
 	//	The higher this value is the higher chance it has to spawn
-	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere, meta = (ClampMin = 0, ClampMax = 1000))
-	int32 SpawnProbabilityWeight = 1;
+	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere, meta = (ClampMin = 0.0f, ClampMax = 1000.0f))
+	float SpawnProbabilityWeight = 1;
 
 	//	How many times can this loot spawn. 0 means infinite.
 	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere, meta = (ClampMin = 0, ClampMax = 1000))

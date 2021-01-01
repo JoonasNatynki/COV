@@ -10,6 +10,40 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(LogLootSpawner, Log, All)
 
+UENUM(BlueprintType)
+enum class ESpawnMethod : uint8
+{
+	//	Spawns all loot instantly
+	Instant,
+	//	Spawns loot over time
+	Overtime
+};
+
+UENUM(BlueprintType)
+enum class ESpawnShape : uint8
+{
+	//	Just spawns loot at the location of the loot spawner
+	None,
+	//	Random direction in all directions
+	Random,
+	//	Random direction in the general direction of "up"
+    Flower	
+};
+
+USTRUCT(BlueprintType)
+struct FLootSpawnMethod
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(EditAnywhere)
+	ESpawnMethod SpawningMethod = ESpawnMethod::Instant;
+
+	UPROPERTY(EditAnywhere)
+	ESpawnShape SpawnShape = ESpawnShape::None;
+};
+
 //	Loot definition and probability
 USTRUCT(BlueprintType)
 struct FLootSpawnDefinition
@@ -78,6 +112,9 @@ public:
 	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere)
 	TArray<FLootSpawnDefinition> LootSpawnDefinitions;
 
+	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere)
+	FLootSpawnMethod SpawnMethod;
+
 	FString ToString() const;
 };
 
@@ -100,6 +137,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	FLootSpawnDefinition* SelectLootFromDefinition(FLootProfile& LootProfileIn) const;
+	FRotator GetLootSpawnRotation(const FLootSpawnDefinition& LootDefinition) const;
+	FVector GetLootSpawnLocation(const FLootSpawnDefinition& LootDefinition) const;
 
 public:	
 	// Called every frame

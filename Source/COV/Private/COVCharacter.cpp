@@ -184,33 +184,31 @@ void ACOVCharacter::Input_Interact_Implementation()
 	if (ensure(IsValid(FocusComponent)))
 	{
 		//	Find out the actor that the player is focusing on
-		AActor* focusedActor = FocusComponent->GetFocusedActor();
-		if (IsValid(focusedActor))
+		AActor* FocusedActor = FocusComponent->GetFocusedActor();
+		if (IsValid(FocusedActor))
 		{
 			//	Make sure the focused actor is interactable
-			if (focusedActor->Implements<UCOVInteractable>())
+			if (FocusedActor->Implements<UCOVInteractable>())
 			{
 				//	Can the focused actor be interacted with right now?
-				if (ICOVInteractable::Execute_GetIsInteractable(focusedActor))
+				if (ICOVInteractable::Execute_GetIsInteractable(FocusedActor) && ensure(ICOVInteractable::Execute_GetInteractionOptions(FocusedActor).Num() > 0))
 				{
 					//	Interaction will be successful
-					//	By default get the first interaction option
-					ensure(ICOVInteractable::Execute_GetInteractionOptions(focusedActor).Num() > 0);
-					TSubclassOf<UInteractionOptionDetails> DefaultInteractionOption = ICOVInteractable::Execute_GetInteractionOptions(focusedActor)[0];
+					//	By default get the first interaction option. TODO: Have the user select which option to choose
+					const TSubclassOf<UInteractionOptionDetails> DefaultInteractionOption = ICOVInteractable::Execute_GetInteractionOptions(FocusedActor)[0];
 
-					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(focusedActor));
-					Input_Interact_Server(focusedActor, DefaultInteractionOption);
-
+					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s)."), *GetNameSafe(this), *GetNameSafe(FocusedActor));
+					Input_Interact_Server(FocusedActor, DefaultInteractionOption);
 				}
 				else
 				{
-					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+					COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacted with actor (%s), but it was not interactable."), *GetNameSafe(this), *GetNameSafe(FocusedActor));
 					return;
 				}
 			}
 			else
 			{
-				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(focusedActor));
+				COV_LOG(COVCharacter, Log, TEXT("Character (%s) interacting with actor (%s), but the actor does not implement the interface 'Interactable'."), *GetNameSafe(this), *GetNameSafe(FocusedActor));
 				return;
 			}
 		}

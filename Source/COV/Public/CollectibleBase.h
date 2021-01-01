@@ -5,11 +5,12 @@
 #include "CoreMinimal.h"
 
 #include "CollectibleItemBase.h"
+#include "InGameObjectProperties.h"
 #include "GameFramework/Actor.h"
 #include "CollectibleBase.generated.h"
 
 UCLASS()
-class COV_API ACollectibleBase : public ACollectibleItemBase
+class COV_API ACollectibleBase : public ACollectibleItemBase, public IInGameObjectProperties
 {
 	GENERATED_BODY()
 	

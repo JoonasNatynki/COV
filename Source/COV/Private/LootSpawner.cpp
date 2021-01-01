@@ -28,6 +28,7 @@ FString FLootSpawnDefinition::ToString() const
 	
 	FinalString = FinalString + FString(", SpawnProbabilityWeight = ") + FString::SanitizeFloat(SpawnProbabilityWeight);
 	FinalString = FinalString + FString(", Modulated SpawnProbabilityWeight = ") + FString::SanitizeFloat(GetSpawnProbabilityWeight());
+	FinalString = FinalString + FString(", bIgnoreLootRarityModulation = ") + ((bIgnoreLootRarityModulation)?(FString("TRUE")):(FString("FALSE")));
 	
 	FinalString = FinalString  + FString("]");
 	return FinalString;
@@ -60,7 +61,7 @@ ALootSpawner::ALootSpawner()
 
 bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 {	
-	UE_LOG(LogLootSpawner, Log, TEXT("Beginning loot spawning of profile =\n%s"), *LootProfileToSpawn.ToString());
+	UE_LOG(LogLootSpawner, Log, TEXT("Beginning loot spawning event of profile =\n%s"), *LootProfileToSpawn.ToString());
 	UWorld* World = GetWorld();
 	check(IsValid(World));
 
@@ -73,46 +74,27 @@ bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 	int32 FailedSpawned = 0;
 	FLootSpawnDefinition* LootSelectedForSpawn = nullptr;
 	const int32 AmountOfLootToSpawn = UKismetMathLibrary::RandomIntegerInRange(LootProfileToSpawn.AmountOfLootToSpawn.MinimumAmountToSpawn, LootProfileToSpawn.AmountOfLootToSpawn.MaximumAmountToSpawn);
-	
+
+	//	Spawn loot...
 	do
 	{
 		//	See which loot will spawn next...
-		float TotalWeightOfAllLoot = 0.0f;
-		for(const FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
-		{
-			TotalWeightOfAllLoot += LootDefinition.GetSpawnProbabilityWeight();
-		}
+		LootSelectedForSpawn = SelectLootFromDefinition(LootProfileToSpawn);
 
-		//	Throw dart...
-		const float Dart = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalWeightOfAllLoot);
-
-		//	See where dart landed
-		float LandingLocation = 0.0f;
-		int32 Index = 0;
-		for(FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
-		{
-			LandingLocation += LootDefinition.GetSpawnProbabilityWeight();
-			
-			if(LandingLocation >= Dart)
-			{
-				ensureAlwaysMsgf(IsValid(LootDefinition.LootType), TEXT("LootDefinition is missing loot type. Can't spawn loot in the definition of index (%d) on (%s) spawner."), Index, *GetNameSafe(this));
-				LootSelectedForSpawn = &LootDefinition;
-
-				break;
-			}
-
-			Index++;
-		}
-
+		//	Spawn loot now
 		if(LootSelectedForSpawn && IsValid(LootSelectedForSpawn->LootType))
 		{
 			FActorSpawnParameters SpawnParams;
-			const FVector& Location = GetActorLocation();
-			const FRotator& Rotation = GetActorRotation();
+			const FVector& Location = GetLootSpawnLocation(*LootSelectedForSpawn);
+			const FRotator& Rotation = GetLootSpawnRotation(*LootSelectedForSpawn);
 			AActor* SpawnedActor = World->SpawnActor(LootSelectedForSpawn->LootType, &Location, &Rotation, SpawnParams);
 		
 			if(IsValid(SpawnedActor))
 			{
+				Cast<UPrimitiveComponent>(SpawnedActor->GetRootComponent())->AddImpulse(SpawnedActor->GetActorForwardVector() * 100.0f);
+				Cast<UPrimitiveComponent>(SpawnedActor->GetRootComponent())->AddAngularImpulseInRadians(GetActorRightVector() * 20.0f);
+				
+				UE_LOG(LogLootSpawner, Verbose, TEXT("(%s) spawned loot (%s). "), *GetNameSafe(this), *GetNameSafe(SpawnedActor));
 				LootSpawned++;
 				LootSelectedForSpawn->TimesAlreadySpawned++;
 
@@ -136,13 +118,56 @@ bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 
 		LootSelectedForSpawn = nullptr;
 	}
-	while(LootSpawned < AmountOfLootToSpawn && LootProfileToSpawn.LootSpawnDefinitions.Num() > 0);
+	while((LootSpawned < AmountOfLootToSpawn) && (LootProfileToSpawn.LootSpawnDefinitions.Num() > 0));
 
 	ensureAlwaysMsgf(LootSpawned >= LootProfileToSpawn.AmountOfLootToSpawn.MinimumAmountToSpawn, TEXT("Loot spawner (%s) could not spawn the required amount (%d) of loot. Successful spawns (%d)"), *GetNameSafe(this), LootProfileToSpawn.AmountOfLootToSpawn.MinimumAmountToSpawn, LootSpawned);
 	
-	UE_LOG(LogLootSpawner, Log, TEXT("...loot spawning done. Successful spawns = %d, failures = %d"), LootSpawned, FailedSpawned);
+	UE_LOG(LogLootSpawner, Log, TEXT("...loot spawning event done. Successful spawns = %d, failures = %d"), LootSpawned, FailedSpawned);
 
 	return FailedSpawned > 0;
+}
+
+FLootSpawnDefinition* ALootSpawner::SelectLootFromDefinition(FLootProfile& LootProfileIn) const
+{
+	//	1.
+	float TotalWeightOfAllLoot = 0.0f;
+	for(const FLootSpawnDefinition& LootDefinition : LootProfileIn.LootSpawnDefinitions)
+	{
+		TotalWeightOfAllLoot += LootDefinition.GetSpawnProbabilityWeight();
+	}
+
+	//	2.
+	//	Throw dart...
+	const float Dart = UKismetMathLibrary::RandomFloatInRange(0.0f, TotalWeightOfAllLoot);
+
+	//	3.
+	//	See where dart landed
+	float LandingLocation = 0.0f;
+	int32 Index = 0;
+	for(FLootSpawnDefinition& LootDefinition : LootProfileIn.LootSpawnDefinitions)
+	{
+		LandingLocation += LootDefinition.GetSpawnProbabilityWeight();
+			
+		if(LandingLocation >= Dart)
+		{
+			ensureAlwaysMsgf(IsValid(LootDefinition.LootType), TEXT("LootDefinition is missing loot type. Can't spawn loot in the definition of index (%d) on (%s) spawner."), Index, *GetNameSafe(this));
+			return &LootDefinition;
+		}
+
+		Index++;
+	}
+
+	return nullptr;
+}
+
+FRotator ALootSpawner::GetLootSpawnRotation(const FLootSpawnDefinition& LootDefinition) const
+{
+	return UKismetMathLibrary::RandomRotator(true);
+}
+
+FVector ALootSpawner::GetLootSpawnLocation(const FLootSpawnDefinition& LootDefinition) const
+{
+	return GetActorLocation();
 }
 
 // Called when the game starts or when spawned

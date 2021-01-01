@@ -2,23 +2,45 @@
 
 #include "LootSpawner.h"
 
+
+#include "LootDetails.h"
+#include "UE4Helpers.h"
+#include "Engine/SCS_Node.h"
 #include "Kismet/KismetMathLibrary.h"
 
 DEFINE_LOG_CATEGORY(LogLootSpawner)
 
+float FLootSpawnDefinition::GetSpawnProbabilityWeight() const
+{
+	ULootDetails* LootDetailsComponent = UE4CodeHelpers::FindDefaultComponentsByClass<ULootDetails>(LootType, ULootDetails::StaticClass());
+
+	if(LootDetailsComponent)
+	{
+		return SpawnProbabilityWeight / LootDetailsComponent->Rarity;
+	}
+	
+	return 1.0f;
+}
+
 FString FLootSpawnDefinition::ToString() const
 {
 	FString FinalString = FString("\n......[LootType = ") + GetNameSafe(LootType);
-	FinalString = FinalString + FString(", SpawnProbabilityWeight = ") + FString::FromInt(SpawnProbabilityWeight) + FString("]");
+	
+	FinalString = FinalString + FString(", SpawnProbabilityWeight = ") + FString::SanitizeFloat(SpawnProbabilityWeight);
+	FinalString = FinalString + FString(", Modulated SpawnProbabilityWeight = ") + FString::SanitizeFloat(GetSpawnProbabilityWeight());
+	
+	FinalString = FinalString  + FString("]");
 	return FinalString;
 }
 
 FString FLootProfile::ToString() const
 {
 	FString FinalString("...[Amount of loot to spawn (min ");
+
 	FinalString = FinalString + FString::FromInt(AmountOfLootToSpawn.MinimumAmountToSpawn);
 	FinalString = FinalString + FString(", max ");
 	FinalString = FinalString + FString::FromInt(AmountOfLootToSpawn.MaximumAmountToSpawn);
+
 	FinalString = FinalString + FString(")");
 	
 	for(const FLootSpawnDefinition& LSD : LootSpawnDefinitions)
@@ -37,7 +59,7 @@ ALootSpawner::ALootSpawner()
 }
 
 bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
-{
+{	
 	UE_LOG(LogLootSpawner, Log, TEXT("Beginning loot spawning of profile =\n%s"), *LootProfileToSpawn.ToString());
 	UWorld* World = GetWorld();
 	check(IsValid(World));
@@ -58,7 +80,7 @@ bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 		float TotalWeightOfAllLoot = 0.0f;
 		for(const FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
 		{
-			TotalWeightOfAllLoot += LootDefinition.SpawnProbabilityWeight;
+			TotalWeightOfAllLoot += LootDefinition.GetSpawnProbabilityWeight();
 		}
 
 		//	Throw dart...
@@ -69,12 +91,13 @@ bool ALootSpawner::SpawnLoot(FLootProfile LootProfileToSpawn)
 		int32 Index = 0;
 		for(FLootSpawnDefinition& LootDefinition : LootProfileToSpawn.LootSpawnDefinitions)
 		{
-			LandingLocation += LootDefinition.SpawnProbabilityWeight;
-
+			LandingLocation += LootDefinition.GetSpawnProbabilityWeight();
+			
 			if(LandingLocation >= Dart)
 			{
 				ensureAlwaysMsgf(IsValid(LootDefinition.LootType), TEXT("LootDefinition is missing loot type. Can't spawn loot in the definition of index (%d) on (%s) spawner."), Index, *GetNameSafe(this));
 				LootSelectedForSpawn = &LootDefinition;
+
 				break;
 			}
 

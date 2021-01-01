@@ -16,21 +16,33 @@ struct FLootSpawnDefinition
 {
 	GENERATED_BODY()
 
+friend class ALootSpawner;
+friend struct FLootProfile;
+
 public:
 	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<ACollectibleItemBase> LootType;
 
 	//	The higher this value is the higher chance it has to spawn
 	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere, meta = (ClampMin = 0.0f, ClampMax = 1000.0f))
-	float SpawnProbabilityWeight = 1;
+	float SpawnProbabilityWeight = 1;	//	Please don't use this directly
+
+	//	Get the REAL spawn probability weight.
+	float GetSpawnProbabilityWeight() const;
 
 	//	How many times can this loot spawn. 0 means infinite.
 	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere, meta = (ClampMin = 0, ClampMax = 1000))
 	int32 MaximumNumberOfSpawns = 0;
 
+	//	If TRUE, will ignore the loot's own rarity modulation coming from the ULootDetails component. See: ULootDetails::Rarity
+	UPROPERTY(Category = "Loot", BlueprintReadWrite, EditAnywhere)
+	bool bIgnoreLootRarityModulation = false;
+
+private:
 	//	Transient. ONLY USED WHEN SPAWNING
 	int32 TimesAlreadySpawned = 0;
-	
+
+public:
 	FString ToString() const;
 
 	virtual bool operator==(const FLootSpawnDefinition& Other) const
